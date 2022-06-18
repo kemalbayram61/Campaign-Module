@@ -1,8 +1,6 @@
-import props as props
 from Data.DBHelper import DBHelper
 from Abstracts.DBConstants import DBConstants
 from Abstracts.EnvConstants import EnvConstants
-from Objects.Campaign import Campaign
 
 class Services:
     __envs :dict = None
