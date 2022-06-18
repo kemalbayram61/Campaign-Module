@@ -14,7 +14,6 @@ class Services:
                                    password=self.__envs[DBConstants.PASSWORD.value].replace('\n', ''),
                                    host=self.__envs[DBConstants.HOST.value].replace('\n', ''),
                                    port=self.__envs[DBConstants.PORT.value].replace('\n', ''))
-        self.__dbHelper.disconnect()
 
     def getSelectedEnv(self) ->str:
         mainEnvFile = open("Config/main.env")

@@ -18,7 +18,7 @@ class DBHelper:
         self.__password = password
         self.__host = host
         self.__port = port
-        self.test()
+        self.checkVersion()
 
     def connect(self):
         self.__connection = psycopg2.connect(database=self.__database,
@@ -27,7 +27,7 @@ class DBHelper:
                                              host=self.__host,
                                              port=self.__port)
 
-    def test(self):
+    def checkVersion(self):
         self.connect()
         cursor = self.__connection.cursor()
         cursor.execute("select version()")
