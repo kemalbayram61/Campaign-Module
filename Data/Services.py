@@ -1,6 +1,7 @@
 from Data.DBHelper import DBHelper
 from Abstracts.DBConstants import DBConstants
 from Abstracts.EnvConstants import EnvConstants
+from Objects.Campaign import Campaign
 
 class Services:
     __envs :dict = None
@@ -29,3 +30,6 @@ class Services:
         for line in envsFile.readlines():
             if ("#" not in line and line != '\n'):
                 self.__envs[line.split("=", 1)[0]] = line.split("=", 1)[1]
+
+    def insertCampaign(self, campaign: Campaign):
+        self.__dbHelper.insertCampaign(campaign)

@@ -8,8 +8,14 @@ class ProductFilterCriteria:
         self.nameList = nameList
         self.featureList = featureList
 
-    def getDocument(self):
+    def listToStr(self, listObject):
+        response = ""
+        for element in listObject:
+            response = response + str(element) + ';'
+        return response
+
+    def __str__(self):
         if(self.nameList == None):
-            return list(map(lambda feature: feature.getDocument(), self.featureList))
+            return self.listToStr(self.featureList)
         else:
-            return self.nameList
+            return self.listToStr(self.nameList)
