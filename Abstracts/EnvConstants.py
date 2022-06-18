@@ -1,3 +1,4 @@
 from enum import Enum
 class EnvConstants(Enum):
     SELECTED_ENVIRONMENT = "SELECTED_ENVIRONMENT"
+    RESET_TABLES_ON_INIT = "RESET_TABLES_ON_INIT"

@@ -15,6 +15,9 @@ class Services:
                                    host=self.__envs[DBConstants.HOST.value].replace('\n', ''),
                                    port=self.__envs[DBConstants.PORT.value].replace('\n', ''))
 
+        if(self.__envs[EnvConstants.RESET_TABLES_ON_INIT.value] == "1"):
+            self.__dbHelper.resetTables()
+
     def getSelectedEnv(self) ->str:
         mainEnvFile = open("Config/main.env")
         for line in mainEnvFile.readlines():
@@ -26,5 +29,5 @@ class Services:
         self.__envs = {}
         envsFile = open("Config/" + self.getSelectedEnv() + ".env")
         for line in envsFile.readlines():
-            if ("#" not in line):
+            if ("#" not in line and line != '\n'):
                 self.__envs[line.split("=", 1)[0]] = line.split("=", 1)[1]

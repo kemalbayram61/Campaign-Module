@@ -1,3 +1,4 @@
+from Abstracts.DBConstants import DBConstants
 import psycopg2
 
 class DBHelper:
@@ -27,6 +28,9 @@ class DBHelper:
                                              host=self.__host,
                                              port=self.__port)
 
+    def disconnect(self):
+        self.__connection.close()
+
     def checkVersion(self):
         self.connect()
         cursor = self.__connection.cursor()
@@ -35,5 +39,48 @@ class DBHelper:
         print(result)
         self.disconnect()
 
-    def disconnect(self):
-        self.__connection.close()
+    def resetTables(self):
+        self.connect()
+        cursor = self.__connection.cursor()
+        cursor.execute("drop table if exists " + DBConstants.CAMPAIGN_TABLE_NAME.value)
+        cursor.execute("drop table if exists " + DBConstants.PRODUCT_TABLE_NAME.value)
+        cursor.execute("drop table if exists " + DBConstants.CONDITIONAL_SELECTION_TABLE_NAME.value)
+        cursor.execute("drop table if exists " + DBConstants.PRODUCT_FEATURE_TABLE_NAME.value)
+
+        campaignSql = '''
+            create table {}(
+                _id serial primary key,
+                name varchar(60) NOT NULL,
+                productFilter int NOT NULL,
+                conditionalSelectionID int
+            )
+        '''.format(DBConstants.CAMPAIGN_TABLE_NAME.value)
+        productSql = '''
+            create table {}(
+                _id serial primary key,
+                name varchar(60) NOT NULL
+            )
+        '''.format(DBConstants.PRODUCT_TABLE_NAME.value)
+        productFeatureSql = '''
+            create table {}(
+                productID int NOT NULL,
+                feature varchar(60) NOT NULL
+            )
+        '''.format(DBConstants.PRODUCT_FEATURE_TABLE_NAME.value)
+        conditionalSelectionSql = '''
+            create table {}(
+                _id serial primary key,
+                campaignID int NOT NULL,
+                requiredType int NOT NULL,
+                requiredCount int NOT NULL,
+                redundantType int NOT NULL,
+                redundantCount int NOT NULL
+            )
+        '''.format(DBConstants.CONDITIONAL_SELECTION_TABLE_NAME.value)
+
+        cursor.execute(campaignSql)
+        cursor.execute(productSql)
+        cursor.execute(productFeatureSql)
+        cursor.execute(conditionalSelectionSql)
+        self.__connection.commit()
+        self.disconnect()
