@@ -29,5 +29,5 @@ class Services:
         self.__envs = {}
         envsFile = open("Config/" + self.getSelectedEnv() + ".env")
         for line in envsFile.readlines():
-            if ("#" not in line):
+            if ("#" not in line and line != '\n'):
                 self.__envs[line.split("=", 1)[0]] = line.split("=", 1)[1]
