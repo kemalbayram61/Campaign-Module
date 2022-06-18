@@ -11,5 +11,5 @@ class Feature:
             return True
         return False
 
-    def getDocument(self):
-        return {"key": self.key, "value":self.value}
+    def __str__(self):
+        return "key:" + self.key + "value:" + self.value

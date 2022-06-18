@@ -13,3 +13,4 @@ if __name__ == '__main__':
                                   productFilterCriteria=productFilterCriteria,
                                   conditionalSelectionID="1",
                                   conditionalSelectionObject=conditionalSelection)
+    services.insertCampaign(campaign)
