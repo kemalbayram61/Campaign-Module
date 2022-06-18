@@ -1,56 +1,39 @@
-from pymongo import MongoClient
-from pymongo.database import Database
-from pymongo.collection import Collection
-from pymongo.typings import _DocumentType, Optional
-from pymongo.cursor import Cursor
+import psycopg2
 
 class DBHelper:
-    __connectionString: str = None
-    __dbname: str = None
-    __mongoClient: MongoClient = None
-    __database: Database[_DocumentType] = None
-    def __init__(self, connectionString: str, dbName: str):
-        self.__connectionString = connectionString
-        self.__dbname = dbName
-        clientCase:bool = self.setClient()
-        if(clientCase):
-            databaseCase:bool = self.setDatabase()
-            if(databaseCase == False):
-                raise Exception("Database name is invalid.")
-        else:
-            raise Exception("Connection string is invalid.")
+    __database: str
+    __user: str
+    __password: str
+    __host: str
+    __port: str
+    __connection = None
 
-    def setClient(self) ->bool:
-        if(self.__connectionString != None):
-            self.__mongoClient = MongoClient(self.__connectionString)
-            return True
-        return False
+    def __init__(self, database:str = None,
+                 user:str = None,
+                 password:str = None,
+                 host:str = None,
+                 port:str = None):
+        self.__database = database
+        self.__user = user
+        self.__password = password
+        self.__host = host
+        self.__port = port
+        self.test()
 
-    def setDatabase(self) ->bool:
-        if(self.__mongoClient != None):
-            self.__database = self.__mongoClient.get_database(self.__dbname)
-            return True
-        return False
+    def connect(self):
+        self.__connection = psycopg2.connect(database=self.__database,
+                                             user=self.__user,
+                                             password=self.__password,
+                                             host=self.__host,
+                                             port=self.__port)
 
-    def getCollection(self, collectionName: str) ->Collection:
-        return self.__database.get_collection(collectionName)
+    def test(self):
+        self.connect()
+        cursor = self.__connection.cursor()
+        cursor.execute("select version()")
+        result = cursor.fetchone()
+        print(result)
+        self.disconnect()
 
-    def insertOne(self, collectionName: str, document) ->bool:
-        collection = self.getCollection(collectionName)
-        if(collection != None):
-            collection.insert_one(document)
-            return True
-        return False
-
-    def insertMany(self, collectionName: str, documentList) ->bool:
-        collection = self.getCollection(collectionName)
-        if(collection != None):
-            collection.insert_many(documentList)
-            return True
-        return False
-
-    def getDocuments(self, collectionName: str, filter:dict) ->Cursor[_DocumentType]:
-        return self.getCollection(collectionName).find(filter)
-
-    def getDocument(self, collectionName: str, filter: dict) ->Optional[_DocumentType]:
-        return self.getCollection(collectionName).find_one(filter)
+    def disconnect(self):
+        self.__connection.close()

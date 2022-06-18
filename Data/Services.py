@@ -9,7 +9,12 @@ class Services:
     __dbHelper: DBHelper = None
     def __init__(self):
         self.loadEnvs()
-        self.__dbHelper = DBHelper(self.__envs[DBConstants.CONNECTION_STRING.value], self.__envs[DBConstants.DATABASE_NAME.value])
+        self.__dbHelper = DBHelper(database=self.__envs[DBConstants.DATABASE.value].replace('\n', ''),
+                                   user=self.__envs[DBConstants.USER.value].replace('\n', ''),
+                                   password=self.__envs[DBConstants.PASSWORD.value].replace('\n', ''),
+                                   host=self.__envs[DBConstants.HOST.value].replace('\n', ''),
+                                   port=self.__envs[DBConstants.PORT.value].replace('\n', ''))
+        self.__dbHelper.disconnect()
 
     def getSelectedEnv(self) ->str:
         mainEnvFile = open("Config/main.env")
@@ -24,6 +29,3 @@ class Services:
         for line in envsFile.readlines():
             if ("#" not in line):
                 self.__envs[line.split("=", 1)[0]] = line.split("=", 1)[1]
-
-    def insertCampaign(self, campaign: Campaign):
-        self.__dbHelper.insertOne(DBConstants.CAMPAIGN_COLLECTION.value, campaign.getDocument())
