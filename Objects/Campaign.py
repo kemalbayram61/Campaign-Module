@@ -13,7 +13,7 @@ class Campaign:
                  name: str = None,
                  productFilter: ProductFilter = None,
                  productFilterCriteria: ProductFilterCriteria = None,
-                 conditionalSelectionID: "str" = None,
+                 conditionalSelectionID: str = None,
                  conditionalSelectionObject: ConditionalSelection = None):
         self.__id = id
         self.__name = name

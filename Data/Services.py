@@ -15,6 +15,9 @@ class Services:
                                    host=self.__envs[DBConstants.HOST.value].replace('\n', ''),
                                    port=self.__envs[DBConstants.PORT.value].replace('\n', ''))
 
+        if(self.__envs[EnvConstants.RESET_TABLES_ON_INIT.value] == "1"):
+            self.__dbHelper.resetTables()
+
     def getSelectedEnv(self) ->str:
         mainEnvFile = open("Config/main.env")
         for line in mainEnvFile.readlines():

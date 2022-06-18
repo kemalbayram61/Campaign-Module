@@ -15,14 +15,14 @@ class ConditionalSelection:
                  requiredCount:int = None,
                  redundantType: ProductFilter = None,
                  redundantCriteria: ProductFilterCriteria = None,
-                 redundandCount: int = None):
+                 redundantCount: int = None):
         self.__id = id
         self.__requiredType = requiredType
         self.__requiredCriteria = requiredCriteria
         self.__requiredCount = requiredCount
         self.__redundantType = redundantType
         self.__redundantCriteria = redundantCriteria
-        self.__redundantCount = redundandCount
+        self.__redundantCount = redundantCount
 
     def getID(self) ->str:
         return self.__id
