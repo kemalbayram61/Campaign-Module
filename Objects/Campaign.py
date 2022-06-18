@@ -9,6 +9,19 @@ class Campaign:
     __conditionalSelectionID: str
     __conditionalSelectionObject: ConditionalSelection
 
+    def __init__(self, id: str = None,
+                 name: str = None,
+                 productFilter: ProductFilter = None,
+                 productFilterCriteria: ProductFilterCriteria = None,
+                 conditionalSelectionID: "str" = None,
+                 conditionalSelectionObject: ConditionalSelection = None):
+        self.__id = id
+        self.__name = name
+        self.__productFilter = productFilter
+        self.__productFilterCriteria = productFilterCriteria
+        self.__conditionalSelectionID = conditionalSelectionID
+        self.__conditionalSelectionObject = conditionalSelectionObject
+
     def getID(self) ->str:
         return self.__id
 
@@ -44,3 +57,18 @@ class Campaign:
 
     def setConditionalSelectionObject(self, conditionalSelectionObject: ConditionalSelection) ->None:
         self.__conditionalSelectionObject = conditionalSelectionObject
+
+    def getDocument(self) ->dict:
+        if(self.__id is not None):
+            return {"_id": self.__id,
+                    "name": self.__name,
+                    "productFilter": self.__productFilter.name,
+                    "productFilterCriteria": self.__productFilterCriteria.getDocument(),
+                    "conditionalSelectionID": self.__conditionalSelectionID,
+                    "conditionalSelectionObject": self.__conditionalSelectionObject.getDocument()}
+        else:
+            return {"name": self.__name,
+                    "productFilter": self.__productFilter.name,
+                    "productFilterCriteria": self.__productFilterCriteria.getDocument(),
+                    "conditionalSelectionID": self.__conditionalSelectionID,
+                    "conditionalSelectionObject": self.__conditionalSelectionObject.getDocument()}

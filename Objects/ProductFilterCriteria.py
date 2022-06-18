@@ -7,3 +7,9 @@ class ProductFilterCriteria:
                        featureList: list[Feature] = None):
         self.nameList = nameList
         self.featureList = featureList
+
+    def getDocument(self):
+        if(self.nameList == None):
+            return list(map(lambda feature: feature.getDocument(), self.featureList))
+        else:
+            return self.nameList

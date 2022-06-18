@@ -9,6 +9,21 @@ class ConditionalSelection:
     __redundantCriteria: ProductFilterCriteria
     __redundantCount: int
 
+    def __init__(self, id: str = None,
+                 requiredType: ProductFilter = None,
+                 requiredCriteria: ProductFilterCriteria = None,
+                 requiredCount:int = None,
+                 redundantType: ProductFilter = None,
+                 redundantCriteria: ProductFilterCriteria = None,
+                 redundandCount: int = None):
+        self.__id = id
+        self.__requiredType = requiredType
+        self.__requiredCriteria = requiredCriteria
+        self.__requiredCount = requiredCount
+        self.__redundantType = redundantType
+        self.__redundantCriteria = redundantCriteria
+        self.__redundantCount = redundandCount
+
     def getID(self) ->str:
         return self.__id
 
@@ -50,3 +65,20 @@ class ConditionalSelection:
 
     def setRedundantCount(self, count: int) -> None:
         self.__redundantCount = count
+
+    def getDocument(self) ->dict:
+        if(self.__id is not None):
+            return {"_id": self.__id,
+                    "requiredType": self.__requiredType.name,
+                    "requiredCriteria": self.__requiredCriteria.getDocument(),
+                    "requiredCount": self.__requiredCount,
+                    "redundantType": self.__redundantType.name,
+                    "redundantCriteria": self.__redundantCriteria.getDocument(),
+                    "redundantCount": self.__requiredCount}
+        else:
+            return {"requiredType": self.__requiredType.name,
+                    "requiredCriteria": self.__requiredCriteria.getDocument(),
+                    "requiredCount": self.__requiredCount,
+                    "redundantType": self.__redundantType.name,
+                    "redundantCriteria": self.__redundantCriteria.getDocument(),
+                    "redundantCount": self.__requiredCount}
