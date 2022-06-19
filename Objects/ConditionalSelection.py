@@ -2,6 +2,7 @@ from Abstracts.EProductFilter import ProductFilter
 from Objects.ProductFilterCriteria import ProductFilterCriteria
 class ConditionalSelection:
     __id:str
+    __campaignID: str
     __requiredType: ProductFilter
     __requiredCriteria: ProductFilterCriteria
     __requiredCount: int
@@ -10,6 +11,7 @@ class ConditionalSelection:
     __redundantCount: int
 
     def __init__(self, id: str = None,
+                 campaignID: str = None,
                  requiredType: ProductFilter = None,
                  requiredCriteria: ProductFilterCriteria = None,
                  requiredCount:int = None,
@@ -17,6 +19,7 @@ class ConditionalSelection:
                  redundantCriteria: ProductFilterCriteria = None,
                  redundantCount: int = None):
         self.__id = id
+        self.__campaignID = campaignID
         self.__requiredType = requiredType
         self.__requiredCriteria = requiredCriteria
         self.__requiredCount = requiredCount
@@ -26,6 +29,9 @@ class ConditionalSelection:
 
     def getID(self) ->str:
         return self.__id
+
+    def getCampaignID(self) ->str:
+        return self.__campaignID
 
     def getRequiredType(self) ->ProductFilter:
         return self.__requiredType
@@ -47,6 +53,9 @@ class ConditionalSelection:
 
     def setID(self, id:str) ->None:
         self.__id = id
+
+    def setCampaignID(self, id:str) ->None:
+        self.__campaignID = id
 
     def setRequiredType(self, requiredType: ProductFilter) ->None:
         self.__requiredType = requiredType
