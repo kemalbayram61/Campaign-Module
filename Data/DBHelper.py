@@ -53,6 +53,7 @@ class DBHelper:
             create table {}(
                 _id serial primary key,
                 name varchar(60) NOT NULL,
+                companyID int NOT NULL,
                 productFilter int NOT NULL,
                 productFilterCriteria json NOT NULL,
                 conditionalSelectionID int
@@ -90,9 +91,10 @@ class DBHelper:
         sql = f'''
             insert into {DBConstants.CAMPAIGN_TABLE_NAME.value}(
                 name,
+                companyID,
                 productFilter,
                 productFilterCriteria,
-                conditionalSelectionID) values ('{campaign.getName()}', {campaign.getProductFilter().value}, '{{"criteria":{str(campaign.getProductFilterCriteria())}}}', {int(campaign.getConditionalSelectionID())})
+                conditionalSelectionID) values ('{campaign.getName()}', {int(campaign.getCompanyID())} , {campaign.getProductFilter().value}, '{{"criteria":{str(campaign.getProductFilterCriteria())}}}', {int(campaign.getConditionalSelectionID())})
         '''
 
         cursor.execute(sql)
