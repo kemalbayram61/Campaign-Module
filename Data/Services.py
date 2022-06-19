@@ -41,3 +41,15 @@ class Services:
 
     def insertConditionalSelection(self, conditionalSelection: ConditionalSelection):
         self.__dbHelper.insertConditionalSelection(conditionalSelection)
+
+    def getAllCampaign(self):
+        allCampaign = self.__dbHelper.select(DBConstants.CAMPAIGN_TABLE_NAME)
+        print(allCampaign)
+
+    def getAllProduct(self):
+        allProduct = self.__dbHelper.select(DBConstants.PRODUCT_TABLE_NAME)
+        print(allProduct)
+
+    def getAllConditionalSelection(self):
+        allCconditionalSelection = self.__dbHelper.select(DBConstants.CONDITIONAL_SELECTION_TABLE_NAME)
+        print(allCconditionalSelection)

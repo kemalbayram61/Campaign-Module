@@ -24,3 +24,5 @@ if __name__ == '__main__':
     services.insertProduct(product)
     services.insertCampaign(campaign)
     services.insertConditionalSelection(conditionalSelection)
+
+    services.getAllCampaign()
