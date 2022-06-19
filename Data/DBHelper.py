@@ -1,6 +1,7 @@
 from Abstracts.DBConstants import DBConstants
 from Objects.Campaign import Campaign
 from Objects.Product import Product
+from Objects.DBFilter import DBFilter
 from Objects.ConditionalSelection import ConditionalSelection
 import psycopg2
 
@@ -139,3 +140,14 @@ class DBHelper:
         cursor.execute(sql)
         self.__connection.commit()
         self.disconnect()
+
+    def select(self, tableName: DBConstants, criteria: list[DBFilter] = None):
+        self.connect()
+        cursor = self.__connection.cursor()
+        sql = "select * from " + str(tableName.value)
+        if(criteria is not None and len(criteria)>0):
+            sql = sql + " where " + ' and '.join([str(elem.key) + str(elem.operator) + str(elem.value) for elem in criteria])
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        self.disconnect()
+        return result
