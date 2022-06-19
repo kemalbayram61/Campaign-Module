@@ -1,5 +1,6 @@
 from Abstracts.DBConstants import DBConstants
 from Objects.Campaign import Campaign
+from Objects.Product import Product
 import psycopg2
 
 class DBHelper:
@@ -46,7 +47,6 @@ class DBHelper:
         cursor.execute("drop table if exists " + DBConstants.CAMPAIGN_TABLE_NAME.value)
         cursor.execute("drop table if exists " + DBConstants.PRODUCT_TABLE_NAME.value)
         cursor.execute("drop table if exists " + DBConstants.CONDITIONAL_SELECTION_TABLE_NAME.value)
-        cursor.execute("drop table if exists " + DBConstants.PRODUCT_FEATURE_TABLE_NAME.value)
 
         campaignSql = '''
             create table {}(
@@ -60,15 +60,10 @@ class DBHelper:
         productSql = '''
             create table {}(
                 _id serial primary key,
-                name varchar(60) NOT NULL
+                name varchar(60) NOT NULL,
+                features json NOT NULL
             )
         '''.format(DBConstants.PRODUCT_TABLE_NAME.value)
-        productFeatureSql = '''
-            create table {}(
-                productID int NOT NULL,
-                feature varchar(60) NOT NULL
-            )
-        '''.format(DBConstants.PRODUCT_FEATURE_TABLE_NAME.value)
         conditionalSelectionSql = '''
             create table {}(
                 _id serial primary key,
@@ -84,7 +79,6 @@ class DBHelper:
 
         cursor.execute(campaignSql)
         cursor.execute(productSql)
-        cursor.execute(productFeatureSql)
         cursor.execute(conditionalSelectionSql)
         self.__connection.commit()
         self.disconnect()
@@ -98,6 +92,20 @@ class DBHelper:
                 productFilter,
                 productFilterCriteria,
                 conditionalSelectionID) values ('{campaign.getName()}', {campaign.getProductFilter().value}, '{{"criteria":{str(campaign.getProductFilterCriteria())}}}', {int(campaign.getConditionalSelectionID())})
+        '''
+
+        cursor.execute(sql)
+        self.__connection.commit()
+        self.disconnect()
+
+    def insertProduct(self, product: Product):
+        self.connect()
+        cursor = self.__connection.cursor()
+        featuresStr: str = "[" + ','.join([str(elem) for elem in product.getFeatures()]) + "]"
+        sql = f'''
+            insert into {DBConstants.PRODUCT_TABLE_NAME.value}(
+                name,
+                features) values ('{product.getname()}', '{{"features":{featuresStr}}}')
         '''
 
         cursor.execute(sql)
