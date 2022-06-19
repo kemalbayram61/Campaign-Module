@@ -53,7 +53,7 @@ class DBHelper:
                 _id serial primary key,
                 name varchar(60) NOT NULL,
                 productFilter int NOT NULL,
-                productFilterCriteria varchar(500) NOT NULL,
+                productFilterCriteria json NOT NULL,
                 conditionalSelectionID int
             )
         '''.format(DBConstants.CAMPAIGN_TABLE_NAME.value)
@@ -74,10 +74,10 @@ class DBHelper:
                 _id serial primary key,
                 campaignID int NOT NULL,
                 requiredType int NOT NULL,
-                requiredCriteria varchar(500) NOT NULL,
+                requiredCriteria json NOT NULL,
                 requiredCount int NOT NULL,
                 redundantType int NOT NULL,
-                redundantCriteria varchar(500) NOT NULL,
+                redundantCriteria json NOT NULL,
                 redundantCount int NOT NULL
             )
         '''.format(DBConstants.CONDITIONAL_SELECTION_TABLE_NAME.value)
@@ -92,13 +92,14 @@ class DBHelper:
     def insertCampaign(self, campaign: Campaign):
         self.connect()
         cursor = self.__connection.cursor()
-        sql = '''
-            insert into {}(
+        sql = f'''
+            insert into {DBConstants.CAMPAIGN_TABLE_NAME.value}(
                 name,
                 productFilter,
                 productFilterCriteria,
-                conditionalSelectionID) values ('{}', {}, '{}', {})
-        '''.format(DBConstants.CAMPAIGN_TABLE_NAME.value, campaign.getName(), campaign.getProductFilter().value, str(campaign.getProductFilterCriteria()), int(campaign.getConditionalSelectionID()))
+                conditionalSelectionID) values ('{campaign.getName()}', {campaign.getProductFilter().value}, '{{"criteria":{str(campaign.getProductFilterCriteria())}}}', {int(campaign.getConditionalSelectionID())})
+        '''
+
         cursor.execute(sql)
         self.__connection.commit()
         self.disconnect()

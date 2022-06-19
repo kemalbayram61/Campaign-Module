@@ -8,14 +8,8 @@ class ProductFilterCriteria:
         self.nameList = nameList
         self.featureList = featureList
 
-    def listToStr(self, listObject):
-        response = ""
-        for element in listObject:
-            response = response + str(element) + ';'
-        return response
-
     def __str__(self):
-        if(self.nameList == None):
-            return self.listToStr(self.featureList)
+        if(self.nameList != None):
+            return  "[" + ','.join(["\"" + str(elem) + "\"" for elem in self.nameList]) + "]"
         else:
-            return self.listToStr(self.nameList)
+            return  "[" + ','.join([str(elem) for elem in self.featureList]) + "]"
