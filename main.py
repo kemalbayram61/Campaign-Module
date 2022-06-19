@@ -14,6 +14,7 @@ if __name__ == '__main__':
     conditionalSelection: ConditionalSelection = ConditionalSelection("1","1", ProductFilter.PRODUCT, productFilterCriteria, 3, ProductFilter.PRODUCT, productFilterCriteria, 1)
     campaign: Campaign = Campaign(id=None,
                                   name="sepette 3 al 2 öde",
+                                  companyID="1",
                                   productFilter=ProductFilter.PRODUCT,
                                   productFilterCriteria=productFilterCriteria,
                                   conditionalSelectionID="1",

@@ -4,6 +4,7 @@ from Objects.ConditionalSelection import ConditionalSelection
 class Campaign:
     __id: str
     __name: str
+    __companyID: str
     __productFilter:ProductFilter
     __productFilterCriteria: ProductFilterCriteria
     __conditionalSelectionID: str
@@ -11,12 +12,14 @@ class Campaign:
 
     def __init__(self, id: str = None,
                  name: str = None,
+                 companyID: str = None,
                  productFilter: ProductFilter = None,
                  productFilterCriteria: ProductFilterCriteria = None,
                  conditionalSelectionID: str = None,
                  conditionalSelectionObject: ConditionalSelection = None):
         self.__id = id
         self.__name = name
+        self.__companyID = companyID
         self.__productFilter = productFilter
         self.__productFilterCriteria = productFilterCriteria
         self.__conditionalSelectionID = conditionalSelectionID
@@ -24,6 +27,9 @@ class Campaign:
 
     def getID(self) ->str:
         return self.__id
+
+    def getCompanyID(self) ->str:
+        return self.__companyID
 
     def getName(self) ->str:
         return self.__name
@@ -42,6 +48,9 @@ class Campaign:
 
     def setID(self, id: str) ->None:
         self.__id = id
+
+    def setCompanyID(self, id: str) ->None:
+        self.__companyID = id
 
     def setName(self, name: str) ->None:
         self.__name = name
