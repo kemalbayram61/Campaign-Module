@@ -12,4 +12,4 @@ class Feature:
         return False
 
     def __str__(self):
-        return "key:" + self.key + "value:" + self.value
+        return "{\"key\":\"" + str(self.key) + "\",\"value\":\"" + str(self.value) + "\"}"
