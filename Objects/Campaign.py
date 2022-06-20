@@ -11,6 +11,7 @@ class Campaign:
     __productFilterCriteria: ProductFilterCriteria
     __implementationType: ImplementationType
     __implementationTypeCriteria: ImplementationTypeCriteria
+    __implementationTypeAmount: float
     __requiredType: ProductFilter
     __requiredCriteria: ProductFilterCriteria
     __requiredCount: int
@@ -29,6 +30,7 @@ class Campaign:
                  productFilterCriteria: ProductFilterCriteria = None,
                  implementationType: ImplementationType = None,
                  implementationTypeCriteria: ImplementationTypeCriteria = None,
+                 implementationTypeAmount: float = None,
                  requiredType: ProductFilter = None,
                  requiredCriteria: ProductFilterCriteria = None,
                  requiredCount: int = None,
@@ -46,6 +48,7 @@ class Campaign:
         self.__productFilterCriteria = productFilterCriteria
         self.__implementationType = implementationType
         self.__implementationTypeCriteria = implementationTypeCriteria
+        self.__implementationTypeAmount = implementationTypeAmount
         self.__requiredType = requiredType
         self.__requiredCriteria = requiredCriteria
         self.__requiredCount = requiredCount

@@ -53,23 +53,21 @@ class DBHelper:
                 _id serial primary key,
                 name varchar(60) NOT NULL,
                 companyID int NOT NULL,
-                productFilter int NOT NULL,
-                productFilterCriteria json NOT NULL,
-                implementationType int NOT NULL,
-                implementationTypeCriteria int NOT NULL,
-                implementationTypeAmount decimal NOT NULL,
-                requiredType int NOT NULL,
-                requiredCriteria json NOT NULL,
-                requiredCount int NOT NULL,
-                requiredCondition int NOT NULL,
-                requiredConditionAmount decimal NOT NULL,
-                redundantType int NOT NULL,
-                redundantCriteria json NOT NULL,
-                redundantCondition int NOT NULL,
-                redundantConditionAmount decimal NOT NULL,
-                redundantCount int NOT NULL
-            )
-        '''.format(DBConstants.CAMPAIGN_TABLE_NAME.value)
+                productFilter int,
+                productFilterCriteria json,
+                implementationType int,
+                implementationTypeCriteria int,
+                implementationTypeAmount decimal,
+                requiredType int,
+                requiredCriteria json,
+                requiredCount int,
+                requiredCondition int,
+                requiredConditionAmount decimal,
+                redundantType int,
+                redundantCriteria json,
+                redundantCondition int,
+                redundantConditionAmount decimal,
+                redundantCount int)'''.format(DBConstants.CAMPAIGN_TABLE_NAME.value)
         productSql = '''
             create table {}(
                 _id serial primary key,
