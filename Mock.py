@@ -59,4 +59,14 @@ class Mock:
                                        redundantCondition=Comparison.SMALLER_THAN,
                                        redundantConditionAmount=5000)
         campaignList.append(campaign4)
+        campaign5: Campaign = Campaign(id="2",
+                                       name="70tl ve üzeri siparişinizde 30tl hediye",
+                                       companyID="1",
+                                       requiredType = ProductFilter.PRODUCT_FEATURE,
+                                       implementationType=ImplementationType.TOTAL_PRICE,
+                                       implementationTypeAmount=30,
+                                       requiredCriteria= ProductFilterCriteria( featureList=[ce]),
+                                       requiredCondition=Comparison.GREATER_THAN,
+                                       requiredConditionAmount=70)
+        campaignList.append(campaign5)
         return campaignList
