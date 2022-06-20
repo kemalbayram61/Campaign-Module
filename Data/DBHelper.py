@@ -2,7 +2,6 @@ from Abstracts.DBConstants import DBConstants
 from Objects.Campaign import Campaign
 from Objects.Product import Product
 from Objects.DBFilter import DBFilter
-from Objects.ConditionalSelection import ConditionalSelection
 import psycopg2
 
 class DBHelper:
@@ -93,8 +92,7 @@ class DBHelper:
                 name,
                 companyID,
                 productFilter,
-                productFilterCriteria,
-                conditionalSelectionID) values ('{campaign.getName()}', {int(campaign.getCompanyID())} , {campaign.getProductFilter().value}, '{{"criteria":{str(campaign.getProductFilterCriteria())}}}', {int(campaign.getConditionalSelectionID())})
+                productFilterCriteria) values ('{campaign.getName()}', {int(campaign.getCompanyID())} , {campaign.getProductFilter().value}, '{{"criteria":{str(campaign.getProductFilterCriteria())}}}')
         '''
 
         cursor.execute(sql)
@@ -109,31 +107,6 @@ class DBHelper:
             insert into {DBConstants.PRODUCT_TABLE_NAME.value}(
                 name,
                 features) values ('{product.getname()}', '{{"features":{featuresStr}}}')
-        '''
-
-        cursor.execute(sql)
-        self.__connection.commit()
-        self.disconnect()
-
-    def insertConditionalSelection(self, conditionalSelection: ConditionalSelection):
-        self.connect()
-        cursor = self.__connection.cursor()
-        sql = f'''
-            insert into {DBConstants.CONDITIONAL_SELECTION_TABLE_NAME.value}(
-                campaignID,
-                requiredType,
-                requiredCriteria,
-                requiredCount,
-                redundantType,
-                redundantCriteria,
-                redundantCount) values 
-                ({int(conditionalSelection.getCampaignID())}, 
-                {conditionalSelection.getRequiredType().value}, 
-                '{{"criteria":{str(conditionalSelection.getRequiredCriteria())}}}', 
-                {conditionalSelection.getRequiredCount()},
-                {conditionalSelection.getRedundantType().value},
-                '{{"criteria":{str(conditionalSelection.getRedundantCriteria())}}}', 
-                {conditionalSelection.getRedundantCount()})
         '''
 
         cursor.execute(sql)

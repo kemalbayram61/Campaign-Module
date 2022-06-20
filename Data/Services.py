@@ -3,7 +3,6 @@ from Abstracts.DBConstants import DBConstants
 from Abstracts.EnvConstants import EnvConstants
 from Objects.Campaign import Campaign
 from Objects.Product import Product
-from Objects.ConditionalSelection import ConditionalSelection
 
 class Services:
     __envs :dict = None
@@ -39,9 +38,6 @@ class Services:
     def insertProduct(self, product: Product):
         self.__dbHelper.insertProduct(product)
 
-    def insertConditionalSelection(self, conditionalSelection: ConditionalSelection):
-        self.__dbHelper.insertConditionalSelection(conditionalSelection)
-
     def getAllCampaign(self):
         allCampaign = self.__dbHelper.select(DBConstants.CAMPAIGN_TABLE_NAME)
         print(allCampaign)
@@ -49,7 +45,3 @@ class Services:
     def getAllProduct(self):
         allProduct = self.__dbHelper.select(DBConstants.PRODUCT_TABLE_NAME)
         print(allProduct)
-
-    def getAllConditionalSelection(self):
-        allCconditionalSelection = self.__dbHelper.select(DBConstants.CONDITIONAL_SELECTION_TABLE_NAME)
-        print(allCconditionalSelection)
