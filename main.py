@@ -10,5 +10,3 @@ if __name__ == '__main__':
     width: Feature = Feature("genişlik","110cm")
     height: Feature = Feature("uzunluk","90cm")
     product: Product = Product(name="Masa", features=[width, height])
-
-    services.getAllCampaign()

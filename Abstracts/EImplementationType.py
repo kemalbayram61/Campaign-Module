@@ -1,4 +1,4 @@
 from enum import Enum
 class ImplementationType(Enum):
-    PRODUCT = 0
-    PRODUCT_CATEGORY = 1
+    EACH_PRICE = 0
+    SUBTRACT_PRICE = 1

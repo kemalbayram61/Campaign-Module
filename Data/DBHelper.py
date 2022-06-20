@@ -47,7 +47,6 @@ class DBHelper:
         cursor = self.__connection.cursor()
         cursor.execute("drop table if exists " + DBConstants.CAMPAIGN_TABLE_NAME.value)
         cursor.execute("drop table if exists " + DBConstants.PRODUCT_TABLE_NAME.value)
-        cursor.execute("drop table if exists " + DBConstants.CONDITIONAL_SELECTION_TABLE_NAME.value)
 
         campaignSql = '''
             create table {}(
