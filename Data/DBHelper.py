@@ -57,7 +57,19 @@ class DBHelper:
                 companyID int NOT NULL,
                 productFilter int NOT NULL,
                 productFilterCriteria json NOT NULL,
-                conditionalSelectionID int
+                implementationType int NOT NULL,
+                implementationTypeCriteria int NOT NULL,
+                implementationTypeAmount decimal NOT NULL,
+                requiredType int NOT NULL,
+                requiredCriteria json NOT NULL,
+                requiredCount int NOT NULL,
+                requiredCondition int NOT NULL,
+                requiredConditionAmount decimal NOT NULL,
+                redundantType int NOT NULL,
+                redundantCriteria json NOT NULL,
+                redundantCondition int NOT NULL,
+                redundantConditionAmount decimal NOT NULL,
+                redundantCount int NOT NULL
             )
         '''.format(DBConstants.CAMPAIGN_TABLE_NAME.value)
         productSql = '''
@@ -67,22 +79,9 @@ class DBHelper:
                 features json NOT NULL
             )
         '''.format(DBConstants.PRODUCT_TABLE_NAME.value)
-        conditionalSelectionSql = '''
-            create table {}(
-                _id serial primary key,
-                campaignID int NOT NULL,
-                requiredType int NOT NULL,
-                requiredCriteria json NOT NULL,
-                requiredCount int NOT NULL,
-                redundantType int NOT NULL,
-                redundantCriteria json NOT NULL,
-                redundantCount int NOT NULL
-            )
-        '''.format(DBConstants.CONDITIONAL_SELECTION_TABLE_NAME.value)
 
         cursor.execute(campaignSql)
         cursor.execute(productSql)
-        cursor.execute(conditionalSelectionSql)
         self.__connection.commit()
         self.disconnect()
 

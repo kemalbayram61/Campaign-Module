@@ -1,29 +1,61 @@
 from Abstracts.EProductFilter import ProductFilter
+from Abstracts.EImplementationType import ImplementationType
+from Abstracts.EImplementationTypeCriteria import ImplementationTypeCriteria
+from Abstracts.EComparison import Comparison
 from Objects.ProductFilterCriteria import ProductFilterCriteria
-from Objects.ConditionalSelection import ConditionalSelection
 class Campaign:
     __id: str
     __name: str
     __companyID: str
     __productFilter:ProductFilter
     __productFilterCriteria: ProductFilterCriteria
-    __conditionalSelectionID: str
-    __conditionalSelectionObject: ConditionalSelection
+    __implementationType: ImplementationType
+    __implementationTypeCriteria: ImplementationTypeCriteria
+    __requiredType: ProductFilter
+    __requiredCriteria: ProductFilterCriteria
+    __requiredCount: int
+    __requiredCondition: Comparison
+    __requiredConditionAmount: float
+    __redundantType: ProductFilter
+    __redundantCriteria: ProductFilterCriteria
+    __redundantCount: int
+    __redundantCondition: Comparison
+    __redundantConditionAmount: float
 
     def __init__(self, id: str = None,
                  name: str = None,
                  companyID: str = None,
                  productFilter: ProductFilter = None,
                  productFilterCriteria: ProductFilterCriteria = None,
-                 conditionalSelectionID: str = None,
-                 conditionalSelectionObject: ConditionalSelection = None):
+                 implementationType: ImplementationType = None,
+                 implementationTypeCriteria: ImplementationTypeCriteria = None,
+                 requiredType: ProductFilter = None,
+                 requiredCriteria: ProductFilterCriteria = None,
+                 requiredCount: int = None,
+                 requiredCondition: Comparison = None,
+                 requiredConditionAmount: float = None,
+                 redundantType: ProductFilter = None,
+                 redundantCriteria: ProductFilterCriteria = None,
+                 redundantCount: int = None,
+                 redundantCondition: Comparison = None,
+                 redundantConditionAmount: float = None):
         self.__id = id
         self.__name = name
         self.__companyID = companyID
         self.__productFilter = productFilter
         self.__productFilterCriteria = productFilterCriteria
-        self.__conditionalSelectionID = conditionalSelectionID
-        self.__conditionalSelectionObject = conditionalSelectionObject
+        self.__implementationType = implementationType
+        self.__implementationTypeCriteria = implementationTypeCriteria
+        self.__requiredType = requiredType
+        self.__requiredCriteria = requiredCriteria
+        self.__requiredCount = requiredCount
+        self.__redundantType = redundantType
+        self.__redundantCriteria = redundantCriteria
+        self.__redundantCount = redundantCount
+        self.__requiredCondition = requiredCondition
+        self.__requiredConditionAmount = requiredConditionAmount
+        self.__redundantCondition = redundantCondition
+        self.__redundantConditionAmount = redundantConditionAmount
 
     def getID(self) ->str:
         return self.__id
@@ -40,12 +72,6 @@ class Campaign:
     def getProductFilterCriteria(self) ->ProductFilterCriteria:
         return self.__productFilterCriteria
 
-    def getConditionalSelectionID(self) ->str:
-        return self.__conditionalSelectionID
-
-    def getConditionalSelectionObject(self) ->ConditionalSelection:
-        return self.__conditionalSelectionObject
-
     def setID(self, id: str) ->None:
         self.__id = id
 
@@ -61,23 +87,38 @@ class Campaign:
     def setProductFilterCriteria(self, productFilterCriteria: ProductFilterCriteria):
         self.__productFilterCriteria = productFilterCriteria
 
-    def setConditionalSelectionID(self, id: str) ->None:
-        self.__conditionalSelectionID = id
+    def getRequiredType(self) ->ProductFilter:
+        return self.__requiredType
 
-    def setConditionalSelectionObject(self, conditionalSelectionObject: ConditionalSelection) ->None:
-        self.__conditionalSelectionObject = conditionalSelectionObject
+    def getRequiredCriteria(self) ->ProductFilterCriteria:
+        return self.__requiredCriteria
 
-    def getDocument(self) ->dict:
-        if(self.__id is not None):
-            return {"_id": self.__id,
-                    "name": self.__name,
-                    "productFilter": self.__productFilter.name,
-                    "productFilterCriteria": self.__productFilterCriteria.getDocument(),
-                    "conditionalSelectionID": self.__conditionalSelectionID,
-                    "conditionalSelectionObject": self.__conditionalSelectionObject.getDocument()}
-        else:
-            return {"name": self.__name,
-                    "productFilter": self.__productFilter.name,
-                    "productFilterCriteria": self.__productFilterCriteria.getDocument(),
-                    "conditionalSelectionID": self.__conditionalSelectionID,
-                    "conditionalSelectionObject": self.__conditionalSelectionObject.getDocument()}
+    def getRequiredCount(self) ->int:
+        return self.__requiredCount
+
+    def getRedundantType(self) -> ProductFilter:
+        return self.__redundantType
+
+    def getRedundantCriteria(self) -> ProductFilterCriteria:
+        return self.__redundantCriteria
+
+    def getRedundantCount(self) -> int:
+        return self.__redundantCount
+
+    def setRequiredType(self, requiredType: ProductFilter) ->None:
+        self.__requiredType = requiredType
+
+    def setRequiredCriteria(self, requiredCriteria: ProductFilterCriteria) ->None:
+        self.__requiredCriteria = requiredCriteria
+
+    def setRequiredCount(self, count: int) ->None:
+        self.__requiredCount = count
+
+    def setRedundantType(self, redundantType: ProductFilter) -> None:
+        self.__redundantType = redundantType
+
+    def setRedundantCriteria(self, redundandCriteria: ProductFilterCriteria) -> None:
+        self.__redundantCriteria = redundandCriteria
+
+    def setRedundantCount(self, count: int) -> None:
+        self.__redundantCount = count
