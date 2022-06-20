@@ -21,3 +21,5 @@ if __name__ == '__main__':
                                   implementationType= ImplementationType.EACH_PRICE,
                                   implementationTypeCriteria=ImplementationTypeCriteria.RATE,
                                   implementationTypeAmount=0.2)
+
+    services.insertCampaign(campaign)
