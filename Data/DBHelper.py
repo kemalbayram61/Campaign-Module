@@ -89,7 +89,37 @@ class DBHelper:
                 name,
                 companyID,
                 productFilter,
-                productFilterCriteria) values ('{campaign.getName()}', {int(campaign.getCompanyID())} , {campaign.getProductFilter().value}, '{{"criteria":{str(campaign.getProductFilterCriteria())}}}')
+                productFilterCriteria,
+                implementationType ,
+                implementationTypeCriteria ,
+                implementationTypeAmount ,
+                requiredType ,
+                requiredCriteria ,
+                requiredCount,
+                requiredCondition,
+                requiredConditionAmount,
+                redundantType,
+                redundantCriteria,
+                redundantCondition,
+                redundantConditionAmount,
+                redundantCount) values ('
+                {campaign.getName()}', 
+                {int(campaign.getCompanyID())} , 
+                { 'NULL' if campaign.getProductFilter() == None else campaign.getProductFilter().value}, 
+                '{{"criteria":{str(0 if campaign.getProductFilterCriteria() == None else campaign.getProductFilterCriteria())}}}',
+                {'NULL' if campaign.getImplementationType() == None else campaign.getImplementationType().value},
+                {'NULL' if campaign.getImplementationTypeCriteria() == None else campaign.getImplementationTypeCriteria().value},
+                {'NULL' if campaign.getImplementationTypeAmount() == None else campaign.getImplementationTypeAmount()},
+                {'NULL' if campaign.getRequiredType() == None else campaign.getRequiredType().value},
+                '{{"criteria":{str(0 if campaign.getRequiredCriteria() == None else campaign.getRequiredCriteria())}}}',
+                {'NULL' if campaign.getRequiredCount() == None else campaign.getRequiredCount()},
+                {'NULL' if campaign.getRequiredCondition() == None else campaign.getRequiredCondition().value},
+                {'NULL' if campaign.getRequiredConditionAmount() == None else campaign.getRequiredConditionAmount()},
+                {'NULL' if campaign.getRedundantType() == None else campaign.getRedundantType().value},
+                '{{"criteria":{str(0 if campaign.getRedundantCriteria() == None else campaign.getRedundantCriteria())}}}',
+                {'NULL' if campaign.getRedundantCondition() == None else campaign.getRedundantCondition().value},
+                {'NULL' if campaign.getRedundantConditionAmount() == None else campaign.getRedundantConditionAmount()},
+                {'NULL' if campaign.getRedundantCount() == None else campaign.getRedundantCount()})
         '''
 
         cursor.execute(sql)

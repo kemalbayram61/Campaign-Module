@@ -63,6 +63,27 @@ class Campaign:
     def getID(self) ->str:
         return self.__id
 
+    def getImplementationType(self) ->ImplementationType:
+        return self.__implementationType
+
+    def getImplementationTypeCriteria(self) ->ImplementationTypeCriteria:
+        return self.__implementationTypeCriteria
+
+    def getImplementationTypeAmount(self) ->float:
+        return self.__implementationTypeAmount
+
+    def getRequiredCondition(self) ->Comparison:
+        return  self.__requiredCondition
+
+    def getRequiredConditionAmount(self) ->float:
+        return self.__requiredConditionAmount
+
+    def getRedundantCondition(self) -> Comparison:
+        return self.__redundantCondition
+
+    def getRedundantConditionAmount(self) -> float:
+        return self.__redundantConditionAmount
+
     def getCompanyID(self) ->str:
         return self.__companyID
 
