@@ -49,12 +49,12 @@ class Mock:
                                        name="50000tl ve üzeri koltuk alışverişinde 5000tl ve altı ortasehpa hediye",
                                        companyID="1",
                                        requiredType = ProductFilter.PRODUCT_FEATURE,
-                                       requiredCriteria= ProductFilterCriteria( featureList=[categoryTable]),
+                                       requiredCriteria= ProductFilterCriteria( featureList=[categoryArmChair]),
                                        requiredCount=1,
                                        requiredCondition=Comparison.GREATER_THAN,
                                        requiredConditionAmount=50000,
                                        redundantType= ProductFilter.PRODUCT_FEATURE,
-                                       redundantCriteria=ProductFilterCriteria( featureList=[categoryChair]),
+                                       redundantCriteria=ProductFilterCriteria( featureList=[categoryTripod]),
                                        redundantCount=1,
                                        redundantCondition=Comparison.SMALLER_THAN,
                                        redundantConditionAmount=5000)
@@ -69,4 +69,13 @@ class Mock:
                                        requiredCondition=Comparison.GREATER_THAN,
                                        requiredConditionAmount=70)
         campaignList.append(campaign5)
+        campaign6: Campaign = Campaign(id="1",
+                                      name="Seçili Coca-Cola ürünleri %40 indirimli",
+                                      companyID="1",
+                                      productFilter=ProductFilter.PRODUCT_FEATURE,
+                                      productFilterCriteria=ProductFilterCriteria(nameList=["Coca-cola-1", "Coca-cola-2"]),
+                                      implementationType=ImplementationType.EACH_PRICE,
+                                      implementationTypeCriteria=ImplementationTypeCriteria.RATE,
+                                      implementationTypeAmount=0.2)
+        campaignList.append(campaign6)
         return campaignList
