@@ -51,7 +51,7 @@ class DBHelper:
         campaignSql = '''
             create table {}(
                 _id serial primary key,
-                name varchar(60) NOT NULL,
+                name varchar(100) NOT NULL,
                 companyID int NOT NULL,
                 productFilter int,
                 productFilterCriteria json,
