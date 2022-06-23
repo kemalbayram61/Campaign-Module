@@ -76,6 +76,6 @@ class Mock:
                                       productFilterCriteria=ProductFilterCriteria(nameList=["Coca-cola-1", "Coca-cola-2"]),
                                       implementationType=ImplementationType.EACH_PRICE,
                                       implementationTypeCriteria=ImplementationTypeCriteria.RATE,
-                                      implementationTypeAmount=0.2)
+                                      implementationTypeAmount=0.4)
         campaignList.append(campaign6)
         return campaignList
