@@ -48,6 +48,23 @@ class CampaignMock:
                                        actionAmount=20,
                                        actionQty= None,
                                        maxDiscount=None)
-        campaignList = [campaign1, campaign2, campaign3, campaign4, campaign5]
+
+        campaign6: Campaign = Campaign(id="6",
+                                       name="Seçili ürünlerde 50 ve üzeri alışverişlerde sepete %20 indirim",
+                                       productCriteria=[Criteria(CriteriaTypes.NAME, "Ice tea"), Criteria(CriteriaTypes.NAME, "Fuse tea"), Criteria(CriteriaTypes.AMOUNT, 50)],
+                                       actionCriteria=None,
+                                       actionType=ActionTypes.PERCENT,
+                                       actionAmount=20,
+                                       actionQty= 1,
+                                       maxDiscount=None)
+        campaign7: Campaign = Campaign(id="7",
+                                       name="50 ve üzeri alışverişlerde 10 para puan hediye",
+                                       productCriteria=[Criteria(CriteriaTypes.AMOUNT, 50)],
+                                       actionCriteria=None,
+                                       actionType=ActionTypes.PERCENT,
+                                       actionAmount=20,
+                                       actionQty= 1,
+                                       maxDiscount=None)
+        campaignList = [campaign1, campaign2, campaign3, campaign4, campaign5, campaign6, campaign7]
 
         return campaignList
