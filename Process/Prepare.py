@@ -1,18 +1,22 @@
 from Objects.Basked import Basked
 from Objects.PreparedCampaign import PreparedCampaign
 from Objects.PreparedBaskedItem import PreparedBaskedItem
+from Objects.Campaign import Campaign
 
 class Prepare:
     basked: Basked
-    campaignList: list
-    preparedCampaignList: list
-    preparedBaskedItemList: list
+    campaignList: list[Campaign]
+    preparedCampaignList: list[PreparedCampaign]
+    preparedBaskedItemList: list[PreparedBaskedItem]
 
     def __init__(self, basked: Basked = None, campaignList: list = None):
         self.basked = basked
         self.campaignList = campaignList
+        if(basked is not None and campaignList is not None):
+            self.setPreparedCampaignList()
+            self.setPreparedBaskedItemList()
 
-    def getPreparedCampaignList(self) ->list:
+    def setPreparedCampaignList(self) ->list[PreparedCampaign]:
         preparedCampaignList = []
         for campaign in self.campaignList:
             if(campaign.productCriteria is not None):
@@ -32,9 +36,10 @@ class Prepare:
                                                        featureValue= productCriteria.value,
                                                        isPotential=False)
                     preparedCampaignList.append(prepareCampaign)
+        self.preparedCampaignList = preparedCampaignList
         return preparedCampaignList
 
-    def getPreparedBaskedItemList(self) ->list:
+    def setPreparedBaskedItemList(self) ->list[PreparedBaskedItem]:
         preparedBaskedItemList = []
         baskedItems = self.basked.items
         for baskedItem in baskedItems:
@@ -45,5 +50,16 @@ class Prepare:
                                                         qty=baskedItem.qty,
                                                         amount=baskedItem.amount)
                 preparedBaskedItemList.append(preparedBaskedItem)
-
+        self.preparedBaskedItemList = preparedBaskedItemList
         return preparedBaskedItemList
+
+    def getMatchesCampaignList(self) ->list[PreparedCampaign]:
+        for campaign in self.preparedCampaignList:
+            isPotential = False
+            for baskedItem in self.preparedBaskedItemList:
+                if(campaign.feature == baskedItem.feature and campaign.featureValue == baskedItem.featureValue):
+                    isPotential = True
+                    break
+            campaign.isPotential = isPotential
+
+        return self.preparedCampaignList
