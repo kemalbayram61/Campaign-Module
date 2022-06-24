@@ -1,9 +1,10 @@
 from Abstracts.ActionTypes import ActionTypes
+from Objects.Criteria import Criteria
 class Campaign:
     id: str
     name: str
-    productCriteria: list
-    actionCriteria: list
+    productCriteria: list[Criteria]
+    actionCriteria: list[Criteria]
     actionType: ActionTypes
     actionAmount: float
     actionQty: int
@@ -11,8 +12,8 @@ class Campaign:
 
     def __init__(self, id:str = None,
                  name: str = None,
-                 productCriteria: list = None,
-                 actionCriteria: list = None,
+                 productCriteria: list[Criteria] = None,
+                 actionCriteria: list[Criteria] = None,
                  actionType: ActionTypes = None,
                  actionAmount: float = None,
                  actionQty: int = None,
