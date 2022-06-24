@@ -6,7 +6,6 @@ if __name__ == '__main__':
     campaignMock = CampaignMock()
     baskedMock = BaskedMock()
     prepareProcess = Prepare(basked=baskedMock.getMock(), campaignList=campaignMock.getMock())
-    preparedCampaignList = prepareProcess.getPreparedCampaignList()
-    preparedBaskedItemList = prepareProcess.getPreparedBaskedItemList()
-    for prepared in preparedBaskedItemList:
+    matchList = prepareProcess.getMatchesCampaignList()
+    for prepared in matchList:
         print(str(prepared))
