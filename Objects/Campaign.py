@@ -26,3 +26,6 @@ class Campaign:
         self.actionAmount = actionAmount
         self.actionQty = actionQty
         self.maxDiscount = maxDiscount
+
+    def __str__(self):
+        return self.id + "\t" + self.name + "\t" + str(self.productCriteria) + "\t" + str(self.actionCriteria) + "\t" + str(self.actionType) + "\t" + str(self.actionAmount) + "\t" + str(self.actionQty) + "\t" + str(self.maxDiscount)

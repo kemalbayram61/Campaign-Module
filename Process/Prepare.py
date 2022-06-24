@@ -53,7 +53,7 @@ class Prepare:
         self.preparedBaskedItemList = preparedBaskedItemList
         return preparedBaskedItemList
 
-    def getMatchesCampaignList(self) ->list[PreparedCampaign]:
+    def getMatchListOfCampaign(self) ->list[Campaign]:
         for campaign in self.preparedCampaignList:
             isPotential = False
             for baskedItem in self.preparedBaskedItemList:
@@ -62,4 +62,13 @@ class Prepare:
                     break
             campaign.isPotential = isPotential
 
-        return self.preparedCampaignList
+        matchList = [c for c in self.preparedCampaignList if c.isPotential]
+        response: list[Campaign] = []
+
+        for match in matchList:
+            for c in self.campaignList:
+                if(match.campaignID == c.id):
+                    response.append(c)
+                    break
+
+        return response
