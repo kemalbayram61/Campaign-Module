@@ -19,3 +19,11 @@ class BaskedItem:
         self.features = features
         self.qty = qty
         self.amount = amount
+
+    def getFeaturesStr(self):
+        if(self.features is not None):
+            return  str(",".join(str(x) for x in self.features))
+        return ""
+
+    def __str__(self):
+        return self.id + "\t" + self.name + "\t" + self.barcode + "\t[" + self.getFeaturesStr() + "]\t" + str(self.qty) + "\t" + str(self.amount)
