@@ -1,8 +1,15 @@
 from fastapi import FastAPI
-from Object.Basket import Basket
+from pydantic import BaseModel
+
+class Request(BaseModel):
+    id: str
+    customerID: str
+    productList: list[str]
+    paymentTypeID: str
+    paymentChannelID: str
 
 app = FastAPI()
 
 @app.post("/find_campaign_list")
-def find_campaign_list(basket: Basket):
-    return {basket.id:basket.customerID}
+def find_campaign_list(request: Request):
+    return {request.id:request.customerID}
