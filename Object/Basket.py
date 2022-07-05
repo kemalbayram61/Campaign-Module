@@ -1,7 +1,6 @@
 from Object.Product import Product
-from pydantic import BaseModel
 
-class Basket(BaseModel):
+class Basket:
     id: str
     customerID: str
     productList: list[Product]
