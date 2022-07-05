@@ -1,5 +1,4 @@
-from pydantic import BaseModel
-class Product(BaseModel):
+class Product:
     id: str
     name: str
     barcode: str
