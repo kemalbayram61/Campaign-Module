@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from Data.ProductHelper import ProductHelper
 from Mock.Product import ProductMock
+from Mock.Customer import CustomerMock
 from Data.DBHelper import DBHelper
 from Data.Config import Config
 from Object.Basket import Basket
@@ -26,6 +27,8 @@ if (config.get_reset_table_on_init()):
 #add mock
 product_mock = ProductMock()
 db_helper.execute_command(product_mock.get_mock_sql())
+customer_mock = CustomerMock()
+db_helper.execute_command(customer_mock.get_mock_sql())
 
 app = FastAPI()
 
