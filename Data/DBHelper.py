@@ -13,7 +13,9 @@ class DBHelper:
     def reset_tables(self) ->None:
         self.open_connection()
         self.cursor.execute("drop table if exists product")
+        self.cursor.execute("drop table if exists customer")
         self.cursor.execute("drop table if exists campaign")
+
         product_sql: str = '''
             create table product(
             id SERIAL NOT NULL PRIMARY KEY,
@@ -25,7 +27,17 @@ class DBHelper:
             amount real
             )
         '''
+        customer_sql: str = '''
+            create table customer(
+            id SERIAL NOT NULL PRIMARY KEY,
+            name varchar(60) NOT NULL,
+            property json NOT NULL,
+            campaign_list varchar(100)
+            )
+        '''
+
         self.cursor.execute(product_sql)
+        self.cursor.execute(customer_sql)
         self.connection.commit()
         self.close_connection()
 
