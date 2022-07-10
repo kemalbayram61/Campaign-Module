@@ -17,3 +17,6 @@ app = FastAPI()
 @app.post("/find_campaign_list")
 def find_campaign_list(request: Request):
     return {request.id:request.customerID}
+
+from Data.DBHelper import DBHelper
+a = DBHelper()
