@@ -8,11 +8,11 @@ class DBHelper:
 
     def __init__(self):
         self.config = Config()
-        self.open_connection()
         if(self.config.get_reset_table_on_init()):
             self.reset_tables()
 
     def reset_tables(self) ->None:
+        self.open_connection()
         self.cursor.execute("drop table if exists product")
         self.cursor.execute("drop table if exists campaign")
         product_sql: str = '''
@@ -28,15 +28,27 @@ class DBHelper:
         '''
         self.cursor.execute(product_sql)
         self.connection.commit()
+        self.close_connection()
 
     def select_one(self, table_name: str):
+        self.open_connection()
         self.cursor.execute("select * from " + table_name)
         result = self.cursor.fetchone()
+        self.close_connection()
         return result
 
     def select_all(self, table_name: str):
+        self.open_connection()
         self.cursor.execute("select * from " + table_name)
         result = self.cursor.fetchall()
+        self.close_connection()
+        return result
+
+    def find_by_id(self, table_name: str, id: str):
+        self.open_connection()
+        self.cursor.execute("select * from " + table_name + " where id="+ id)
+        result = self.cursor.fetchone()
+        self.close_connection()
         return result
 
     def close_connection(self):
