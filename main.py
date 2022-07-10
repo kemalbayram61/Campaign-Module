@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from Data.ProductHelper import ProductHelper
+from Mock.Product import ProductMock
+from Data.DBHelper import DBHelper
+from Data.Config import Config
 from Object.Basket import Basket
 from Object.Product import Product
 
@@ -14,6 +17,15 @@ class Request(BaseModel):
     productList: list[RequestProduct]
     paymentTypeID: str
     paymentChannelID: str
+
+config = Config()
+db_helper = DBHelper()
+if (config.get_reset_table_on_init()):
+    db_helper.reset_tables()
+
+#add mock
+product_mock = ProductMock()
+db_helper.execute_command(product_mock.get_mock_sql())
 
 app = FastAPI()
 

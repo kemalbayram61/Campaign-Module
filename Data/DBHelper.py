@@ -9,8 +9,6 @@ class DBHelper:
 
     def __init__(self):
         self.config = Config()
-        if(self.config.get_reset_table_on_init()):
-            self.reset_tables()
 
     def reset_tables(self) ->None:
         self.open_connection()
@@ -29,9 +27,11 @@ class DBHelper:
         '''
         self.cursor.execute(product_sql)
         self.connection.commit()
+        self.close_connection()
 
-        product_mock = ProductMock()
-        self.cursor.execute(product_mock.get_mock_sql())
+    def execute_command(self, command: str):
+        self.open_connection()
+        self.cursor.execute(command)
         self.connection.commit()
         self.close_connection()
 
