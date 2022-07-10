@@ -1,4 +1,5 @@
 from Data.Config import Config
+from Mock.Product import ProductMock
 import psycopg2
 
 class DBHelper:
@@ -8,8 +9,6 @@ class DBHelper:
 
     def __init__(self):
         self.config = Config()
-        if(self.config.get_reset_table_on_init()):
-            self.reset_tables()
 
     def reset_tables(self) ->None:
         self.open_connection()
@@ -27,6 +26,12 @@ class DBHelper:
             )
         '''
         self.cursor.execute(product_sql)
+        self.connection.commit()
+        self.close_connection()
+
+    def execute_command(self, command: str):
+        self.open_connection()
+        self.cursor.execute(command)
         self.connection.commit()
         self.close_connection()
 
