@@ -1,4 +1,5 @@
 from Data.Config import Config
+from Mock.Product import ProductMock
 import psycopg2
 
 class DBHelper:
@@ -27,6 +28,10 @@ class DBHelper:
             )
         '''
         self.cursor.execute(product_sql)
+        self.connection.commit()
+
+        product_mock = ProductMock()
+        self.cursor.execute(product_mock.get_mock_sql())
         self.connection.commit()
         self.close_connection()
 

@@ -19,10 +19,11 @@ app = FastAPI()
 
 def get_basked(request: Request)->Basket:
     productList: list[Product] = []
-    for product in request.productList:
-        product_helper = ProductHelper(product.id)
+    for product_req in request.productList:
+        product_helper = ProductHelper(product_req.id)
         product = product_helper.get()
         if(product is not None):
+            product.qty = product_req.qty
             productList.append(product)
 
     basket: Basket = Basket(customerID=request.customerID,
