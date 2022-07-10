@@ -7,9 +7,9 @@ class Finder:
     customer: Customer
 
     def __init__(self, customer: Customer = None,
-                 basked: Basket = None):
+                 basket: Basket = None):
         self.customer = customer
-        self.basked = basked
+        self.basked = basket
 
     def discover_campaign_list(self) ->list[str]:
         if(self.customer is not None and self.basked is not None):
@@ -22,7 +22,7 @@ class Finder:
                 actionCampaignList = actionCampaignList + product.actionCampaignList
 
             for criteria in criteriaCampaignList:
-                if(criteria in actionCampaignList and criteria in self.customer.campaignList):
+                if(criteria in actionCampaignList and criteria in self.customer.campaignList and criteria not in response):
                     response.append(criteria)
 
             return response

@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from Data.ProductHelper import ProductHelper
+from Data.CustomerHelper import CustomerHelper
 from Mock.Product import ProductMock
 from Mock.Customer import CustomerMock
 from Data.DBHelper import DBHelper
 from Data.Config import Config
 from Object.Basket import Basket
 from Object.Product import Product
+from Object.Customer import Customer
+from Process.Finder import Finder
 
 class RequestProduct(BaseModel):
     id:str
@@ -51,4 +54,8 @@ def get_basked(request: Request)->Basket:
 @app.post("/find_campaign_list")
 def find_campaign_list(request: Request):
     basket: Basket = get_basked(request)
-    return basket
+    customer_helper: CustomerHelper = CustomerHelper(request.customerID)
+    customer: Customer = customer_helper.get()
+    finder: Finder = Finder(customer=customer,
+                            basket=basket)
+    return finder.discover_campaign_list()
