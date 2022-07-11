@@ -15,6 +15,8 @@ class DBHelper:
         self.cursor.execute("drop table if exists product")
         self.cursor.execute("drop table if exists customer")
         self.cursor.execute("drop table if exists campaign")
+        self.cursor.execute("drop table if exists payment_channel")
+        self.cursor.execute("drop table if exists payment_type")
 
         product_sql: str = '''
             create table product(
@@ -36,8 +38,26 @@ class DBHelper:
             )
         '''
 
+        payment_channel_sql: str = '''
+            create table customer(
+            id SERIAL NOT NULL PRIMARY KEY,
+            name json NOT NULL,
+            campaign_list varchar(100)
+            )
+        '''
+
+        payment_type_sql: str = '''
+            create table customer(
+            id SERIAL NOT NULL PRIMARY KEY,
+            name json NOT NULL,
+            campaign_list varchar(100)
+            )
+        '''
+
         self.cursor.execute(product_sql)
         self.cursor.execute(customer_sql)
+        self.cursor.execute(payment_channel_sql)
+        self.cursor.execute(payment_type_sql)
         self.connection.commit()
         self.close_connection()
 
