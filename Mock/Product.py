@@ -1,5 +1,8 @@
-class ProductMock:
-    def get_mock_sql(self) ->str:
+from Abstract.MockObject import MockObject
+
+
+class ProductMock(MockObject):
+    def get_mock_sql(self) -> str:
         response = '''
         INSERT INTO public.product
         ("name", "barcode", "property", "criteria", "action", "amount")

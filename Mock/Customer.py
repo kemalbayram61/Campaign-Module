@@ -1,4 +1,7 @@
-class CustomerMock:
+from Abstract.MockObject import MockObject
+
+
+class CustomerMock(MockObject):
     def get_mock_sql(self) -> str:
         response = '''
         INSERT INTO public.customer
