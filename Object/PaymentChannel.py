@@ -1,11 +1,11 @@
 class PaymentChannel:
     id: str
     name: dict # {"TR": "Türkçe tanım", "EN": "English Definition"}
-    campaignList: list[str]
+    campaign_list: list[str]
 
     def __init__(self, id: str = None,
                  name: dict = None,
-                 campaignList: list[str] = None):
+                 campaign_list: list[str] = None):
         self.id = id
         self.name = {} if name == None else name
-        self.campaignList = [] if campaignList == None else campaignList
+        self.campaign_list = [] if campaign_list == None else campaign_list
