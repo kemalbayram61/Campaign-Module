@@ -99,4 +99,4 @@ class DBHelper:
         self.cursor = self.connection.cursor()
         self.cursor.execute("select version()")
         data = self.cursor.fetchone()
-        print("Connection established to: " + data)
+        print("Connection established to: " + str(data))
