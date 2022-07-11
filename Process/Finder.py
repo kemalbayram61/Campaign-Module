@@ -21,7 +21,7 @@ class Finder:
         self.payment_channel = payment_channel
 
     def discover_campaign_list(self) -> list[str]:
-        if self.customer is not None and self.basked is not None:
+        if self.customer is not None and self.basked is not None and self.payment_type is not None and self.payment_channel is not None:
             product_list: list[Product] = self.basked.product_list
             criteria_campaign_list: list[str] = []
             action_campaign_list: list[str] = []
