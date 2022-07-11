@@ -19,16 +19,16 @@ from pydantic import BaseModel
 
 
 class RequestProduct(BaseModel):
-    id:str
+    id: str
     qty: int
 
 
 class Request(BaseModel):
     id: str
-    customerID: str
-    productList: list[RequestProduct]
-    paymentTypeID: str
-    paymentChannelID: str
+    customer_id: str
+    product_list: list[RequestProduct]
+    payment_type_id: str
+    payment_channel_id: str
 
 
 config = Config()
@@ -39,7 +39,7 @@ if config.get_reset_table_on_init():
     db_helper.reset_tables()
 
 
-#add mock
+# add mock
 product_mock = ProductMock()
 db_helper.execute_command(product_mock.get_mock_sql())
 customer_mock = CustomerMock()
@@ -53,18 +53,18 @@ app = FastAPI()
 
 
 def get_basked(request: Request)->Basket:
-    productList: list[Product] = []
-    for product_req in request.productList:
+    product_list: list[Product] = []
+    for product_req in request.product_list:
         product_helper = ProductHelper(product_req.id)
         product = product_helper.get()
         if product is not None:
             product.qty = product_req.qty
-            productList.append(product)
+            product_list.append(product)
 
-    basket: Basket = Basket(customerID=request.customerID,
-                            paymentChannelID=request.paymentChannelID,
-                            paymentTypeID=request.paymentTypeID,
-                            productList=productList)
+    basket: Basket = Basket(customer_id=request.customer_id,
+                            payment_channel_id=request.payment_channel_id,
+                            payment_type_id=request.payment_type_id,
+                            product_list=product_list)
 
     return basket
 
@@ -72,9 +72,9 @@ def get_basked(request: Request)->Basket:
 @app.post("/find_campaign_list")
 def find_campaign_list(request: Request):
     basket: Basket = get_basked(request)
-    customer_helper: CustomerHelper = CustomerHelper(request.customerID)
-    payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(request.paymentTypeID)
-    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(request.paymentChannelID)
+    customer_helper: CustomerHelper = CustomerHelper(request.customer_id)
+    payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(request.payment_type_id)
+    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(request.payment_channel_id)
     customer: Customer = customer_helper.get()
     payment_type: PaymentType = payment_type_helper.get()
     payment_channel: PaymentChannel = payment_channel_helper.get()
