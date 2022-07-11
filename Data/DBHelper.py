@@ -39,7 +39,7 @@ class DBHelper:
         '''
 
         payment_channel_sql: str = '''
-            create table customer(
+            create table payment_channel(
             id SERIAL NOT NULL PRIMARY KEY,
             name json NOT NULL,
             campaign_list varchar(100)
@@ -47,7 +47,7 @@ class DBHelper:
         '''
 
         payment_type_sql: str = '''
-            create table customer(
+            create table payment_type(
             id SERIAL NOT NULL PRIMARY KEY,
             name json NOT NULL,
             campaign_list varchar(100)
