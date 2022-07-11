@@ -5,56 +5,57 @@ from Abstract.AllProductCriteria import AllProductCriteria
 from Abstract.AllProductAction import AllProductAction
 from Abstract.ActionType import ActionType
 
+
 class Campaign:
     id: str
-    allPaymentChannel: AllPaymentChannel
-    allCustomer: AllCustomer
-    allPaymentType: AllPaymentType
-    allProductCriteria: AllProductCriteria
-    allProductAction: AllProductAction
+    all_payment_channel: AllPaymentChannel
+    all_customer: AllCustomer
+    all_payment_type: AllPaymentType
+    all_product_criteria: AllProductCriteria
+    all_product_action: AllProductAction
     level: int
-    minQty: int
-    minAmount: float
-    maxDiscount: float
-    maxOccurrence: int
-    actionType: ActionType
-    actionAmount: float
-    actionQty: int
-    startDate: str
-    endDate: str
-    isActive: bool
+    min_qty: int
+    min_amount: float
+    max_discount: float
+    max_occurrence: int
+    action_type: ActionType
+    action_amount: float
+    action_qty: int
+    start_date: str
+    end_date: str
+    is_active: bool
 
     def __init__(self, id: str = None,
-                    allPaymentChannel: AllPaymentChannel = None,
-                    allCustomer: AllCustomer = None,
-                    allPaymentType: AllPaymentType = None,
-                    allProductCriteria: AllProductCriteria = None,
-                    allProductAction: AllProductAction = None,
-                    level: int = None,
-                    minQty: int = None,
-                    minAmount: float = None,
-                    maxDiscount: float = None,
-                    maxOccurrence: int = None,
-                    actionType: ActionType = None,
-                    actionAmount: float = None,
-                    actionQty: int = None,
-                    startDate: str = None,
-                    endDate: str = None,
-                    isActive: bool = None):
+                 all_payment_channel: AllPaymentChannel = None,
+                 all_customer: AllCustomer = None,
+                 all_payment_type: AllPaymentType = None,
+                 all_product_criteria: AllProductCriteria = None,
+                 all_product_action: AllProductAction = None,
+                 level: int = None,
+                 min_qty: int = None,
+                 min_amount: float = None,
+                 max_discount: float = None,
+                 max_occurrence: int = None,
+                 action_type: ActionType = None,
+                 action_amount: float = None,
+                 action_qty: int = None,
+                 start_date: str = None,
+                 end_date: str = None,
+                 is_active: bool = None):
         self.id = id
-        self.allPaymentChannel = allPaymentChannel
-        self.allCustomer = allCustomer
-        self.allPaymentType = allPaymentType
-        self.allProductAction = allProductAction
-        self.allProductCriteria = allProductCriteria
+        self.all_payment_channel = all_payment_channel
+        self.all_customer = all_customer
+        self.all_payment_type = all_payment_type
+        self.all_product_action = all_product_action
+        self.all_product_criteria = all_product_criteria
         self.level = level
-        self.minQty = minQty
-        self.minAmount = minAmount
-        self.maxDiscount = maxDiscount
-        self.maxOccurrence = maxOccurrence
-        self.actionType = actionType
-        self.actionAmount = actionAmount
-        self.actionQty = actionQty
-        self.startDate = startDate
-        self.endDate = endDate
-        self.isActive = isActive
+        self.min_qty = min_qty
+        self.min_amount = min_amount
+        self.max_discount = max_discount
+        self.max_occurrence = max_occurrence
+        self.action_type = action_type
+        self.action_amount = action_amount
+        self.action_qty = action_qty
+        self.start_date = start_date
+        self.end_date = end_date
+        self.is_active = is_active
