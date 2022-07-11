@@ -4,6 +4,8 @@ from Data.ProductHelper import ProductHelper
 from Data.CustomerHelper import CustomerHelper
 from Mock.Product import ProductMock
 from Mock.Customer import CustomerMock
+from Mock.PaymentType import PaymentTypeMock
+from Mock.PaymentChannel import PaymentChannelMock
 from Data.DBHelper import DBHelper
 from Data.Config import Config
 from Object.Basket import Basket
@@ -32,6 +34,10 @@ product_mock = ProductMock()
 db_helper.execute_command(product_mock.get_mock_sql())
 customer_mock = CustomerMock()
 db_helper.execute_command(customer_mock.get_mock_sql())
+payment_channel_mock = PaymentChannelMock()
+db_helper.execute_command(payment_channel_mock.get_mock_sql())
+payment_type_mock = PaymentTypeMock()
+db_helper.execute_command(payment_type_mock.get_mock_sql())
 
 app = FastAPI()
 
