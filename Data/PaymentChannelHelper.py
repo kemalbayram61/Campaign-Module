@@ -4,7 +4,7 @@ from Data.DBHelper import DBHelper
 
 class PaymentChannelHelper(DBObject):
     db_helper = None
-    id:str = None
+    id: str = None
     payment_channel: PaymentChannel = None
 
     def __init__(self, id:str):
