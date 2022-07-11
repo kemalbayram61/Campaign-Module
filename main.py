@@ -34,10 +34,8 @@ class Request(BaseModel):
 config = Config()
 db_helper = DBHelper()
 
-
 if config.get_reset_table_on_init():
     db_helper.reset_tables()
-
 
 # add mock
 product_mock = ProductMock()
@@ -52,7 +50,7 @@ db_helper.execute_command(payment_type_mock.get_mock_sql())
 app = FastAPI()
 
 
-def get_basked(request: Request)->Basket:
+def get_basked(request: Request) -> Basket:
     product_list: list[Product] = []
     for product_req in request.product_list:
         product_helper = ProductHelper(product_req.id)
