@@ -8,6 +8,7 @@ from Mock.Product import ProductMock
 from Mock.Customer import CustomerMock
 from Mock.PaymentType import PaymentTypeMock
 from Mock.PaymentChannel import PaymentChannelMock
+from Mock.Campaign import CampaignMock
 from Object.Basket import Basket
 from Object.Product import Product
 from Object.Customer import Customer
@@ -46,6 +47,8 @@ payment_channel_mock = PaymentChannelMock()
 db_helper.execute_command(payment_channel_mock.get_mock_sql())
 payment_type_mock = PaymentTypeMock()
 db_helper.execute_command(payment_type_mock.get_mock_sql())
+campaign_mock = CampaignMock()
+db_helper.execute_command(campaign_mock.get_mock_sql())
 
 app = FastAPI()
 
