@@ -17,6 +17,7 @@ from Object.PaymentType import PaymentType
 from Object.PaymentChannel import PaymentChannel
 from Object.Campaign import Campaign
 from Process.Finder import Finder
+from Process.Optimizer import Optimizer
 from fastapi import FastAPI
 from pydantic import BaseModel
 
@@ -62,6 +63,7 @@ def get_basked(request: Request) -> Basket:
         product = product_helper.get()
         if product is not None:
             product.qty = product_req.qty
+            product.ceiling = product.qty * product.unit_price
             product_list.append(product)
 
     basket: Basket = Basket(customer_id=request.customer_id,
@@ -91,4 +93,7 @@ def find_campaign_list(request: Request):
         campaign_helper: CampaignHelper = CampaignHelper(campaign_id)
         campaign_list.append(campaign_helper.get())
 
-    return campaign_list
+    optimizer: Optimizer = Optimizer(basket=basket,
+                                     campaign_list=campaign_list)
+
+    return optimizer.optimize_basket()
