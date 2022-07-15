@@ -4,6 +4,7 @@ class Product:
     barcode: str
     qty: int
     unit_price: float
+    ceiling: float
     property: dict
     criteria_campaign_list: list[str]
     action_campaign_list: list[str]
@@ -13,6 +14,7 @@ class Product:
                  barcode: str = None,
                  qty: int = None,
                  unit_price: float = None,
+                 ceiling: float = None,
                  property: dict = None,
                  criteria_campaign_list: list[str] = None,
                  action_campaign_list: list[str] = None):
@@ -21,6 +23,7 @@ class Product:
         self.barcode = barcode
         self.qty = qty
         self.unit_price = unit_price
+        self.ceiling = ceiling
         self.property = {} if property == None else property
         self.criteria_campaign_list = [] if criteria_campaign_list is None else criteria_campaign_list
         self.action_campaign_list = [] if action_campaign_list is None else action_campaign_list
