@@ -54,10 +54,29 @@ class DBHelper:
             )
         '''
 
+        campaign_sql: str = '''
+            create table campaign(
+            id SERIAL NOT NULL PRIMARY KEY,
+            name varchar(100) NOT NULL,
+            level int NOT NULL,
+            start_date varchar(30),
+            end_date varchar(30),
+            min_qty int,
+            min_amount real,
+            max_occurrence int,
+            action_type int,
+            action_amount real,
+            action_qty int,
+            max_discount real,
+            is_active int
+            )
+        '''
+
         self.cursor.execute(product_sql)
         self.cursor.execute(customer_sql)
         self.cursor.execute(payment_channel_sql)
         self.cursor.execute(payment_type_sql)
+        self.cursor.execute(campaign_sql)
         self.connection.commit()
         self.close_connection()
 

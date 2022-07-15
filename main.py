@@ -2,17 +2,20 @@ from Data.ProductHelper import ProductHelper
 from Data.CustomerHelper import CustomerHelper
 from Data.PaymentTypeHelper import PaymentTypeHelper
 from Data.PaymentChannelHelper import PaymentChannelHelper
+from Data.CampaignHelper import CampaignHelper
 from Data.DBHelper import DBHelper
 from Data.Config import Config
 from Mock.Product import ProductMock
 from Mock.Customer import CustomerMock
 from Mock.PaymentType import PaymentTypeMock
 from Mock.PaymentChannel import PaymentChannelMock
+from Mock.Campaign import CampaignMock
 from Object.Basket import Basket
 from Object.Product import Product
 from Object.Customer import Customer
 from Object.PaymentType import PaymentType
 from Object.PaymentChannel import PaymentChannel
+from Object.Campaign import Campaign
 from Process.Finder import Finder
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -46,6 +49,8 @@ payment_channel_mock = PaymentChannelMock()
 db_helper.execute_command(payment_channel_mock.get_mock_sql())
 payment_type_mock = PaymentTypeMock()
 db_helper.execute_command(payment_type_mock.get_mock_sql())
+campaign_mock = CampaignMock()
+db_helper.execute_command(campaign_mock.get_mock_sql())
 
 app = FastAPI()
 
@@ -80,4 +85,10 @@ def find_campaign_list(request: Request):
                             basket=basket,
                             payment_type=payment_type,
                             payment_channel=payment_channel)
-    return finder.discover_campaign_list()
+    campaign_list: list[Campaign] = []
+    campaign_id_list: list[str] = finder.discover_campaign_list()
+    for campaign_id in campaign_id_list:
+        campaign_helper: CampaignHelper = CampaignHelper(campaign_id)
+        campaign_list.append(campaign_helper.get())
+
+    return campaign_list
