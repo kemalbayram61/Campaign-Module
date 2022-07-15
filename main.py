@@ -15,6 +15,7 @@ from Object.Product import Product
 from Object.Customer import Customer
 from Object.PaymentType import PaymentType
 from Object.PaymentChannel import PaymentChannel
+from Object.Campaign import Campaign
 from Process.Finder import Finder
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -84,5 +85,10 @@ def find_campaign_list(request: Request):
                             basket=basket,
                             payment_type=payment_type,
                             payment_channel=payment_channel)
-    campaign_helper: CampaignHelper = CampaignHelper(customer.campaign_list[0])
-    return finder.discover_campaign_list()
+    campaign_list: list[Campaign] = []
+    campaign_id_list: list[str] = finder.discover_campaign_list()
+    for campaign_id in campaign_id_list:
+        campaign_helper: CampaignHelper = CampaignHelper(campaign_id)
+        campaign_list.append(campaign_helper.get())
+
+    return campaign_list
