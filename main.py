@@ -2,6 +2,7 @@ from Data.ProductHelper import ProductHelper
 from Data.CustomerHelper import CustomerHelper
 from Data.PaymentTypeHelper import PaymentTypeHelper
 from Data.PaymentChannelHelper import PaymentChannelHelper
+from Data.CampaignHelper import CampaignHelper
 from Data.DBHelper import DBHelper
 from Data.Config import Config
 from Mock.Product import ProductMock
@@ -83,4 +84,5 @@ def find_campaign_list(request: Request):
                             basket=basket,
                             payment_type=payment_type,
                             payment_channel=payment_channel)
+    campaign_helper: CampaignHelper = CampaignHelper(customer.campaign_list[0])
     return finder.discover_campaign_list()

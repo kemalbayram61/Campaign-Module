@@ -3,7 +3,7 @@ from Abstract.ActionType import ActionType
 from Object.Campaign import Campaign
 from Data.DBHelper import DBHelper
 
-class ProductHelper(DBObject):
+class CampaignHelper(DBObject):
     db_helper = None
     id:str = None
     campaign: Campaign = None
