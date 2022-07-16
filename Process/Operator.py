@@ -1,6 +1,7 @@
 from typing import Optional
 from Object.Basket import Basket
 from Object.Campaign import Campaign
+from Utility.Date import Date
 
 
 class Operator:
@@ -20,7 +21,8 @@ class Operator:
         return ceiling
 
     def apply_campaign(self) -> Optional[Basket]:
-        if self.basket is not None and self.campaign is not None:
+        current_date: str = Date.get_current_date()
+        if self.basket is not None and self.campaign is not None and Date.compare_date(self.campaign.start_date, current_date) <= 0 and Date.compare_date(self.campaign.end_date, current_date) >= 0 and self.campaign.is_active:
             return self.basket
         else:
-            return None
+            return self.basket
