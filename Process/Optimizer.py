@@ -3,7 +3,7 @@ from Object.Campaign import Campaign
 
 
 class Optimizer:
-    basket:Basket
+    basket: Basket
     campaign_list: list[Campaign]
 
     def __init__(self, basket: Basket = None,
@@ -12,4 +12,4 @@ class Optimizer:
         self.campaign_list = campaign_list
 
     def optimize_basket(self) -> (Basket, list[Campaign]):
-        return (self.basket, self.campaign_list)
+        return self.basket, self.campaign_list
