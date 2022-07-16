@@ -1,3 +1,4 @@
+from typing import Optional
 from Object.Basket import Basket
 from Object.Campaign import Campaign
 
@@ -11,8 +12,15 @@ class Operator:
         self.basket = basket
         self.campaign = campaign
 
-    def apply_campaign(self) -> Basket:
+    @staticmethod
+    def evaluate_basket_ceiling(basket: Basket) -> float:
+        ceiling: float = 0.0
+        for product in basket.product_list:
+            ceiling = ceiling + product.ceiling
+        return ceiling
+
+    def apply_campaign(self) -> Optional[Basket]:
         if self.basket is not None and self.campaign is not None:
             return self.basket
         else:
-            return self.basket
+            return None
