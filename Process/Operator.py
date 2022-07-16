@@ -1,3 +1,4 @@
+from typing import Optional
 from Object.Basket import Basket
 from Object.Campaign import Campaign
 
@@ -18,8 +19,8 @@ class Operator:
             ceiling = ceiling + product.ceiling
         return ceiling
 
-    def apply_campaign(self) -> Basket:
+    def apply_campaign(self) -> Optional[Basket]:
         if self.basket is not None and self.campaign is not None:
             return self.basket
         else:
-            return self.basket
+            return None
