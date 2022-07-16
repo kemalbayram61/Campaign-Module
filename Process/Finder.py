@@ -36,3 +36,19 @@ class Finder:
 
             return response
         return []
+
+    @staticmethod
+    def filter_campaign_on_basket(basket: Basket) -> list[str]:
+        product_list: list[Product] = basket.product_list
+        criteria_campaign_list: list[str] = []
+        action_campaign_list: list[str] = []
+        response: list[str] = []
+        for product in product_list:
+            criteria_campaign_list = criteria_campaign_list + product.criteria_campaign_list
+            action_campaign_list = action_campaign_list + product.action_campaign_list
+
+        for criteria_campaign in criteria_campaign_list:
+            if criteria_campaign in action_campaign_list:
+                response.append(criteria_campaign)
+
+        return response
