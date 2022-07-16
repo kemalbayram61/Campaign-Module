@@ -11,5 +11,8 @@ class Operator:
         self.basket = basket
         self.campaign = campaign
 
-    def apply_campaign(self) ->Basket:
-        return self.basket
+    def apply_campaign(self) -> Basket:
+        if self.basket is not None and self.campaign is not None:
+            return self.basket
+        else:
+            return self.basket
