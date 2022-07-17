@@ -19,12 +19,19 @@ class Optimizer:
                 return True
         return False
 
-    def filter_list(self, list1: list[Campaign], list2:[Campaign]) -> list[Campaign]:
+    def filter_list(self, list1: list[Campaign], list2: [Campaign]) -> list[Campaign]:
         response: list[Campaign] = []
         for campaign in list2:
             if self.is_exist_campaign(campaign, list1) is False:
                 response.append(campaign)
         return response
+
+    def get_optimum_campaign(self, executed_stack: list[dict]) -> dict:
+        minimum_ceiling: dict = None
+        for executed in executed_stack:
+            if minimum_ceiling is None or minimum_ceiling["basket_ceiling"] > executed["basket_ceiling"]:
+                minimum_ceiling = executed
+        return minimum_ceiling
 
     def optimize_basket(self) -> (Basket, list[Campaign]):
         applicable_list: list[Campaign] = self.campaign_list
@@ -39,8 +46,11 @@ class Optimizer:
                                               campaign=campaign)
                 temp_basket = operator.apply_campaign()
 
-            executed_stack.append({"campaign_list": executed_list, "basket_ceiling": Operator.evaluate_basket_ceiling(temp_basket)})
+            executed_stack.append(
+                {"campaign_list": executed_list, "basket_ceiling": Operator.evaluate_basket_ceiling(temp_basket)})
             applicable_list = Finder.filter_campaign_on_basket(temp_basket)
             applicable_list = self.filter_list(executed_list, applicable_list)
 
-        return self.basket, executed_list
+        optimum_campaign = self.get_optimum_campaign(executed_stack)
+
+        return self.basket, optimum_campaign["campaign_list"] if optimum_campaign is not None else []
