@@ -64,6 +64,7 @@ def get_basked(request: Request) -> Basket:
         if product is not None:
             product.qty = product_req.qty
             product.ceiling = product.qty * product.unit_price
+            product.is_used = False
             product_list.append(product)
 
     basket: Basket = Basket(customer_id=request.customer_id,
