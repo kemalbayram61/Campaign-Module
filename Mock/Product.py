@@ -6,7 +6,11 @@ class ProductMock(MockObject):
         response = '''
         INSERT INTO public.product
         ("name", "barcode", "property", "criteria", "action", "amount")
-        VALUES('Tükenmez Kalem', '283746328746123', '{"Kategori":"Kırtasiye", "Alt Kategori": "Kalem"}', '1,5', NULL, 50);
+        VALUES('Coca Cola', '283746328746432', '{"Kategori":"İçececek", "Alt Kategori": "Asitli İçecek"}', '1,2', '1', 9.90);
+        
+        INSERT INTO public.product
+        ("name", "barcode", "property", "criteria", "action", "amount")
+        VALUES('Ice Tea', '283746328746936', '{"Kategori":"İçececek", "Alt Kategori": "Asisiz İçecek"}', '1,2', '1,2', 12.50);
         
         INSERT INTO public.product
         ("name", "barcode", "property", "criteria", "action", "amount")

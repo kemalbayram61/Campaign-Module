@@ -38,6 +38,7 @@ class Optimizer:
         executed_list: list[Campaign] = []
         executed_stack: list[dict] = []
 
+        #sort all campaigns with different combinations and assign to applicable_list object
         while len(applicable_list) != 0:
             executed_list.append(applicable_list[0])
             temp_basket = self.basket
