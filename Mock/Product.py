@@ -14,7 +14,7 @@ class ProductMock(MockObject):
         
         INSERT INTO public.product
         ("name", "barcode", "property", "criteria", "action", "amount")
-        VALUES('Resim Defteri', '283746328746124', '{"Kategori":"Kırtasiye", "Alt Kategori": "Defter"}', '1,8', '1,2', 25);
+        VALUES('Resim Defteri', '283746328746124', '{"Kategori":"Kırtasiye", "Alt Kategori": "Defter"}', '7,8', '9,12', 25);
         
         INSERT INTO public.product
         ("name", "barcode", "property", "criteria", "action", "amount")
