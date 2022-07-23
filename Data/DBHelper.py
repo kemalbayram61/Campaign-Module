@@ -23,8 +23,8 @@ class DBHelper:
             id SERIAL NOT NULL PRIMARY KEY,
             name varchar(60) NOT NULL,
             barcode varchar(20) NOT NULL,
-            criteria varchar(100),
-            action varchar(100)
+            criteria_campaign_list varchar(100),
+            action_campaign_list varchar(100)
             )
         '''
         customer_sql: str = '''
