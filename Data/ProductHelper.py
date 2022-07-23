@@ -26,10 +26,8 @@ class ProductHelper(DBObject):
             self.product = Product(id=str(db_object[0]),
                                    name=db_object[1],
                                    barcode=db_object[2],
-                                   property=db_object[3],
-                                   criteria_campaign_list=[] if db_object[4] is None else db_object[4].split(','),
-                                   action_campaign_list=[] if db_object[5] is None else db_object[5].split(','),
-                                   unit_price=db_object[6])
+                                   criteria_campaign_list=[] if db_object[3] is None else db_object[3].split(','),
+                                   action_campaign_list=[] if db_object[4] is None else db_object[4].split(','))
 
     def get(self) -> Product:
         return self.product
