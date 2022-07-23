@@ -22,15 +22,17 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 
-class RequestProduct(BaseModel):
-    id: str
+class BasketLine(BaseModel):
     qty: int
+    barcode: str
+    amount: float
+    unit_price: int
 
 
-class Request(BaseModel):
-    id: str
+class RequestBasket(BaseModel):
+    order_id: str
     customer_id: str
-    product_list: list[RequestProduct]
+    basket_lines: list[BasketLine]
     payment_type_id: str
     payment_channel_id: str
 
@@ -56,14 +58,15 @@ db_helper.execute_command(campaign_mock.get_mock_sql())
 app = FastAPI()
 
 
-def get_basked(request: Request) -> Basket:
+def get_basked(request: RequestBasket) -> Basket:
     product_list: list[Product] = []
-    for product_req in request.product_list:
-        product_helper = ProductHelper(product_req.id)
+    for basket_line in request.basket_lines:
+        product_helper = ProductHelper(barcode=basket_line.barcode)
         product = product_helper.get()
         if product is not None:
-            product.qty = product_req.qty
-            product.ceiling = product.qty * product.unit_price
+            product.qty = basket_line.qty
+            product.amount = basket_line.amount
+            product.unit_price = basket_line.unit_price
             product.is_used = False
             product_list.append(product)
 
@@ -76,7 +79,7 @@ def get_basked(request: Request) -> Basket:
 
 
 @app.post("/find_campaign_list")
-def find_campaign_list(request: Request):
+def find_campaign_list(request: RequestBasket):
     basket: Basket = get_basked(request)
     customer_helper: CustomerHelper = CustomerHelper(request.customer_id)
     payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(request.payment_type_id)
