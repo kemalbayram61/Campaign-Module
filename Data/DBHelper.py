@@ -107,6 +107,13 @@ class DBHelper:
         self.close_connection()
         return result
 
+    def find_product_by_barcode(self, barcode: str):
+        self.open_connection()
+        self.cursor.execute("select * from product where barcode='"+ barcode + "'")
+        result = self.cursor.fetchone()
+        self.close_connection()
+        return result
+
     def close_connection(self):
         self.connection.close()
 
