@@ -27,11 +27,11 @@ class Optimizer:
         return response
 
     def get_optimum_campaign(self, executed_stack: list[dict]) -> dict:
-        minimum_ceiling: dict = None
+        minimum_amount: dict = None
         for executed in executed_stack:
-            if minimum_ceiling is None or minimum_ceiling["basket_ceiling"] > executed["basket_ceiling"]:
-                minimum_ceiling = executed
-        return minimum_ceiling
+            if minimum_amount is None or minimum_amount["basket_amount"] > executed["basket_amount"]:
+                minimum_amount = executed
+        return minimum_amount
 
     def optimize_basket(self) -> (Basket, list[Campaign]):
         applicable_list: list[Campaign] = self.campaign_list
@@ -48,7 +48,7 @@ class Optimizer:
                 temp_basket = operator.apply_campaign()
 
             executed_stack.append(
-                {"campaign_list": executed_list, "basket_ceiling": Operator.evaluate_basket_ceiling(temp_basket)})
+                {"campaign_list": executed_list, "basket_amount": Operator.evaluate_basket_amount(temp_basket)})
             applicable_list = Finder.filter_campaign_on_basket(temp_basket)
             applicable_list = self.filter_list(executed_list, applicable_list)
 

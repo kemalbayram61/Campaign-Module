@@ -18,11 +18,11 @@ class Operator:
         self.campaign = campaign
 
     @staticmethod
-    def evaluate_basket_ceiling(basket: Basket) -> float:
-        ceiling: float = 0.0
+    def evaluate_basket_amount(basket: Basket) -> float:
+        amount: float = 0.0
         for product in basket.product_list:
-            ceiling = ceiling + product.ceiling
-        return ceiling
+            amount = amount + product.amount
+        return amount
 
     def set_criteria_product_list_for_campaign(self) -> None:
         product_list: list[Product] = self.basket.product_list
@@ -58,11 +58,11 @@ class Operator:
                     self.action_product_list[j] = self.action_product_list[j + 1]
                     self.action_product_list[j + 1] = temp
 
-    def get_criteria_product_list_ceiling(self) -> float:
-        ceiling: float = 0.0
+    def get_criteria_product_list_amount(self) -> float:
+        amount: float = 0.0
         for product in self.criteria_product_list:
-            ceiling = ceiling + product.unit_price * product.qty
-        return ceiling
+            amount = amount + product.unit_price * product.qty
+        return amount
 
     def get_criteria_product_list_count(self) -> int:
         count: int = 0
@@ -74,7 +74,7 @@ class Operator:
         for action_product in self.action_product_list:
             for basket_product in self.basket.product_list:
                 if action_product.id == basket_product.id:
-                    basket_product.ceiling = action_product.ceiling
+                    basket_product.amount = action_product.amount
                     basket_product.is_used = action_product.is_used
 
 
@@ -89,28 +89,26 @@ class Operator:
             amount: float = 0.0
 
             #controls
-            if self.campaign.min_amount is not None and self.campaign.min_amount > self.get_criteria_product_list_ceiling():
+            if self.campaign.min_amount is not None and self.campaign.min_amount > self.get_criteria_product_list_amount():
                 #todo throw error with appropriate error code
                 return None
             if self.campaign.min_qty is not None and self.campaign.min_qty > self.get_criteria_product_list_count():
                 #todo throw error with appropriate error code
                 return None
 
-            if self.campaign.action_type == ActionType.AMOUNT:
-                amount = self.campaign.action_amount
-            elif self.campaign.action_type == ActionType.PERCENT:
-                rate = self.campaign.action_amount
+            if self.campaign.action_amount is not None:
+                if self.campaign.action_type == ActionType.AMOUNT:
+                    amount = self.campaign.action_amount
+                elif self.campaign.action_type == ActionType.PERCENT:
+                    rate = self.campaign.action_amount
 
             if amount != 0.0:
                 for action_product in self.action_product_list:
-                    total_earnings = amount * action_product.qty
-                    action_product.ceiling = action_product.unit_price * action_product.qty - total_earnings
-                    action_product.ceiling = 0 if action_product.ceiling < 0 else action_product.ceiling
+                    action_product.amount = 0 if action_product.amount < 0 else action_product.amount
                     action_product.is_used = True
             elif rate != 0.0:
                 for action_product in self.action_product_list:
-                    action_product.ceiling = action_product.unit_price * action_product.qty - action_product.unit_price * action_product.qty * rate
-                    action_product.ceiling = 0 if action_product.ceiling < 0 else action_product.ceiling
+                    action_product.amount = 0 if action_product.amount < 0 else action_product.amount
                     action_product.is_used = True
             self.update_basket_products()
             return self.basket
