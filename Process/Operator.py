@@ -61,7 +61,7 @@ class Operator:
     def get_criteria_product_list_amount(self) -> float:
         amount: float = 0.0
         for product in self.criteria_product_list:
-            amount = amount + product.unit_price * product.qty
+            amount = amount + product.amount
         return amount
 
     def get_criteria_product_list_count(self) -> int:
@@ -70,12 +70,40 @@ class Operator:
             count = count + product.qty
         return count
 
-    def update_basket_products(self) -> None:
+    def update_basket_with_action_products(self) -> None:
         for action_product in self.action_product_list:
             for basket_product in self.basket.product_list:
                 if action_product.id == basket_product.id:
                     basket_product.amount = action_product.amount
                     basket_product.is_used = action_product.is_used
+
+    def get_basket_product_count(self) ->int:
+        count: int = 0
+        for product in self.basket.product_list:
+            count = count + product.qty
+        return count
+
+    def apply_percentage_discount_to_basket(self, rate: float):
+        for product in self.basket.product_list:
+            discount = product.amount - product.amount * rate
+            product.discount_amount = product.amount if discount > product.amount else discount
+
+    def apply_amount_discount_to_basket(self, amount: float):
+        discount_per_product: float = amount / self.get_basket_product_count()
+        for product in self.basket.product_list:
+            discount = product.amount - product.qty * discount_per_product
+            product.discount_amount = product.amount if discount > product.amount else discount
+
+    def apply_percentage_discount_to_action_product(self, rate: float):
+        for product in self.basket.product_list:
+            discount = product.amount - product.amount * rate
+            product.discount_amount = product.amount if discount > product.amount else discount
+
+    def apply_amount_discount_to_action_product(self, amount: float):
+        discount_per_product: float = amount / self.get_basket_product_count()
+        for product in self.basket.product_list:
+            discount = product.amount - product.qty * discount_per_product
+            product.discount_amount = product.amount if discount > product.amount else discount
 
 
     def apply_campaign(self) -> Optional[Basket]:
@@ -110,7 +138,6 @@ class Operator:
                 for action_product in self.action_product_list:
                     action_product.amount = 0 if action_product.amount < 0 else action_product.amount
                     action_product.is_used = True
-            self.update_basket_products()
             return self.basket
         else:
             return self.basket
