@@ -1,4 +1,8 @@
-from Data.CampaignHelper import CampaignHelper
+from Abstract.AllCustomer import AllCustomer
+from Abstract.AllPaymentType import AllPaymentType
+from Abstract.AllPaymentChannel import AllPaymentChannel
+from Abstract.AllProductCriteria import AllProductCriteria
+from Abstract.AllProductAction import AllProductAction
 from Object.Basket import Basket
 from Object.Product import Product
 from Object.Customer import Customer
@@ -24,22 +28,38 @@ class Finder:
         self.payment_channel = payment_channel
         self.campaign_helper = CampaignHelper("-1")
 
+    def __get_campaign_list_of_id_list(self, id_list: list[str]) ->list[Campaign]:
+        response: list[Campaign] = []
+        for id in id_list:
+            campaign_helper: CampaignHelper = CampaignHelper(id)
+            response.append(campaign_helper.get())
+        return response
+
     def discover_campaign_list(self) -> list[str]:
         if self.customer is not None and self.basked is not None and self.payment_type is not None and self.payment_channel is not None:
             product_list: list[Product] = self.basked.product_list
-            criteria_campaign_list: list[str] = []
-            action_campaign_list: list[str] = []
+            criteria_campaign_id_list: list[str] = []
+            action_campaign_id_list: list[str] = []
             response: list[str] = []
             for product in product_list:
-                criteria_campaign_list = criteria_campaign_list + product.criteria_campaign_list
-                action_campaign_list = action_campaign_list + product.action_campaign_list
+                criteria_campaign_id_list = criteria_campaign_id_list + product.criteria_campaign_list
+                action_campaign_id_list = action_campaign_id_list + product.action_campaign_list
 
-            for criteria in criteria_campaign_list:
-                if criteria in action_campaign_list and criteria in self.customer.campaign_list and criteria not in response and criteria in self.payment_channel.campaign_list and criteria in self.payment_type.campaign_list:
-                    response.append(criteria)
-
-            #todo bütün kampayaları çek ve bu sepet için uygunluğunu kontrol ederek idlerini response içerisine ekle
+            criteria_campaign_list: list[Campaign] = self.__get_campaign_list_of_id_list(criteria_campaign_id_list)
             all_campaign_list: list[Campaign] = self.campaign_helper.get_all()
+
+            for criteria_campaign in criteria_campaign_list:
+                if criteria_campaign.id in action_campaign_id_list:
+                    if criteria_campaign.all_customer == AllCustomer.YES or criteria_campaign.id in self.customer.campaign_list:
+                        if criteria_campaign.all_payment_channel == AllPaymentChannel.YES or criteria_campaign.id in self.payment_channel.campaign_list:
+                            if criteria_campaign.all_payment_type == AllPaymentType.YES or criteria_campaign.id in self.payment_type.campaign_list:
+                                if criteria_campaign.id not in response:
+                                    response.append(criteria_campaign.id)
+
+            for campaign in all_campaign_list:
+                if campaign.all_product_action == AllProductAction.YES and campaign.all_product_criteria == AllProductCriteria.YES and campaign.all_customer == AllCustomer.YES and campaign.all_payment_type == AllPaymentType.YES and campaign.all_payment_channel == AllPaymentChannel.YES and campaign.id not in response:
+                    response.append(campaign.id)
+
             return response
         return []
 
