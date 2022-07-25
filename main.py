@@ -68,6 +68,7 @@ def get_basked(request: RequestBasket) -> Basket:
             product.amount = basket_line.amount
             product.unit_price = basket_line.unit_price
             product.is_used = False
+            product.discount_amount = 0.0
             product_list.append(product)
 
     basket: Basket = Basket(customer_id=request.customer_id,
