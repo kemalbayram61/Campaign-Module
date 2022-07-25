@@ -24,7 +24,7 @@ class Operator:
             ceiling = ceiling + product.ceiling
         return ceiling
 
-    def set_product_list_of_campaign_by_criteria(self) -> None:
+    def set_criteria_product_list_for_campaign(self) -> None:
         product_list: list[Product] = self.basket.product_list
         response: list[Product] = []
         for product in product_list:
@@ -32,7 +32,7 @@ class Operator:
                 response.append(product)
         self.criteria_product_list = response
 
-    def set_product_list_of_campaign_by_action(self) -> None:
+    def set_action_product_list_for_campaign(self) -> None:
         product_list: list[Product] = self.basket.product_list
         response: list[Product] = []
         for product in product_list:
@@ -81,8 +81,8 @@ class Operator:
     def apply_campaign(self) -> Optional[Basket]:
         current_date: str = Date.get_current_date()
         if self.basket is not None and self.campaign is not None and Date.compare_date(self.campaign.start_date, current_date) <= 0 and Date.compare_date(self.campaign.end_date, current_date) >= 0 and self.campaign.is_active:
-            self.set_product_list_of_campaign_by_criteria()
-            self.set_product_list_of_campaign_by_action()
+            self.set_criteria_product_list_for_campaign()
+            self.set_action_product_list_for_campaign()
             self.sort_criteria_product_list()
             self.sort_action_product_list()
             rate: float = 0.0
