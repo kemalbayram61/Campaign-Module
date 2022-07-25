@@ -66,7 +66,12 @@ class DBHelper:
             action_amount real,
             action_qty int,
             max_discount real,
-            is_active int
+            is_active int,
+            "all_payment_channel" int, 
+            "all_customer" int, 
+            "all_payment_type" int, 
+            "all_product_criteria" int, 
+            "all_product_action" int
             )
         '''
 

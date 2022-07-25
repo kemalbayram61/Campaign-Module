@@ -5,13 +5,14 @@ from Object.Customer import Customer
 from Object.PaymentType import PaymentType
 from Object.PaymentChannel import PaymentChannel
 from Object.Campaign import Campaign
-
+from Data.CampaignHelper import CampaignHelper
 
 class Finder:
     basked: Basket
     customer: Customer
     payment_channel: PaymentChannel
     payment_type: PaymentType
+    campaign_helper: CampaignHelper
 
     def __init__(self, customer: Customer = None,
                  basket: Basket = None,
@@ -21,6 +22,7 @@ class Finder:
         self.basked = basket
         self.payment_type = payment_type
         self.payment_channel = payment_channel
+        self.campaign_helper = CampaignHelper("-1")
 
     def discover_campaign_list(self) -> list[str]:
         if self.customer is not None and self.basked is not None and self.payment_type is not None and self.payment_channel is not None:
@@ -36,6 +38,8 @@ class Finder:
                 if criteria in action_campaign_list and criteria in self.customer.campaign_list and criteria not in response and criteria in self.payment_channel.campaign_list and criteria in self.payment_type.campaign_list:
                     response.append(criteria)
 
+            #todo bütün kampayaları çek ve bu sepet için uygunluğunu kontrol ederek idlerini response içerisine ekle
+            all_campaign_list: list[Campaign] = self.campaign_helper.get_all()
             return response
         return []
 
