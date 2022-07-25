@@ -1,4 +1,5 @@
 from Abstract.ActionType import ActionType
+from Abstract.AllProductAction import AllProductAction
 from typing import Optional
 from Object.Basket import Basket
 from Object.Campaign import Campaign
@@ -141,13 +142,16 @@ class Operator:
                     rate = self.campaign.action_amount
 
             if amount != 0.0:
-                for action_product in self.action_product_list:
-                    action_product.amount = 0 if action_product.amount < 0 else action_product.amount
-                    action_product.is_used = True
+                if self.campaign.all_product_action == AllProductAction.YES:
+                    self.apply_amount_discount_to_basket(amount)
+                else:
+                    self.apply_amount_discount_to_action_product(amount)
+
             elif rate != 0.0:
-                for action_product in self.action_product_list:
-                    action_product.amount = 0 if action_product.amount < 0 else action_product.amount
-                    action_product.is_used = True
+                if self.campaign.all_product_action == AllProductAction.YES:
+                    self.apply_percentage_discount_to_basket(rate)
+                else:
+                    self.apply_percentage_discount_to_action_product(rate)
             return self.basket
         else:
             return self.basket
