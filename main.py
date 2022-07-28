@@ -22,7 +22,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 
-class BasketLine(BaseModel):
+class RequestBasketLine(BaseModel):
     qty: int
     barcode: str
     amount: float
@@ -32,9 +32,26 @@ class BasketLine(BaseModel):
 class RequestBasket(BaseModel):
     order_id: str
     customer_id: str
-    basket_lines: list[BasketLine]
+    basket_lines: list[RequestBasketLine]
     payment_type_id: str
     payment_channel_id: str
+
+
+class ResponseBasketLine:
+    qty: int
+    barcode: str
+    amount: float
+    unit_price: int
+    discount_amount: float
+
+
+class ResponseBasket:
+    order_id: str
+    customer_id: str
+    basket_lines: list[ResponseBasketLine]
+    payment_type_id: str
+    payment_channel_id: str
+    campaign_list: list[str]
 
 
 config = Config()
@@ -71,7 +88,8 @@ def get_basked(request: RequestBasket) -> Basket:
             product.discount_amount = 0.0
             product_list.append(product)
 
-    basket: Basket = Basket(customer_id=request.customer_id,
+    basket: Basket = Basket(order_id=request.order_id,
+                            customer_id=request.customer_id,
                             payment_channel_id=request.payment_channel_id,
                             payment_type_id=request.payment_type_id,
                             product_list=product_list)
@@ -79,8 +97,31 @@ def get_basked(request: RequestBasket) -> Basket:
     return basket
 
 
+def get_response_basket(applied_basket: Basket, applied_campaign_list: list[Campaign]) -> ResponseBasket:
+    response: ResponseBasket = ResponseBasket()
+    response.order_id = applied_basket.order_id
+    response.customer_id = applied_basket.customer_id
+    response.payment_type_id = applied_basket.payment_type_id
+    response.payment_channel_id = applied_basket.payment_channel_id
+    basket_lines: list[ResponseBasketLine] = []
+    for product in applied_basket.product_list:
+        basket_line: ResponseBasketLine = ResponseBasketLine()
+        basket_line.qty = product.qty
+        basket_line.amount = product.amount
+        basket_line.barcode = product.barcode
+        basket_line.unit_price = product.unit_price
+        basket_line.discount_amount = product.discount_amount
+        basket_lines.append(basket_line)
+    response.basket_lines = basket_lines
+    campaign_list: list[str] = []
+    for campaign in applied_campaign_list:
+        campaign_list.append(campaign.id)
+    response.campaign_list = campaign_list
+    return response
+
+
 @app.post("/find_campaign_list")
-def find_campaign_list(request: RequestBasket):
+def find_campaign_list(request: RequestBasket) -> ResponseBasket:
     basket: Basket = get_basked(request)
     customer_helper: CustomerHelper = CustomerHelper(request.customer_id)
     payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(request.payment_type_id)
@@ -101,4 +142,9 @@ def find_campaign_list(request: RequestBasket):
     optimizer: Optimizer = Optimizer(basket=basket,
                                      campaign_list=campaign_list)
 
-    return optimizer.optimize_basket()
+    optimum_result = optimizer.optimize_basket()
+    applied_basket: Basket = optimum_result[0]
+    applied_campaign_list: list[Campaign] = optimum_result[1]
+    response: ResponseBasket = get_response_basket(applied_basket, applied_campaign_list)
+
+    return response
