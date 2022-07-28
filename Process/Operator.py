@@ -129,11 +129,9 @@ class Operator:
 
             #controls
             if self.campaign.min_amount is not None and self.campaign.min_amount > self.get_criteria_product_list_amount():
-                #todo throw error with appropriate error code
-                return None
+                return self.basket
             if self.campaign.min_qty is not None and self.campaign.min_qty > self.get_criteria_product_count():
-                #todo throw error with appropriate error code
-                return None
+                return self.basket
 
             if self.campaign.action_amount is not None:
                 if self.campaign.action_type == ActionType.AMOUNT:
