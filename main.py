@@ -16,43 +16,12 @@ from Object.Customer import Customer
 from Object.PaymentType import PaymentType
 from Object.PaymentChannel import PaymentChannel
 from Object.Campaign import Campaign
+from Object.RequestBasket import RequestBasket
+from Object.ResponseBasket import ResponseBasket
+from Object.ResponseBasketLine import ResponseBasketLine
 from Process.Finder import Finder
 from Process.Optimizer import Optimizer
 from fastapi import FastAPI
-from pydantic import BaseModel
-
-
-class RequestBasketLine(BaseModel):
-    qty: int
-    barcode: str
-    amount: float
-    unit_price: int
-
-
-class RequestBasket(BaseModel):
-    order_id: str
-    org_id: str
-    customer_id: str
-    basket_lines: list[RequestBasketLine]
-    payment_type_id: str
-    payment_channel_id: str
-
-
-class ResponseBasketLine:
-    qty: int
-    barcode: str
-    amount: float
-    unit_price: int
-    discount_amount: float
-
-
-class ResponseBasket:
-    order_id: str
-    customer_id: str
-    basket_lines: list[ResponseBasketLine]
-    payment_type_id: str
-    payment_channel_id: str
-    campaign_list: list[str]
 
 
 config = Config()
