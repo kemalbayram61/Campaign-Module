@@ -22,7 +22,6 @@ class CampaignHelper(DBObject):
         db_object = self.db_helper.find_by_id("campaign", self.id)
         if db_object is not None:
             self.campaign = Campaign(id=str(db_object[0]),
-                                     name=db_object[1],
                                      level=db_object[2],
                                      start_date=db_object[3],
                                      end_date=db_object[4],
@@ -49,7 +48,6 @@ class CampaignHelper(DBObject):
         if db_object_list is not None:
             for db_object in db_object_list:
                 campaign = Campaign(id=str(db_object[0]),
-                                    name=db_object[1],
                                     level=db_object[2],
                                     start_date=db_object[3],
                                     end_date=db_object[4],

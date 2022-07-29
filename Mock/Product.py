@@ -5,19 +5,19 @@ class ProductMock(MockObject):
     def get_mock_sql(self) -> str:
         response = '''
         INSERT INTO public.product
-        ("name", "barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('Coca Cola', '283746328746432', '1,2', '1');
+        ("barcode", "criteria_campaign_list", "action_campaign_list")
+        VALUES('283746328746432', '1,2', '1');
         
         INSERT INTO public.product
-        ("name", "barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('Ice Tea', '283746328746936', '1,2', '1,2');
+        ("barcode", "criteria_campaign_list", "action_campaign_list")
+        VALUES('283746328746936', '1,2', '1,2');
         
         INSERT INTO public.product
-        ("name", "barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('Resim Defteri', '283746328746124', '7,8', '9,12');
+        ("barcode", "criteria_campaign_list", "action_campaign_list")
+        VALUES('283746328746124', '7,8', '9,12');
         
         INSERT INTO public.product
-        ("name", "barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('Silgi', '283746328746124', '3,8', NULL);
+        ("barcode", "criteria_campaign_list", "action_campaign_list")
+        VALUES('283746328746124', '3,8', NULL);
         '''
         return response

@@ -16,7 +16,6 @@ class PaymentTypeHelper(DBObject):
         db_object = self.db_helper.find_by_id("payment_channel", self.id)
         if db_object is not None:
             self.payment_type = PaymentType(id=db_object[0],
-                                            name=db_object[1],
                                             campaign_list=[] if db_object[2] is None else db_object[2].split(','))
 
 

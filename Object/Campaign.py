@@ -8,7 +8,6 @@ from Abstract.ActionType import ActionType
 
 class Campaign:
     id: str
-    name: str
     all_payment_channel: AllPaymentChannel
     all_customer: AllCustomer
     all_payment_type: AllPaymentType
@@ -27,7 +26,6 @@ class Campaign:
     is_active: bool
 
     def __init__(self, id: str = None,
-                 name: str = None,
                  all_payment_channel: AllPaymentChannel = None,
                  all_customer: AllCustomer = None,
                  all_payment_type: AllPaymentType = None,
@@ -45,7 +43,6 @@ class Campaign:
                  end_date: str = None,
                  is_active: bool = None):
         self.id = id
-        self.name = name
         self.all_payment_channel = all_payment_channel
         self.all_customer = all_customer
         self.all_payment_type = all_payment_type
