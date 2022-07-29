@@ -24,9 +24,9 @@ class ProductHelper(DBObject):
             db_object = self.db_helper.find_product_by_barcode(self.barcode)
         if db_object is not None:
             self.product = Product(id=str(db_object[0]),
-                                   barcode=db_object[2],
-                                   criteria_campaign_list=[] if db_object[3] is None else db_object[3].split(','),
-                                   action_campaign_list=[] if db_object[4] is None else db_object[4].split(','))
+                                   barcode=db_object[1],
+                                   criteria_campaign_list=[] if db_object[2] is None else db_object[2].split(','),
+                                   action_campaign_list=[] if db_object[3] is None else db_object[3].split(','))
 
     def get(self) -> Product:
         return self.product
