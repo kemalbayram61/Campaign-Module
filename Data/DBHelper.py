@@ -21,7 +21,6 @@ class DBHelper:
         product_sql: str = '''
             create table product(
             id SERIAL NOT NULL PRIMARY KEY,
-            name varchar(60) NOT NULL,
             barcode varchar(20) NOT NULL,
             criteria_campaign_list varchar(100),
             action_campaign_list varchar(100)
@@ -30,8 +29,6 @@ class DBHelper:
         customer_sql: str = '''
             create table customer(
             id SERIAL NOT NULL PRIMARY KEY,
-            name varchar(60) NOT NULL,
-            property json NOT NULL,
             campaign_list varchar(100)
             )
         '''
@@ -39,7 +36,6 @@ class DBHelper:
         payment_channel_sql: str = '''
             create table payment_channel(
             id SERIAL NOT NULL PRIMARY KEY,
-            name json NOT NULL,
             campaign_list varchar(100)
             )
         '''
@@ -47,7 +43,6 @@ class DBHelper:
         payment_type_sql: str = '''
             create table payment_type(
             id SERIAL NOT NULL PRIMARY KEY,
-            name json NOT NULL,
             campaign_list varchar(100)
             )
         '''
@@ -55,7 +50,6 @@ class DBHelper:
         campaign_sql: str = '''
             create table campaign(
             id SERIAL NOT NULL PRIMARY KEY,
-            name varchar(100) NOT NULL,
             level int NOT NULL,
             start_date varchar(30),
             end_date varchar(30),

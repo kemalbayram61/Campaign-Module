@@ -1,6 +1,5 @@
 class Product:
     id: str
-    name: str
     barcode: str
     qty: int
     unit_price: float
@@ -11,7 +10,6 @@ class Product:
     discount_amount: float
 
     def __init__(self, id: str = None,
-                 name: str = None,
                  barcode: str = None,
                  qty: int = None,
                  unit_price: float = None,
@@ -21,7 +19,6 @@ class Product:
                  action_campaign_list: list[str] = None,
                  discount_amount: float = None):
         self.id = id
-        self.name = name
         self.barcode = barcode
         self.qty = qty
         self.unit_price = unit_price
