@@ -20,6 +20,12 @@ class Config:
     def get_db_password(self) -> str:
         return self.config_file["PASSWORD"]
 
+    def get_redis_host(self) -> str:
+        return self.config_file["REDIS_HOST"]
+
+    def get_redis_port(self) -> str:
+        return self.config_file["REDIS_PORT"]
+
     def get_reset_table_on_init(self) -> bool:
         case = self.config_file["RESET_TABLES_ON_INIT"]
         if(case != "1"):
