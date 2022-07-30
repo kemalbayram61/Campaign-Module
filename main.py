@@ -6,6 +6,7 @@ from Data.PaymentChannelHelper import PaymentChannelHelper
 from Data.CampaignHelper import CampaignHelper
 from Data.DBHelper import DBHelper
 from Data.Config import Config
+from Data.RedisHelper import RedisHelper
 from Mock.Product import ProductMock
 from Mock.Customer import CustomerMock
 from Mock.PaymentType import PaymentTypeMock
@@ -27,6 +28,10 @@ from fastapi import FastAPI
 
 config = Config()
 db_helper = DBHelper()
+redis_helper = RedisHelper()
+
+#load data on redis
+redis_helper.load_data()
 
 if config.get_reset_table_on_init():
     db_helper.reset_tables()
