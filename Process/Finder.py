@@ -3,6 +3,7 @@ from Abstract.AllPaymentType import AllPaymentType
 from Abstract.AllPaymentChannel import AllPaymentChannel
 from Abstract.AllProductCriteria import AllProductCriteria
 from Abstract.AllProductAction import AllProductAction
+from Abstract.DBObjectRole import DBObjectRole
 from Object.Basket import Basket
 from Object.Product import Product
 from Object.Customer import Customer
@@ -26,12 +27,12 @@ class Finder:
         self.basked = basket
         self.payment_type = payment_type
         self.payment_channel = payment_channel
-        self.campaign_helper = CampaignHelper("-1")
+        self.campaign_helper = CampaignHelper("-1", DBObjectRole.REDIS)
 
     def __get_campaign_list_of_id_list(self, id_list: list[str]) ->list[Campaign]:
         response: list[Campaign] = []
         for id in id_list:
-            campaign_helper: CampaignHelper = CampaignHelper(id)
+            campaign_helper: CampaignHelper = CampaignHelper(id, DBObjectRole.REDIS)
             response.append(campaign_helper.get())
         return response
 
@@ -80,7 +81,7 @@ class Finder:
                 response_id_list.append(criteria_campaign)
 
         for campaign_id in response_id_list:
-            campaign_helper: CampaignHelper = CampaignHelper(campaign_id)
+            campaign_helper: CampaignHelper = CampaignHelper(campaign_id, DBObjectRole.REDIS)
             response.append(campaign_helper.get())
 
         return response
