@@ -93,28 +93,36 @@ class Operator:
     def apply_percentage_discount_to_basket(self, rate: float):
         for product in self.basket.product_list:
             discount = product.amount - product.amount * rate
-            product.discount_amount = product.amount if discount > product.amount else discount
+            product.line_amount = product.amount if discount > product.amount else discount
+            product.discount_amount = product.amount - product.line_amount
             product.is_used = True
+            product.discount_lines.append({'campaign_id':self.campaign.id, 'discount_amount':product.discount_amount})
 
     def apply_amount_discount_to_basket(self, amount: float):
         discount_per_product: float = amount / self.get_basket_product_count()
         for product in self.basket.product_list:
             discount = product.amount - product.qty * discount_per_product
-            product.discount_amount = product.amount if discount > product.amount else discount
+            product.line_amount = product.amount if discount > product.amount else discount
+            product.discount_amount = product.amount - product.line_amount
             product.is_used = True
+            product.discount_lines.append({'campaign_id': self.campaign.id, 'discount_amount': product.discount_amount})
 
     def apply_percentage_discount_to_action_product(self, rate: float):
         for product in self.action_product_list:
             discount = product.amount - product.amount * rate
-            product.discount_amount = product.amount if discount > product.amount else discount
+            product.line_amount = product.amount if discount > product.amount else discount
+            product.discount_amount = product.amount - product.line_amount
             product.is_used = True
+            product.discount_lines.append({'campaign_id': self.campaign.id, 'discount_amount': product.discount_amount})
 
     def apply_amount_discount_to_action_product(self, amount: float):
         discount_per_product: float = amount / self.get_action_product_count()
         for product in self.action_product_list:
             discount = product.amount - product.qty * discount_per_product
-            product.discount_amount = product.amount if discount > product.amount else discount
+            product.line_amount = product.amount if discount > product.amount else discount
+            product.discount_amount = product.amount - product.line_amount
             product.is_used = True
+            product.discount_lines.append({'campaign_id': self.campaign.id, 'discount_amount': product.discount_amount})
 
 
     def apply_campaign(self) -> Optional[Basket]:
