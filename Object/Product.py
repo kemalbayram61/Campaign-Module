@@ -8,6 +8,7 @@ class Product:
     action_campaign_list: list[str]
     is_used: bool
     discount_amount: float
+    line_amount: float
 
     def __init__(self, id: str = None,
                  barcode: str = None,
@@ -17,7 +18,8 @@ class Product:
                  is_used: bool = None,
                  criteria_campaign_list: list[str] = None,
                  action_campaign_list: list[str] = None,
-                 discount_amount: float = None):
+                 discount_amount: float = None,
+                 line_amount: float = None):
         self.id = id
         self.barcode = barcode
         self.qty = qty
@@ -27,3 +29,4 @@ class Product:
         self.criteria_campaign_list = [] if criteria_campaign_list is None else criteria_campaign_list
         self.action_campaign_list = [] if action_campaign_list is None else action_campaign_list
         self.discount_amount = discount_amount
+        self.line_amount = line_amount
