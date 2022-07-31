@@ -21,6 +21,7 @@ from Object.Campaign import Campaign
 from Object.RequestBasket import RequestBasket
 from Object.ResponseBasket import ResponseBasket
 from Object.ResponseBasketLine import ResponseBasketLine
+from Object.BasketLine import BasketLine
 from Process.Finder import Finder
 from Process.Optimizer import Optimizer
 from fastapi import FastAPI
@@ -53,22 +54,28 @@ app = FastAPI()
 
 def get_basked(request: RequestBasket) -> Basket:
     product_list: list[Product] = []
-    for basket_line in request.basket_lines:
-        product_helper = ProductHelper(barcode=basket_line.barcode, role=DBObjectRole.REDIS)
+    basket_lines: list[BasketLine] = []
+    for request_basket_line in request.basket_lines:
+        product_helper = ProductHelper(barcode=request_basket_line.barcode, role=DBObjectRole.REDIS)
         product = product_helper.get()
         if product is not None:
-            product.qty = basket_line.qty
-            product.amount = basket_line.amount
-            product.unit_price = basket_line.unit_price
-            product.is_used = False
-            product.discount_amount = 0.0
+            basket_line = BasketLine(barcode=request_basket_line.barcode,
+                                     qty=request_basket_line.qty,
+                                     unit_price=request_basket_line.unit_price,
+                                     amount=request_basket_line.amount,
+                                     is_used=False,
+                                     discount_amount=0,
+                                     line_amount=request_basket_line.amount,
+                                     discount_lines=[])
             product_list.append(product)
+            basket_lines.append(basket_line)
 
     basket: Basket = Basket(order_id=request.order_id,
                             customer_id=request.customer_id,
                             payment_channel_id=request.payment_channel_id,
                             payment_type_id=request.payment_type_id,
-                            product_list=product_list)
+                            product_list=product_list,
+                            basket_lines=basket_lines)
 
     return basket
 
@@ -79,16 +86,16 @@ def get_response_basket(applied_basket: Basket, applied_campaign_list: list[Camp
     response.customer_id = applied_basket.customer_id
     response.payment_type_id = applied_basket.payment_type_id
     response.payment_channel_id = applied_basket.payment_channel_id
-    basket_lines: list[ResponseBasketLine] = []
-    for product in applied_basket.product_list:
-        basket_line: ResponseBasketLine = ResponseBasketLine()
-        basket_line.qty = product.qty
-        basket_line.amount = product.amount
-        basket_line.barcode = product.barcode
-        basket_line.unit_price = product.unit_price
-        basket_line.discount_amount = product.discount_amount
-        basket_lines.append(basket_line)
-    response.basket_lines = basket_lines
+    response_basket_lines: list[ResponseBasketLine] = []
+    for basket_line in applied_basket.basket_lines:
+        response_basket_line: ResponseBasketLine = ResponseBasketLine()
+        response_basket_line.qty = basket_line.qty
+        response_basket_line.amount = basket_line.amount
+        response_basket_line.barcode = basket_line.barcode
+        response_basket_line.unit_price = basket_line.unit_price
+        response_basket_line.discount_amount = basket_line.discount_amount
+        response_basket_lines.append(response_basket_line)
+    response.basket_lines = response_basket_lines
     campaign_list: list[str] = []
     for campaign in applied_campaign_list:
         campaign_list.append(campaign.id)
