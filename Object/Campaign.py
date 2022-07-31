@@ -59,3 +59,42 @@ class Campaign:
         self.start_date = start_date
         self.end_date = end_date
         self.is_active = is_active
+
+    def __str__(self) -> str:
+        response: str = '''
+            id:{0},
+            all_payment_channel:{1},
+            all_customer:{2},
+            all_payment_type:{3},
+            all_product_action:{4},
+            all_product_criteria:{5},
+            level:{6},
+            min_qty:{7},
+            min_amount:{8},
+            max_discount:{9},
+            max_occurrence:{10},
+            action_type:{11},
+            action_amount:{12},
+            action_qty:{13},
+            start_date:{14},
+            end_date:{15},
+            is_active:{16}    
+        '''.format(self.id,
+                   self.all_payment_channel,
+                   self.all_customer,
+                   self.all_payment_type,
+                   self.all_product_action,
+                   self.all_product_criteria,
+                   self.level,
+                   self.min_qty,
+                   self.min_amount,
+                   self.max_discount,
+                   self.max_occurrence,
+                   self.action_type,
+                   self.action_amount,
+                   self.action_qty,
+                   self.start_date,
+                   self.end_date,
+                   self.is_active)
+
+        return response
