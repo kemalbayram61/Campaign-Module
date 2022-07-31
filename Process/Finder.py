@@ -12,6 +12,7 @@ from Object.PaymentChannel import PaymentChannel
 from Object.Campaign import Campaign
 from Data.CampaignHelper import CampaignHelper
 
+
 class Finder:
     basked: Basket
     customer: Customer
@@ -71,8 +72,8 @@ class Finder:
         action_campaign_list: list[str] = []
         response_id_list: list[str] = []
         response: list[Campaign] = []
-        for product in product_list:
-            if product.is_used is False:
+        for index, product in enumerate(product_list, start=0):
+            if basket.basket_lines[index].is_used is False:
                 criteria_campaign_list = criteria_campaign_list + product.criteria_campaign_list
                 action_campaign_list = action_campaign_list + product.action_campaign_list
 
