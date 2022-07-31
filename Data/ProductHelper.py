@@ -45,3 +45,9 @@ class ProductHelper(DBObject):
 
     def get(self) -> Product:
         return self.product
+
+    def load_data(self) -> None:
+        pass
+
+    def get_all(self, org_id: str) -> list[Product]:
+        pass

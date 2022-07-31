@@ -34,3 +34,9 @@ class PaymentTypeHelper(DBObject):
 
     def get(self) ->PaymentType:
         return self.payment_type
+
+    def load_data(self) -> None:
+        pass
+
+    def get_all(self, org_id: str) -> list[PaymentType]:
+        pass

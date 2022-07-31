@@ -35,3 +35,9 @@ class CustomerHelper(DBObject):
 
     def get(self) -> Customer:
         return self.customer
+
+    def load_data(self) -> None:
+        pass
+
+    def get_all(self, org_id: str) -> list[Customer]:
+        pass

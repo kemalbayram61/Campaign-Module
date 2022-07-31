@@ -57,10 +57,11 @@ class CampaignHelper(DBObject):
     def get(self) -> Campaign:
         return self.campaign
 
-    def get_all(self) -> list[Campaign]:
+    def get_all(self, org_id: str) -> list[Campaign]:
         response: list[Campaign] = []
         if self.role == DBObjectRole.DATABASE:
-            db_object_list = self.db_helper.select_all("campaign")
+            db_helper: DBHelper = DBHelper()
+            db_object_list = db_helper.select_all("campaign")
             if db_object_list is not None:
                 for db_object in db_object_list:
                     campaign = Campaign(id=str(db_object[0]),
@@ -85,3 +86,6 @@ class CampaignHelper(DBObject):
             redis_helper: RedisHelper = RedisHelper()
             response: list[Campaign] = redis_helper.get("campaign_list")
         return response
+
+    def load_data(self) -> None:
+        pass

@@ -35,3 +35,9 @@ class PaymentChannelHelper(DBObject):
 
     def get(self) ->PaymentChannel:
         return self.payment_channel
+
+    def load_data(self) -> None:
+        pass
+
+    def get_all(self, org_id: str) -> list[PaymentChannel]:
+        pass
