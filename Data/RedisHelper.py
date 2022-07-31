@@ -1,4 +1,7 @@
+from Abstract.DBObjectRole import DBObjectRole
 from Data.Config import Config
+from Data.CampaignHelper import CampaignHelper
+from Object.Campaign import Campaign
 import redis
 
 
@@ -18,4 +21,8 @@ class RedisHelper:
         return redis_manager.get(key)
 
     def load_data(self) -> None:
-        pass
+        campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.DATABASE)
+        all_campaign: list[Campaign] = campaign_helper.get_all()
+        all_campaign_str: str = ';'.join(list(map(lambda campaign: str(campaign), all_campaign)))
+        self.set('all_campaign', all_campaign_str)
+
