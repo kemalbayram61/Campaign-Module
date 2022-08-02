@@ -88,7 +88,12 @@ class CampaignHelper(DBObject):
                     response.append(campaign)
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()
-            response: list[Campaign] = redis_helper.get("campaign_list")
+            response: list[Campaign] = []
+            campaign_list_str: str = str(redis_helper.get("campaign_list"))
+            campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1]
+            campaign_dict_list: list[dict] = json.loads(campaign_list_str)
+            for campaign_dict in campaign_dict_list:
+                response.append(Campaign.dict_to_campaign(campaign_dict))
         return response
 
     def load_data(self) -> None:

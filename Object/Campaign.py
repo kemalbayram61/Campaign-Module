@@ -1,4 +1,3 @@
-import Object.Campaign
 from Abstract.AllCustomer import AllCustomer
 from Abstract.AllPaymentType import AllPaymentType
 from Abstract.AllPaymentChannel import AllPaymentChannel
@@ -81,26 +80,42 @@ class Campaign:
             end_date:{15},
             is_active:{16}}    
         '''.format(self.id,
-                   self.all_payment_channel,
-                   self.all_customer,
-                   self.all_payment_type,
-                   self.all_product_action,
-                   self.all_product_criteria,
+                   self.all_payment_channel.value,
+                   self.all_customer.value,
+                   self.all_payment_type.value,
+                   self.all_product_action.value,
+                   self.all_product_criteria.value,
                    self.level,
                    self.min_qty,
                    self.min_amount,
                    self.max_discount,
                    self.max_occurrence,
-                   self.action_type,
+                   self.action_type.value,
                    self.action_amount,
                    self.action_qty,
                    self.start_date,
                    self.end_date,
-                   self.is_active)
+                   1 if self.is_active else 0)
 
         return response
 
     @staticmethod
     def dict_to_campaign(dict_data: dict) -> object:
-        response = Campaign()
+        response = Campaign(id=dict_data["id"],
+                            all_payment_channel=AllPaymentChannel.NO if int(dict_data["all_payment_channel"]) == 0 else AllPaymentChannel.YES,
+                            all_customer=AllCustomer.NO if int(dict_data["all_customer"]) == 0 else AllCustomer.YES,
+                            all_payment_type=AllPaymentType.NO if int(dict_data["all_payment_type"]) == 0 else AllPaymentType.YES,
+                            all_product_action=AllProductAction.NO if int(dict_data["all_product_action"]) == 0 else AllProductAction.YES,
+                            all_product_criteria=AllProductCriteria.NO if int(dict_data["all_product_criteria"]) == 0 else AllProductCriteria.YES,
+                            level=int(dict_data["level"]),
+                            min_qty=int(dict_data["min_qty"]),
+                            min_amount=float(dict_data["min_amount"]),
+                            max_discount=float(dict_data["max_discount"]),
+                            max_occurrence=int(dict_data["max_occurrance"]),
+                            action_type=ActionType.AMOUNT if int(dict_data["action_type"])==0 else ActionType.PERCENT,
+                            action_amount=float(dict_data["action_amount"]),
+                            action_qty=int(dict_data["action_qty"]),
+                            start_date=dict_data["start_date"],
+                            end_date=dict_data["end_date"],
+                            is_active= False if int(dict_data["is_active"]) == 0 else True)
         return response
