@@ -18,6 +18,3 @@ class RedisHelper:
         redis_manager = redis.Redis(host=self.config.get_redis_host(), port=self.config.get_redis_port())
         return redis_manager.get(key)
 
-    def load_data(self) -> None:
-        pass
-

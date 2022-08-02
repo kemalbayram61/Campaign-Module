@@ -32,7 +32,6 @@ db_helper = DBHelper()
 redis_helper = RedisHelper()
 
 #load data on redis
-redis_helper.load_data()
 
 if config.get_reset_table_on_init():
     db_helper.reset_tables()

@@ -97,9 +97,16 @@ class DBHelper:
         self.close_connection()
         return result
 
+    def select_all_by_org_id(self, table_name: str, org_id: str):
+        self.open_connection()
+        self.cursor.execute("select * from " + table_name + " where org_id=" + org_id)
+        result = self.cursor.fetchall()
+        self.close_connection()
+        return result
+
     def find_by_id(self, table_name: str, id: str):
         self.open_connection()
-        self.cursor.execute("select * from " + table_name + " where id="+ id)
+        self.cursor.execute("select * from " + table_name + " where id=" + id)
         result = self.cursor.fetchone()
         self.close_connection()
         return result
