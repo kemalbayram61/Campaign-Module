@@ -65,7 +65,7 @@ class CampaignHelper(DBObject):
         response: list[Campaign] = []
         if self.role == DBObjectRole.DATABASE:
             db_helper: DBHelper = DBHelper()
-            db_object_list = db_helper.select_all_by_org_id("campaign", org_id)
+            db_object_list = db_helper.select_all("campaign")
             if db_object_list is not None:
                 for db_object in db_object_list:
                     campaign = Campaign(id=str(db_object[0]),
@@ -88,8 +88,19 @@ class CampaignHelper(DBObject):
                     response.append(campaign)
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()
-            response: list[Campaign] = redis_helper.get("campaign_list")
+            response: list[Campaign] = []
+            campaign_list_str: str = str(redis_helper.get("campaign_list"))
+            campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1]
+            campaign_dict_list: list[dict] = json.loads(campaign_list_str)
+            for campaign_dict in campaign_dict_list:
+                response.append(Campaign.dict_to_campaign(campaign_dict))
         return response
 
-    def load_data(self) -> None:
-        pass
+    def load_data(self, org_id: str) -> None:
+        self.role = DBObjectRole.DATABASE
+        redis_helper: RedisHelper = RedisHelper()
+        campaign_list: list[Campaign] = self.get_all(org_id)
+        campaign_list_str: str = "[" + ",".join(list(map(lambda campaign: str(campaign), campaign_list))) + "]"
+        redis_helper.set("campaign_list", campaign_list_str)
+
+
