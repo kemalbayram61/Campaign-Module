@@ -1,3 +1,4 @@
+import Object.Campaign
 from Abstract.AllCustomer import AllCustomer
 from Abstract.AllPaymentType import AllPaymentType
 from Abstract.AllPaymentChannel import AllPaymentChannel
@@ -62,7 +63,7 @@ class Campaign:
 
     def __str__(self) -> str:
         response: str = '''
-            id:{0},
+           {id:{0},
             all_payment_channel:{1},
             all_customer:{2},
             all_payment_type:{3},
@@ -78,7 +79,7 @@ class Campaign:
             action_qty:{13},
             start_date:{14},
             end_date:{15},
-            is_active:{16}    
+            is_active:{16}}    
         '''.format(self.id,
                    self.all_payment_channel,
                    self.all_customer,
@@ -97,4 +98,9 @@ class Campaign:
                    self.end_date,
                    self.is_active)
 
+        return response
+
+    @staticmethod
+    def dict_to_campaign(dict_data: dict) -> object:
+        response = Campaign()
         return response
