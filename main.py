@@ -32,6 +32,8 @@ db_helper = DBHelper()
 redis_helper = RedisHelper()
 
 #load data on redis
+campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.DATABASE)
+campaign_helper.load_data("-1")
 
 if config.get_reset_table_on_init():
     db_helper.reset_tables()
