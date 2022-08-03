@@ -62,23 +62,23 @@ class Campaign:
 
     def __str__(self) -> str:
         response: str = '''
-           {id:{0},
-            all_payment_channel:{1},
-            all_customer:{2},
-            all_payment_type:{3},
-            all_product_action:{4},
-            all_product_criteria:{5},
-            level:{6},
-            min_qty:{7},
-            min_amount:{8},
-            max_discount:{9},
-            max_occurrence:{10},
-            action_type:{11},
-            action_amount:{12},
-            action_qty:{13},
-            start_date:{14},
-            end_date:{15},
-            is_active:{16}}    
+            {{"id":{0},
+            "all_payment_channel":{1},
+            "all_customer":{2},
+            "all_payment_type":{3},
+            "all_product_action":{4},
+            "all_product_criteria":{5},
+            "level":{6},
+            "min_qty":{7},
+            "min_amount":{8},
+            "max_discount":{9},
+            "max_occurrence":{10},
+            "action_type":{11},
+            "action_amount":{12},
+            "action_qty":{13},
+            "start_date":{14},
+            "end_date":{15},
+            "is_active":{16}}}    
         '''.format(self.id,
                    self.all_payment_channel.value,
                    self.all_customer.value,
@@ -101,7 +101,7 @@ class Campaign:
 
     @staticmethod
     def dict_to_campaign(dict_data: dict) -> object:
-        response = Campaign(id=dict_data["id"],
+        response = Campaign(id=str(dict_data["id"]),
                             all_payment_channel=AllPaymentChannel.NO if int(dict_data["all_payment_channel"]) == 0 else AllPaymentChannel.YES,
                             all_customer=AllCustomer.NO if int(dict_data["all_customer"]) == 0 else AllCustomer.YES,
                             all_payment_type=AllPaymentType.NO if int(dict_data["all_payment_type"]) == 0 else AllPaymentType.YES,
@@ -111,7 +111,7 @@ class Campaign:
                             min_qty=int(dict_data["min_qty"]),
                             min_amount=float(dict_data["min_amount"]),
                             max_discount=float(dict_data["max_discount"]),
-                            max_occurrence=int(dict_data["max_occurrance"]),
+                            max_occurrence=int(dict_data["max_occurrence"]),
                             action_type=ActionType.AMOUNT if int(dict_data["action_type"])==0 else ActionType.PERCENT,
                             action_amount=float(dict_data["action_amount"]),
                             action_qty=int(dict_data["action_qty"]),

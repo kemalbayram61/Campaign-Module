@@ -50,7 +50,7 @@ class CampaignHelper(DBObject):
     def __fetch_on_redis(self) -> None:
         redis_helper: RedisHelper = RedisHelper()
         campaign_list_str: str = str(redis_helper.get("campaign_list"))
-        campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1]
+        campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1].replace("\\n","")
         campaign_dict_list: list[dict] = json.loads(campaign_list_str)
         for campaign_dict in campaign_dict_list:
             campaign_object: Campaign = Campaign.dict_to_campaign(campaign_dict)
@@ -90,7 +90,7 @@ class CampaignHelper(DBObject):
             redis_helper: RedisHelper = RedisHelper()
             response: list[Campaign] = []
             campaign_list_str: str = str(redis_helper.get("campaign_list"))
-            campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1]
+            campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1].replace("\\n","")
             campaign_dict_list: list[dict] = json.loads(campaign_list_str)
             for campaign_dict in campaign_dict_list:
                 response.append(Campaign.dict_to_campaign(campaign_dict))
