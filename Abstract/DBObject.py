@@ -7,7 +7,7 @@ class DBObject(ABC):
         pass
 
     @abstractmethod
-    def load_data(self) -> None:
+    def load_data(self, org_id: str) -> None:
         pass
 
     @abstractmethod

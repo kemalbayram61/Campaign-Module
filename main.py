@@ -48,8 +48,10 @@ db_helper.execute_command(campaign_mock.get_mock_sql())
 
 
 #load data on redis
-campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.DATABASE)
+campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.REDIS)
 campaign_helper.load_data("-1")
+customer_helper: CustomerHelper = CustomerHelper("-1", DBObjectRole.REDIS)
+customer_helper.load_data("-1")
 
 app = FastAPI()
 

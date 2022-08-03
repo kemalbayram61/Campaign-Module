@@ -49,14 +49,16 @@ class CampaignHelper(DBObject):
 
     def __fetch_on_redis(self) -> None:
         redis_helper: RedisHelper = RedisHelper()
-        campaign_list_str: str = str(redis_helper.get("campaign_list"))
-        campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1].replace("\\n","")
-        campaign_dict_list: list[dict] = json.loads(campaign_list_str)
-        for campaign_dict in campaign_dict_list:
-            campaign_object: Campaign = Campaign.dict_to_campaign(campaign_dict)
-            if campaign_object.id == self.id:
-                self.campaign = campaign_object
-                break
+        campaign_list_str = redis_helper.get("campaign_list")
+        if campaign_list_str is not None and self.id != "-1":
+            campaign_list_str = str(campaign_list_str)
+            campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1].replace("\\n","")
+            campaign_dict_list: list[dict] = json.loads(campaign_list_str)
+            for campaign_dict in campaign_dict_list:
+                campaign_object: Campaign = Campaign.dict_to_campaign(campaign_dict)
+                if campaign_object.id == self.id:
+                    self.campaign = campaign_object
+                    break
 
     def get(self) -> Campaign:
         return self.campaign
@@ -88,7 +90,6 @@ class CampaignHelper(DBObject):
                     response.append(campaign)
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()
-            response: list[Campaign] = []
             campaign_list_str: str = str(redis_helper.get("campaign_list"))
             campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1].replace("\\n","")
             campaign_dict_list: list[dict] = json.loads(campaign_list_str)
