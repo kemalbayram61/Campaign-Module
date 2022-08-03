@@ -3,7 +3,7 @@ from Abstract.DBObjectRole import DBObjectRole
 from Object.Customer import Customer
 from Data.DBHelper import DBHelper
 from Data.RedisHelper import RedisHelper
-
+import json
 
 class CustomerHelper(DBObject):
     id: str = None
@@ -27,17 +27,42 @@ class CustomerHelper(DBObject):
 
     def __fetch_on_redis(self) -> None:
         redis_helper: RedisHelper = RedisHelper()
-        customer_list: list[Customer] = redis_helper.get("customer_list")
-        for customer in customer_list:
-            if customer.id == self.id:
-                self.customer = customer
-                break
+        customer_list_str = redis_helper.get("customer_list")
+        if customer_list_str is not None and self.id != "-1":
+            customer_list_str = str(customer_list_str)
+            customer_list_str = customer_list_str[2:len(customer_list_str)-1].replace("\\n","")
+            customer_dict_list: list[dict] = json.loads(customer_list_str)
+            for customer_dict in customer_dict_list:
+                customer_object: Customer = Customer.dict_to_customer(customer_dict)
+                if customer_object.id == self.id:
+                    self.customer = customer_object
+                    break
 
     def get(self) -> Customer:
         return self.customer
 
-    def load_data(self) -> None:
-        pass
+    def load_data(self, org_id: str) -> None:
+        self.role = DBObjectRole.DATABASE
+        redis_helper: RedisHelper = RedisHelper()
+        customer_list: list[Customer] = self.get_all(org_id)
+        customer_list_str: str = "[" + ",".join(list(map(lambda customer: str(customer), customer_list))) + "]"
+        redis_helper.set("customer_list", customer_list_str)
 
     def get_all(self, org_id: str) -> list[Customer]:
-        pass
+        response: list[Customer] = []
+        if self.role == DBObjectRole.DATABASE:
+            db_helper: DBHelper = DBHelper()
+            db_object_list = db_helper.select_all("customer")
+            if db_object_list is not None:
+                for db_object in db_object_list:
+                    customer = Customer(id=str(db_object[0]),
+                                        campaign_list=[] if db_object[1] is None else db_object[1].split(','))
+                    response.append(customer)
+        elif self.role == DBObjectRole.REDIS:
+            redis_helper: RedisHelper = RedisHelper()
+            customer_list_str: str = str(redis_helper.get("customer_list"))
+            customer_list_str = customer_list_str[2:len(customer_list_str)-1].replace("\\n","")
+            customer_dict_list: list[dict] = json.loads(customer_list_str)
+            for customer_dict in customer_dict_list:
+                response.append(Customer.dict_to_customer(customer_dict))
+        return response
