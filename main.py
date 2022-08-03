@@ -52,7 +52,7 @@ campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.REDIS)
 campaign_helper.load_data("-1")
 customer_helper: CustomerHelper = CustomerHelper("-1", DBObjectRole.REDIS)
 customer_helper.load_data("-1")
-CustomerHelper("1", DBObjectRole.REDIS)
+
 app = FastAPI()
 
 
