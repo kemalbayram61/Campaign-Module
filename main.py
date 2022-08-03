@@ -31,10 +31,6 @@ config = Config()
 db_helper = DBHelper()
 redis_helper = RedisHelper()
 
-#load data on redis
-campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.DATABASE)
-campaign_helper.load_data("-1")
-
 if config.get_reset_table_on_init():
     db_helper.reset_tables()
 
@@ -49,6 +45,11 @@ payment_type_mock = PaymentTypeMock()
 db_helper.execute_command(payment_type_mock.get_mock_sql())
 campaign_mock = CampaignMock()
 db_helper.execute_command(campaign_mock.get_mock_sql())
+
+
+#load data on redis
+campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.DATABASE)
+campaign_helper.load_data("-1")
 
 app = FastAPI()
 
