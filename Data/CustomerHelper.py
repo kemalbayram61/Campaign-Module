@@ -26,17 +26,11 @@ class CustomerHelper(DBObject):
                                      campaign_list=[] if db_object[1] is None else db_object[1].split(','))
 
     def __fetch_on_redis(self) -> None:
-        redis_helper: RedisHelper = RedisHelper()
-        customer_list_str = redis_helper.get("customer_list")
-        if customer_list_str is not None and self.id != "-1":
-            customer_list_str = str(customer_list_str)
-            customer_list_str = customer_list_str[2:len(customer_list_str)-1].replace("\\n","")
-            customer_dict_list: list[dict] = json.loads(customer_list_str)
-            for customer_dict in customer_dict_list:
-                customer_object: Customer = Customer.dict_to_customer(customer_dict)
-                if customer_object.id == self.id:
-                    self.customer = customer_object
-                    break
+        customer_list: list[Customer] = self.get_all("-1")
+        for customer in customer_list:
+            if customer.id == self.id:
+                self.customer = customer
+                break
 
     def get(self) -> Customer:
         return self.customer

@@ -28,6 +28,7 @@ class Product:
     @staticmethod
     def dict_to_product(dict_data: dict) -> object:
         response = Product(id=str(dict_data["id"]),
+                           barcode=dict_data["barcode"],
                            criteria_campaign_list=dict_data["criteria_campaign_list"],
                            action_campaign_list=dict_data["action_campaign_list"])
         return response
