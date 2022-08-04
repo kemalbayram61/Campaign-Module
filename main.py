@@ -52,6 +52,8 @@ campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.REDIS)
 campaign_helper.load_data("-1")
 customer_helper: CustomerHelper = CustomerHelper("-1", DBObjectRole.REDIS)
 customer_helper.load_data("-1")
+payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper("-1", DBObjectRole.REDIS)
+payment_channel_helper.load_data("-1")
 
 app = FastAPI()
 

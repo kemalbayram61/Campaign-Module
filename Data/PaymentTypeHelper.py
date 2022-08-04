@@ -26,7 +26,7 @@ class PaymentTypeHelper(DBObject):
 
     def __fetch_on_redis(self) ->None:
         redis_helper: RedisHelper = RedisHelper()
-        payment_type_list: list[PaymentType] = redis_helper.get("payment_type_list")
+        payment_type_list: list[PaymentType] = self.get_all("-1")
         for payment_type in payment_type_list:
             if payment_type.id == self.id:
                 self.payment_type = payment_type
