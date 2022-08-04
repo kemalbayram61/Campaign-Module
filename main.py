@@ -105,6 +105,8 @@ def get_response_basket(applied_basket: Basket, applied_campaign_list: list[Camp
         response_basket_line.barcode = basket_line.barcode
         response_basket_line.unit_price = basket_line.unit_price
         response_basket_line.discount_amount = basket_line.discount_amount
+        response_basket_line.line_amount = basket_line.line_amount
+        response_basket_line.discount_lines = basket_line.discount_lines
         response_basket_lines.append(response_basket_line)
     response.basket_lines = response_basket_lines
     campaign_list: list[str] = []
