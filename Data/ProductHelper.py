@@ -18,9 +18,9 @@ class ProductHelper(DBObject):
         self.id = id
         self.barcode = barcode
         self.role = role
-        if role == DBObjectRole.DATABASE:
+        if role == DBObjectRole.DATABASE and id != "-1" and barcode != "-1":
             self.__fetch_on_db()
-        elif role == DBObjectRole.REDIS:
+        elif role == DBObjectRole.REDIS and id != "-1" and barcode != "-1":
             self.__fetch_on_redis()
 
     def __fetch_on_db(self) -> None:

@@ -13,9 +13,9 @@ class CustomerHelper(DBObject):
     def __init__(self, id: str, role: DBObjectRole):
         self.id = id
         self.role = role
-        if role == DBObjectRole.DATABASE:
+        if role == DBObjectRole.DATABASE and id != "-1":
             self.__fetch_on_db()
-        elif role == DBObjectRole.REDIS:
+        elif role == DBObjectRole.REDIS and id != "-1":
             self.__fetch_on_redis()
 
     def __fetch_on_db(self) -> None:

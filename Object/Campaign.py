@@ -62,7 +62,7 @@ class Campaign:
 
     def __str__(self) -> str:
         response: str = '''
-            {{"id":{0},
+            {{"id":"{0}",
             "all_payment_channel":{1},
             "all_customer":{2},
             "all_payment_type":{3},
@@ -76,8 +76,8 @@ class Campaign:
             "action_type":{11},
             "action_amount":{12},
             "action_qty":{13},
-            "start_date":{14},
-            "end_date":{15},
+            "start_date":"{14}",
+            "end_date":"{15}",
             "is_active":{16}}}    
         '''.format(self.id,
                    self.all_payment_channel.value,

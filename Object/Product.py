@@ -15,8 +15,8 @@ class Product:
 
     def __str__(self) -> str:
         response: str = '''
-            {{"id":{0},
-            "barcode":{1},
+            {{"id":"{0}",
+            "barcode":"{1}",
             "criteria_campaign_list":{2},
             "action_campaign_list":{3}}}
         '''.format(self.id,
