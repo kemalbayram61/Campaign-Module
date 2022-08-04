@@ -21,8 +21,8 @@ class Product:
             "action_campaign_list":{3}}}
         '''.format(self.id,
                    self.barcode,
-                   "[" + ','.join(self.criteria_campaign_list) + "]",
-                   "[" + ','.join(self.action_campaign_list) + "]")
+                   "[" + ",".join(list(map(lambda campaign_id: "\"" + str(campaign_id) + "\"", self.criteria_campaign_list))) + "]",
+                   "[" + ",".join(list(map(lambda campaign_id: "\"" + str(campaign_id) + "\"", self.action_campaign_list))) + "]")
         return response
 
     @staticmethod

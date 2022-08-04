@@ -11,7 +11,7 @@ class PaymentChannel:
         response: str = '''
             {{"id":{0},
             "campaign_list":{1}}}
-        '''.format(self.id, "[" + ','.join(self.campaign_list) + "]")
+        '''.format(self.id, "[" + ",".join(list(map(lambda campaign_id: "\"" + str(campaign_id) + "\"", self.campaign_list))) + "]")
         return response
 
     @staticmethod
