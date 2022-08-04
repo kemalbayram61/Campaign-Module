@@ -9,8 +9,8 @@ class PaymentChannel:
 
     def __str__(self) -> str:
         response: str = '''
-            {{id:{0},
-            campaign_list:{1}}}
+            {{"id":{0},
+            "campaign_list":{1}}}
         '''.format(self.id, "[" + ','.join(self.campaign_list) + "]")
         return response
 

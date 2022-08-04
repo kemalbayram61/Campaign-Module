@@ -18,3 +18,9 @@ class RedisHelper:
         redis_manager = redis.Redis(host=self.config.get_redis_host(), port=self.config.get_redis_port())
         return redis_manager.get(key)
 
+    def reset(self) -> None:
+        self.set("payment_channel_list", "")
+        self.set("payment_type_list", "")
+        self.set("customer_list", "")
+        self.set("product_list", "")
+
