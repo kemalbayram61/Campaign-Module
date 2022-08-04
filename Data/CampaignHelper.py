@@ -48,17 +48,11 @@ class CampaignHelper(DBObject):
                                      all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES)
 
     def __fetch_on_redis(self) -> None:
-        redis_helper: RedisHelper = RedisHelper()
-        campaign_list_str = redis_helper.get("campaign_list")
-        if campaign_list_str is not None and self.id != "-1":
-            campaign_list_str = str(campaign_list_str)
-            campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1].replace("\\n","")
-            campaign_dict_list: list[dict] = json.loads(campaign_list_str)
-            for campaign_dict in campaign_dict_list:
-                campaign_object: Campaign = Campaign.dict_to_campaign(campaign_dict)
-                if campaign_object.id == self.id:
-                    self.campaign = campaign_object
-                    break
+        campaign_list: list[Campaign] = self.get_all("-1")
+        for campaign in campaign_list:
+            if campaign.id == self.id:
+                self.campaign = campaign
+                break
 
     def get(self) -> Campaign:
         return self.campaign

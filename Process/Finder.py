@@ -48,7 +48,7 @@ class Finder:
                 action_campaign_id_list = action_campaign_id_list + product.action_campaign_list
 
             criteria_campaign_list: list[Campaign] = self.__get_campaign_list_of_id_list(criteria_campaign_id_list)
-            all_campaign_list: list[Campaign] = self.campaign_helper.get_all()
+            all_campaign_list: list[Campaign] = self.campaign_helper.get_all("-1")
 
             for criteria_campaign in criteria_campaign_list:
                 if criteria_campaign.id in action_campaign_id_list:

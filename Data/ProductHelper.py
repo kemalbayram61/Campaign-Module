@@ -3,6 +3,7 @@ from Abstract.DBObjectRole import DBObjectRole
 from Object.Product import Product
 from Data.DBHelper import DBHelper
 from Data.RedisHelper import RedisHelper
+import json
 
 
 class ProductHelper(DBObject):
@@ -36,8 +37,7 @@ class ProductHelper(DBObject):
                                    action_campaign_list=[] if db_object[3] is None else db_object[3].split(','))
 
     def __fetch_on_redis(self) -> None:
-        redis_helper: RedisHelper = RedisHelper()
-        product_list: list[Product] = redis_helper.get("product_list")
+        product_list: list[Product] = self.get_all("-1")
         for product in product_list:
             if product.id == self.id:
                 self.product = product
@@ -46,8 +46,30 @@ class ProductHelper(DBObject):
     def get(self) -> Product:
         return self.product
 
-    def load_data(self) -> None:
-        pass
+    def load_data(self, org_id: str) -> None:
+        self.role = DBObjectRole.DATABASE
+        redis_helper: RedisHelper = RedisHelper()
+        product_list: list[Product] = self.get_all(org_id)
+        product_list_str: str = "[" + ",".join(list(map(lambda product: str(product), product_list))) + "]"
+        redis_helper.set("product_list", product_list_str)
 
     def get_all(self, org_id: str) -> list[Product]:
-        pass
+        response: list[Product] = []
+        if self.role == DBObjectRole.DATABASE:
+            db_helper: DBHelper = DBHelper()
+            db_object_list = db_helper.select_all("product")
+            if db_object_list is not None:
+                for db_object in db_object_list:
+                    product = Product(id=str(db_object[0]),
+                                      barcode=db_object[1],
+                                      criteria_campaign_list=[] if db_object[2] is None else db_object[2].split(','),
+                                      action_campaign_list=[] if db_object[3] is None else db_object[3].split(','))
+                    response.append(product)
+        elif self.role == DBObjectRole.REDIS:
+            redis_helper: RedisHelper = RedisHelper()
+            product_list_str: str = str(redis_helper.get("product_list"))
+            product_list_str = product_list_str[2:len(product_list_str)-1].replace("\\n","")
+            product_dict_list: list[dict] = json.loads(product_list_str)
+            for product_dict in product_dict_list:
+                response.append(Product.dict_to_product(product_dict))
+        return response

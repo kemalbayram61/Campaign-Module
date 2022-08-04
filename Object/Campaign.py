@@ -115,7 +115,7 @@ class Campaign:
                             action_type=ActionType.AMOUNT if int(dict_data["action_type"])==0 else ActionType.PERCENT,
                             action_amount=float(dict_data["action_amount"]),
                             action_qty=int(dict_data["action_qty"]),
-                            start_date=dict_data["start_date"],
-                            end_date=dict_data["end_date"],
+                            start_date=str(dict_data["start_date"]),
+                            end_date=str(dict_data["end_date"]),
                             is_active= False if int(dict_data["is_active"]) == 0 else True)
         return response

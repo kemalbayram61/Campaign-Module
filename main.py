@@ -57,6 +57,8 @@ payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper("-1", DBObje
 payment_channel_helper.load_data("-1")
 payment_type_helper: PaymentTypeHelper = PaymentTypeHelper("-1", DBObjectRole.DATABASE)
 payment_type_helper.load_data("-1")
+product_helper: ProductHelper = ProductHelper(id="-1", role=DBObjectRole.DATABASE)
+product_helper.load_data("-1")
 
 app = FastAPI()
 
