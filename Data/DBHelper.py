@@ -20,7 +20,7 @@ class DBHelper:
 
         product_sql: str = '''
             create table product(
-            id SERIAL NOT NULL PRIMARY KEY,
+            id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
             barcode varchar(20) NOT NULL,
             criteria_campaign_list varchar(100),
             action_campaign_list varchar(100)
@@ -28,28 +28,28 @@ class DBHelper:
         '''
         customer_sql: str = '''
             create table customer(
-            id SERIAL NOT NULL PRIMARY KEY,
+            id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
             campaign_list varchar(100)
             )
         '''
 
         payment_channel_sql: str = '''
             create table payment_channel(
-            id SERIAL NOT NULL PRIMARY KEY,
+            id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
             campaign_list varchar(100)
             )
         '''
 
         payment_type_sql: str = '''
             create table payment_type(
-            id SERIAL NOT NULL PRIMARY KEY,
+            id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
             campaign_list varchar(100)
             )
         '''
 
         campaign_sql: str = '''
             create table campaign(
-            id SERIAL NOT NULL PRIMARY KEY,
+            id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
             level int NOT NULL,
             start_date varchar(30),
             end_date varchar(30),
@@ -99,14 +99,14 @@ class DBHelper:
 
     def select_all_by_org_id(self, table_name: str, org_id: str):
         self.open_connection()
-        self.cursor.execute("select * from " + table_name + " where org_id=" + org_id)
+        self.cursor.execute("select * from " + table_name + " where org_id='" + org_id + "'")
         result = self.cursor.fetchall()
         self.close_connection()
         return result
 
     def find_by_id(self, table_name: str, id: str):
         self.open_connection()
-        self.cursor.execute("select * from " + table_name + " where id=" + id)
+        self.cursor.execute("select * from " + table_name + " where id='" + id + "'")
         result = self.cursor.fetchone()
         self.close_connection()
         return result

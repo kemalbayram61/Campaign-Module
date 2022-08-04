@@ -9,7 +9,7 @@ class PaymentType:
 
     def __str__(self) -> str:
         response: str = '''
-            {{"id":{0},
+            {{"id":"{0}",
             "campaign_list":{1}}}
         '''.format(self.id, "[" + ",".join(list(map(lambda campaign_id: "\"" + str(campaign_id) + "\"", self.campaign_list))) + "]")
         return response
