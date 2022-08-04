@@ -39,7 +39,7 @@ class ProductHelper(DBObject):
     def __fetch_on_redis(self) -> None:
         product_list: list[Product] = self.get_all("-1")
         for product in product_list:
-            if product.id == self.id:
+            if self.id is not None and product.id == self.id or self.barcode is not None and product.barcode == self.barcode:
                 self.product = product
                 break
 
