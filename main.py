@@ -33,6 +33,7 @@ redis_helper = RedisHelper()
 
 if config.get_reset_table_on_init():
     db_helper.reset_tables()
+    redis_helper.reset()
 
 # add mock
 product_mock = ProductMock()
@@ -48,10 +49,14 @@ db_helper.execute_command(campaign_mock.get_mock_sql())
 
 
 #load data on redis
-campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.REDIS)
+campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.DATABASE)
 campaign_helper.load_data("-1")
-customer_helper: CustomerHelper = CustomerHelper("-1", DBObjectRole.REDIS)
+customer_helper: CustomerHelper = CustomerHelper("-1", DBObjectRole.DATABASE)
 customer_helper.load_data("-1")
+payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper("-1", DBObjectRole.DATABASE)
+payment_channel_helper.load_data("-1")
+payment_type_helper: PaymentTypeHelper = PaymentTypeHelper("-1", DBObjectRole.DATABASE)
+payment_type_helper.load_data("-1")
 
 app = FastAPI()
 
