@@ -7,7 +7,7 @@ class Product:
     def __init__(self, id: str = None,
                  barcode: str = None,
                  criteria_campaign_list: list[str] = None,
-                 action_campaign_list: list[str] = None,):
+                 action_campaign_list: list[str] = None, ):
         self.id = id
         self.barcode = barcode
         self.criteria_campaign_list = [] if criteria_campaign_list is None else criteria_campaign_list
@@ -15,12 +15,19 @@ class Product:
 
     def __str__(self) -> str:
         response: str = '''
-            {id:{0},
+            {{id:{0},
             barcode:{1},
             criteria_campaign_list:{2},
-            action_campaign_list:{3}}
+            action_campaign_list:{3}}}
         '''.format(self.id,
                    self.barcode,
-                   ','.join(self.criteria_campaign_list),
-                   ','.join(self.action_campaign_list))
+                   "[" + ','.join(self.criteria_campaign_list) + "]",
+                   "[" + ','.join(self.action_campaign_list) + "]")
+        return response
+
+    @staticmethod
+    def dict_to_product(dict_data: dict) -> object:
+        response = Product(id=str(dict_data["id"]),
+                           criteria_campaign_list=dict_data["criteria_campaign_list"],
+                           action_campaign_list=dict_data["action_campaign_list"])
         return response

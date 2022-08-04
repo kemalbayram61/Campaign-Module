@@ -9,7 +9,13 @@ class PaymentChannel:
 
     def __str__(self) -> str:
         response: str = '''
-            {id:{0},
-            campaign_list:{1}}
-        '''.format(self.id, ','.join(self.campaign_list))
+            {{id:{0},
+            campaign_list:{1}}}
+        '''.format(self.id, "[" + ','.join(self.campaign_list) + "]")
+        return response
+
+    @staticmethod
+    def dict_to_payment_channel(dict_data: dict) -> object:
+        response = PaymentChannel(id=str(dict_data["id"]),
+                                  campaign_list=dict_data["campaign_list"])
         return response
