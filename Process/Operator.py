@@ -103,15 +103,25 @@ class Operator:
             real_discount = real_discount * degree
         return real_discount
 
+    def get_real_action_qty(self) -> int:
+        real_action_qty: int = self.campaign.action_qty
+        if self.campaign.min_qty is not None:
+            degree: int = int(self.get_criteria_product_count() / self.campaign.min_qty)
+            real_action_qty = real_action_qty * degree
+        elif self.campaign.min_amount is not None:
+            degree: int = int(self.get_criteria_product_amount() / self.campaign.min_amount)
+            real_action_qty = real_action_qty * degree
+        return real_action_qty
+
     # her bir ürüne ayrı ayrı amount kadar indirim uygula max discountu geçmesin f1()
     def f1(self):
         implemented_total_discount: float = 0.0
         action_amount: float = self.campaign.action_amount
         max_discount: float = self.get_real_max_discount()
         for basket_line in self.basket.basket_lines:
-            tmp_action_amount = action_amount
-            tmp_action_amount = tmp_action_amount * basket_line.qty
             if implemented_total_discount < max_discount:
+                tmp_action_amount = action_amount
+                tmp_action_amount = tmp_action_amount * basket_line.qty
                 if basket_line.line_amount > tmp_action_amount:
                     basket_line.line_amount = basket_line.line_amount - tmp_action_amount
                     basket_line.discount_amount = tmp_action_amount
@@ -126,8 +136,29 @@ class Operator:
             else:
                 break
 
+    # action_qty kadar ürüne ayrı ayrı amount kadar indirim uygula f2()
     def f2(self):
-        pass
+        implemented_total_qty: int = 0
+        action_amount: float = self.campaign.action_amount
+        action_qty: int = self.get_real_action_qty()
+        for basket_line in self.basket.basket_lines:
+            if implemented_total_qty < action_qty:
+                implemented_total_qty = implemented_total_qty + basket_line.qty
+                tmp_action_amount = action_amount
+                if implemented_total_qty > action_qty:
+                    tmp_action_amount = tmp_action_amount * (implemented_total_qty - action_qty)
+                    implemented_total_qty = action_qty
+                else:
+                    tmp_action_amount = tmp_action_amount * basket_line.qty
+
+                if basket_line.line_amount > tmp_action_amount:
+                    basket_line.line_amount = basket_line.line_amount - tmp_action_amount
+                    basket_line.discount_amount = tmp_action_amount
+                else:
+                    basket_line.discount_amount = basket_line.line_amount
+                    basket_line.line_amount = 0.0
+            else:
+                break
 
     def f3(self):
         pass
