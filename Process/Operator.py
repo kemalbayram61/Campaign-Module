@@ -87,59 +87,53 @@ class Operator:
             count = count + basket_line.qty
         return count
 
-    def get_action_product_count(self) -> int:
-        count: int = 0
-        for basket_line in self.action_basket_lines:
-            count = count + basket_line.qty
-        return count
-
-    def update_basket_with_action_products(self) -> None:
-        for index, action_product in enumerate(self.action_product_list, start=0):
-            for basket_product in self.basket.product_list:
-                if action_product.id == basket_product.id:
-                    basket_product.amount = self.action_basket_lines[index].amount
-                    basket_product.is_used = self.action_basket_lines[index].amount
-
     def get_basket_product_count(self) -> int:
         count: int = 0
         for basket_line in self.basket.basket_lines:
             count = count + basket_line.qty
         return count
 
-    def apply_percentage_discount_to_basket(self, rate: float):
-        for basket_line in self.basket.basket_lines:
-            discount = basket_line.amount - basket_line.amount * rate
-            basket_line.line_amount = basket_line.amount if discount > basket_line.amount else discount
-            basket_line.discount_amount = basket_line.amount - basket_line.line_amount
-            basket_line.is_used = True
-            basket_line.discount_lines.append({'campaign_id':self.campaign.id, 'discount_amount':basket_line.discount_amount})
+    def f1(self):
+        pass
 
-    def apply_amount_discount_to_basket(self, amount: float):
-        discount_per_product: float = amount / self.get_basket_product_count()
-        for basket_line in self.basket.basket_lines:
-            discount = basket_line.amount - basket_line.qty * discount_per_product
-            basket_line.line_amount = basket_line.amount if discount > basket_line.amount else discount
-            basket_line.discount_amount = basket_line.amount - basket_line.line_amount
-            basket_line.is_used = True
-            basket_line.discount_lines.append({'campaign_id': self.campaign.id, 'discount_amount': basket_line.discount_amount})
+    def f2(self):
+        pass
 
-    def apply_percentage_discount_to_action_product(self, rate: float):
-        for basket_line in self.action_basket_lines:
-            discount = basket_line.amount - basket_line.amount * rate
-            basket_line.line_amount = basket_line.amount if discount > basket_line.amount else discount
-            basket_line.discount_amount = basket_line.amount - basket_line.line_amount
-            basket_line.is_used = True
-            basket_line.discount_lines.append({'campaign_id': self.campaign.id, 'discount_amount': basket_line.discount_amount})
+    def f3(self):
+        pass
 
-    def apply_amount_discount_to_action_product(self, amount: float):
-        discount_per_product: float = amount / self.get_action_product_count()
-        for basket_line in self.action_basket_lines:
-            discount = basket_line.amount - basket_line.qty * discount_per_product
-            basket_line.line_amount = basket_line.amount if discount > basket_line.amount else discount
-            basket_line.discount_amount = basket_line.amount - basket_line.line_amount
-            basket_line.is_used = True
-            basket_line.discount_lines.append({'campaign_id': self.campaign.id, 'discount_amount': basket_line.discount_amount})
+    def f4(self):
+        pass
 
+    def f5(self):
+        pass
+
+    def f6(self):
+        pass
+
+    def f7(self):
+        pass
+
+    def f8(self):
+        pass
+
+    def f9(self):
+        pass
+
+    def f10(self):
+        pass
+
+    def f11(self):
+        pass
+
+    def f12(self):
+        pass
+
+    def f13(self):
+        pass
+
+    def f14(self):
+        pass
 
     def apply_campaign(self) -> Optional[Basket]:
         current_date: str = Date.get_current_date()
@@ -168,53 +162,55 @@ class Operator:
             if self.campaign.action_type == ActionType.AMOUNT:
                 if self.campaign.all_product_action == AllProductAction.YES:
                     if self.campaign.max_discount is not None:
-                        #todo her bir ürüne ayrı ayrı amount kadar indirim uygula max discountu geçmesin
+                        #her bir ürüne ayrı ayrı amount kadar indirim uygula max discountu geçmesin f1()
+                        self.f1()
                         pass
                     elif self.campaign.action_qty is not None:
-                        #todo action_qty kadar ürüne ayrı ayrı amount kadar indirim uygula
-                        pass
+                        #action_qty kadar ürüne ayrı ayrı amount kadar indirim uygula f2()
+                        self.f2()
                     else:
-                        #todo her bir ürüne toplamda amount kadar indirim uygula
+                        #her bir ürüne toplamda amount kadar indirim uygula f3()
+                        self.f3()
                         pass
                 else:
                     if self.campaign.max_discount is not None:
-                        #todo kampanya ürünlerine ayrı ayrı amount kadar indirim uygula max discountu geçmesin
-                        pass
+                        #kampanya ürünlerine ayrı ayrı amount kadar indirim uygula max discountu geçmesin f4()
+                        self.f4()
                     elif self.campaign.action_qty is not None:
-                        #todo kampanya ürünlerinden action_qty kadar ürüne ayrı ayrı amount kadar indirim uygula
-                        pass
+                        #kampanya ürünlerinden action_qty kadar ürüne ayrı ayrı amount kadar indirim uygula f5()
+                        self.f5()
                     else:
-                        #todo kampanya ürünlerine toplamda amount kadar indirim uygula
-                        pass
+                        #kampanya ürünlerine toplamda amount kadar indirim uygula f6()
+                        self.f6()
             elif self.campaign.action_type == ActionType.PERCENT:
                 if self.campaign.all_product_action == AllProductAction.YES:
                     if self.campaign.max_discount is not None:
                         if self.campaign.action_qty is not None:
-                            #todo her bir üründen action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula max discountu geçmesin
-                            pass
+                            #her bir üründen action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula max discountu geçmesin f7()
+                            self.f7()
                         else:
-                            #todo her bir ürüne ayrı ayrı rate kadar indirim uygula max discountu geçmesin
-                            pass
+                            #her bir ürüne ayrı ayrı rate kadar indirim uygula max discountu geçmesin f8()
+                            self.f8()
                     elif self.campaign.action_qty is not None:
-                        #todo her bir üründen action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula
-                        pass
+                        #her bir üründen action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula f9()
+                        self.f9()
                     else:
-                        #todo her bir ürüne ayrı ayrı rate kadar indirim uygula
-                        pass
+                        #her bir ürüne ayrı ayrı rate kadar indirim uygula f10()
+                        self.f10()
                 else:
                     if self.campaign.max_discount is not None:
                         if self.campaign.action_qty is not None:
-                            #todo kampanya ürünlerinden action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula max discountu geçmesin
-                            pass
+                            #kampanya ürünlerinden action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula max discountu geçmesin f11()
+                            self.f11()
                         else:
-                            #todo kampanya ürünlerine ayrı ayrı rate kadar indirim uygula max discountu geçmesin
-                            pass
+                            #kampanya ürünlerine ayrı ayrı rate kadar indirim uygula max discountu geçmesin f12()
+                            self.f12()
                     elif self.campaign.action_qty is not None:
-                        #todo kampanya ürünlerinden action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula
-                        pass
+                        #kampanya ürünlerinden action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula f13()
+                        self.f13()
                     else:
-                        #todo kampanya ayrı ayrı rate kadar indirim uygula
-                        pass
+                        #kampanya ayrı ayrı rate kadar indirim uygula f14()
+                        self.f14()
 
 
             return self.basket
