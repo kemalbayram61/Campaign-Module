@@ -125,10 +125,12 @@ class Operator:
                 if basket_line.line_amount > tmp_action_amount:
                     basket_line.line_amount = basket_line.line_amount - tmp_action_amount
                     basket_line.discount_amount = tmp_action_amount
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
                     implemented_total_discount = implemented_total_discount + tmp_action_amount
                 else:
                     implemented_total_discount = implemented_total_discount + basket_line.line_amount
                     basket_line.discount_amount = basket_line.line_amount
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
                     basket_line.line_amount = 0.0
                 if implemented_total_discount > max_discount:
                     basket_line.line_amount = basket_line.line_amount + (implemented_total_discount - max_discount)
@@ -154,8 +156,10 @@ class Operator:
                 if basket_line.line_amount > tmp_action_amount:
                     basket_line.line_amount = basket_line.line_amount - tmp_action_amount
                     basket_line.discount_amount = tmp_action_amount
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
                 else:
                     basket_line.discount_amount = basket_line.line_amount
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
                     basket_line.line_amount = 0.0
             else:
                 break
