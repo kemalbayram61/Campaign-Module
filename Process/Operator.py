@@ -34,7 +34,7 @@ class Operator:
         criteria_product_list: list[Product] = []
         criteria_basket_lines: list[BasketLine] = []
         for index, product in enumerate(product_list, start=0):
-            if self.campaign.id in product.criteria_campaign_list:
+            if self.campaign.id in product.criteria_campaign_list or self.campaign.all_product_criteria == AllProductCriteria.YES:
                 criteria_product_list.append(product)
                 criteria_basket_lines.append(self.basket.basket_lines[index])
         self.criteria_product_list = criteria_product_list
@@ -45,7 +45,7 @@ class Operator:
         action_product_list: list[Product] = []
         action_basket_lines: list[BasketLine] = []
         for index, product in enumerate(product_list, start=0):
-            if self.campaign.id in product.action_campaign_list:
+            if self.campaign.id in product.action_campaign_list or self.campaign.all_product_criteria == AllProductCriteria.YES:
                 action_product_list.append(product)
                 action_basket_lines.append(self.basket.basket_lines[index])
         self.action_product_list = action_product_list
@@ -84,6 +84,12 @@ class Operator:
     def get_criteria_product_count(self) -> int:
         count: int = 0
         for basket_line in self.criteria_basket_lines:
+            count = count + basket_line.qty
+        return count
+
+    def get_action_product_count(self) -> int:
+        count: int = 0
+        for basket_line in self.action_basket_lines:
             count = count + basket_line.qty
         return count
 
@@ -232,8 +238,21 @@ class Operator:
             else:
                 break
 
+    # kampanya ürünlerine toplamda amount kadar indirim uygula f6()
     def f6(self):
-        pass
+        action_amount: float = self.campaign.action_amount
+        unit_discount: float = action_amount / self.get_action_product_count()
+        for index, basket_line in enumerate(self.basket.basket_lines, start=0):
+            if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                discount_amount = unit_discount * basket_line.qty
+                if discount_amount < basket_line.line_amount:
+                    basket_line.line_amount = basket_line.line_amount - discount_amount
+                    basket_line.discount_amount = discount_amount
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                else:
+                    basket_line.discount_amount = basket_line.line_amount
+                    basket_line.line_amount = 0.0
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
 
     def f7(self):
         pass
