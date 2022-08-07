@@ -26,7 +26,7 @@ class Operator:
     def evaluate_basket_amount(basket: Basket) -> float:
         amount: float = 0.0
         for basket_line in basket.basket_lines:
-            amount = amount + basket_line.amount
+            amount = amount + basket_line.line_amount
         return amount
 
     def set_criteria_product_list_for_campaign(self) -> None:
@@ -34,7 +34,7 @@ class Operator:
         criteria_product_list: list[Product] = []
         criteria_basket_lines: list[BasketLine] = []
         for index, product in enumerate(product_list, start=0):
-            if self.campaign.id in product.criteria_campaign_list and self.basket.basket_lines[index].is_used is False:
+            if self.campaign.id in product.criteria_campaign_list:
                 criteria_product_list.append(product)
                 criteria_basket_lines.append(self.basket.basket_lines[index])
         self.criteria_product_list = criteria_product_list
@@ -45,7 +45,7 @@ class Operator:
         action_product_list: list[Product] = []
         action_basket_lines: list[BasketLine] = []
         for index, product in enumerate(product_list, start=0):
-            if self.campaign.id in product.action_campaign_list and self.basket.basket_lines[index].is_used is False:
+            if self.campaign.id in product.action_campaign_list:
                 action_product_list.append(product)
                 action_basket_lines.append(self.basket.basket_lines[index])
         self.action_product_list = action_product_list
@@ -75,7 +75,7 @@ class Operator:
                     self.action_basket_lines[j + 1] = temp_bl
                     self.action_product_list[j + 1] = temp_pl
 
-    def get_criteria_product_list_amount(self) -> float:
+    def get_criteria_product_amount(self) -> float:
         amount: float = 0.0
         for basket_line in self.criteria_basket_lines:
             amount = amount + basket_line.amount
@@ -93,8 +93,38 @@ class Operator:
             count = count + basket_line.qty
         return count
 
+    def get_real_max_discount(self) -> float:
+        real_discount: float = self.campaign.max_discount
+        if self.campaign.min_qty is not None:
+            degree: int = int(self.get_criteria_product_count() / self.campaign.min_qty)
+            real_discount = real_discount * degree
+        elif self.campaign.min_amount is not None:
+            degree: int = int(self.get_criteria_product_amount() / self.campaign.min_amount)
+            real_discount = real_discount * degree
+        return real_discount
+
+    # her bir ürüne ayrı ayrı amount kadar indirim uygula max discountu geçmesin f1()
     def f1(self):
-        pass
+        implemented_total_discount: float = 0.0
+        action_amount: float = self.campaign.action_amount
+        max_discount: float = self.get_real_max_discount()
+        for basket_line in self.basket.basket_lines:
+            tmp_action_amount = action_amount
+            tmp_action_amount = tmp_action_amount * basket_line.qty
+            if implemented_total_discount < max_discount:
+                if basket_line.line_amount > tmp_action_amount:
+                    basket_line.line_amount = basket_line.line_amount - tmp_action_amount
+                    basket_line.discount_amount = tmp_action_amount
+                    implemented_total_discount = implemented_total_discount + tmp_action_amount
+                else:
+                    implemented_total_discount = implemented_total_discount + basket_line.line_amount
+                    basket_line.discount_amount = basket_line.line_amount
+                    basket_line.line_amount = 0.0
+                if implemented_total_discount > max_discount:
+                    basket_line.line_amount = basket_line.line_amount + (implemented_total_discount - max_discount)
+                    implemented_total_discount = max_discount
+            else:
+                break
 
     def f2(self):
         pass
@@ -156,7 +186,7 @@ class Operator:
                     if Operator.evaluate_basket_amount(self.basket) < self.campaign.min_amount:
                         return self.basket
                 else:
-                    if self.get_criteria_product_list_amount() < self.campaign.min_amount:
+                    if self.get_criteria_product_amount() < self.campaign.min_amount:
                         return self.basket
 
             if self.campaign.action_type == ActionType.AMOUNT:
