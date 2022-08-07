@@ -179,8 +179,31 @@ class Operator:
                 basket_line.line_amount = 0.0
                 basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
 
+    # kampanya ürünlerine ayrı ayrı amount kadar indirim uygula max discountu geçmesin f4()
     def f4(self):
-        pass
+        implemented_total_discount: float = 0.0
+        action_amount: float = self.campaign.action_amount
+        max_discount: float = self.get_real_max_discount()
+        for index, basket_line in enumerate(self.basket.basket_lines, start=0):
+            if implemented_total_discount < max_discount:
+                if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                    tmp_action_amount = action_amount
+                    tmp_action_amount = tmp_action_amount * basket_line.qty
+                    if basket_line.line_amount > tmp_action_amount:
+                        basket_line.line_amount = basket_line.line_amount - tmp_action_amount
+                        basket_line.discount_amount = tmp_action_amount
+                        basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
+                        implemented_total_discount = implemented_total_discount + tmp_action_amount
+                    else:
+                        implemented_total_discount = implemented_total_discount + basket_line.line_amount
+                        basket_line.discount_amount = basket_line.line_amount
+                        basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
+                        basket_line.line_amount = 0.0
+                    if implemented_total_discount > max_discount:
+                        basket_line.line_amount = basket_line.line_amount + (implemented_total_discount - max_discount)
+                        implemented_total_discount = max_discount
+            else:
+                break
 
     def f5(self):
         pass
