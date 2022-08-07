@@ -54,7 +54,7 @@ class Operator:
         #bubble sort was used as a start
         for i in range(len(self.criteria_basket_lines)):
             for j in range(0, len(self.criteria_basket_lines) - 1):
-                if self.criteria_basket_lines[j].amount > self.criteria_basket_lines[j + 1].amount:
+                if self.criteria_basket_lines[j].amount / self.criteria_basket_lines[j].qty > self.criteria_basket_lines[j + 1].amount / self.criteria_basket_lines[j + 1].qty:
                     temp_bl = self.criteria_basket_lines[j]
                     temp_pl = self.criteria_product_list[j]
                     self.criteria_basket_lines[j] = self.criteria_basket_lines[j + 1]
@@ -66,7 +66,7 @@ class Operator:
         #bubble sort was used as a start
         for i in range(len(self.action_basket_lines)):
             for j in range(0, len(self.action_basket_lines) - 1):
-                if self.action_basket_lines[j].amount > self.action_basket_lines[j + 1].amount:
+                if self.action_basket_lines[j].amount / self.action_basket_lines[j + 1].qty > self.action_basket_lines[j + 1].amount / self.action_basket_lines[j].qty:
                     temp_bl = self.action_basket_lines[j]
                     temp_pl = self.action_product_list[j]
                     self.action_basket_lines[j] = self.action_basket_lines[j + 1]
@@ -162,17 +162,19 @@ class Operator:
                 elif self.campaign.action_type == ActionType.PERCENT:
                     rate = self.campaign.action_amount
 
-            if amount != 0.0:
+            if self.campaign.action_type == ActionType.AMOUNT:
                 if self.campaign.all_product_action == AllProductAction.YES:
                     self.apply_amount_discount_to_basket(amount)
                 else:
                     self.apply_amount_discount_to_action_product(amount)
+                    self.update_basket_with_action_products()
 
-            elif rate != 0.0:
+            elif self.campaign.action_type == ActionType.PERCENT:
                 if self.campaign.all_product_action == AllProductAction.YES:
                     self.apply_percentage_discount_to_basket(rate)
                 else:
                     self.apply_percentage_discount_to_action_product(rate)
+                    self.update_basket_with_action_products()
             return self.basket
         else:
             return self.basket
