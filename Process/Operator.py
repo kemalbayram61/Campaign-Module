@@ -205,8 +205,32 @@ class Operator:
             else:
                 break
 
+    # kampanya ürünlerinden action_qty kadar ürüne ayrı ayrı amount kadar indirim uygula f5()
     def f5(self):
-        pass
+        implemented_total_qty: int = 0
+        action_amount: float = self.campaign.action_amount
+        action_qty: int = self.get_real_action_qty()
+        for index, basket_line in enumerate(self.basket.basket_lines, start=0):
+            if implemented_total_qty < action_qty:
+                if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                    implemented_total_qty = implemented_total_qty + basket_line.qty
+                    tmp_action_amount = action_amount
+                    if implemented_total_qty > action_qty:
+                        tmp_action_amount = tmp_action_amount * (implemented_total_qty - action_qty)
+                        implemented_total_qty = action_qty
+                    else:
+                        tmp_action_amount = tmp_action_amount * basket_line.qty
+
+                    if basket_line.line_amount > tmp_action_amount:
+                        basket_line.line_amount = basket_line.line_amount - tmp_action_amount
+                        basket_line.discount_amount = tmp_action_amount
+                        basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
+                    else:
+                        basket_line.discount_amount = basket_line.line_amount
+                        basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
+                        basket_line.line_amount = 0.0
+            else:
+                break
 
     def f6(self):
         pass
