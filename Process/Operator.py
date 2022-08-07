@@ -164,8 +164,20 @@ class Operator:
             else:
                 break
 
+    # her bir ürüne toplamda amount kadar indirim uygula f3()
     def f3(self):
-        pass
+        action_amount: float = self.campaign.action_amount
+        unit_discount: float = action_amount / self.get_basket_product_count()
+        for basket_line in self.basket.basket_lines:
+            discount_amount = unit_discount * basket_line.qty
+            if discount_amount < basket_line.line_amount:
+                basket_line.line_amount = basket_line.line_amount - discount_amount
+                basket_line.discount_amount = discount_amount
+                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+            else:
+                basket_line.discount_amount = basket_line.line_amount
+                basket_line.line_amount = 0.0
+                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
 
     def f4(self):
         pass
