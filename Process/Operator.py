@@ -312,8 +312,26 @@ class Operator:
             else:
                 break
 
+    # her bir üründen action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula f9()
     def f9(self):
-        pass
+        implemented_total_qty: int = 0
+        action_amount: float = self.campaign.action_amount
+        action_qty: int = self.get_real_action_qty()
+        for basket_line in self.basket.basket_lines:
+            if implemented_total_qty < action_qty:
+                implemented_total_qty = implemented_total_qty + basket_line.qty
+                tmp_action_amount = action_amount
+                if implemented_total_qty > action_qty:
+                    distance = implemented_total_qty - action_qty
+                    tmp_action_amount = (basket_line.qty - distance) * tmp_action_amount / basket_line.qty
+                    implemented_total_qty = action_qty
+
+                discount_amount = basket_line.line_amount * tmp_action_amount
+                basket_line.line_amount = basket_line.line_amount - discount_amount
+                basket_line.discount_amount = discount_amount
+                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+            else:
+                break
 
     def f10(self):
         pass
