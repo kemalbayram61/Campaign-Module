@@ -333,8 +333,14 @@ class Operator:
             else:
                 break
 
+    # her bir ürüne ayrı ayrı rate kadar indirim uygula f10()
     def f10(self):
-        pass
+        action_amount: float = self.campaign.action_amount
+        for basket_line in self.basket.basket_lines:
+            discount_amount = basket_line.line_amount * action_amount
+            basket_line.line_amount = basket_line.line_amount - discount_amount
+            basket_line.discount_amount = discount_amount
+            basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
 
     def f11(self):
         pass
