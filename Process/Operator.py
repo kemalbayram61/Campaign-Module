@@ -373,8 +373,28 @@ class Operator:
             else:
                 break
 
+    # kampanya ürünlerine ayrı ayrı rate kadar indirim uygula max discountu geçmesin f12()
     def f12(self):
-        pass
+        implemented_total_discount: float = 0.0
+        action_amount: float = self.campaign.action_amount
+        max_discount: float = self.get_real_max_discount()
+        for index, basket_line in enumerate(self.basket.basket_lines, start=0):
+            if implemented_total_discount < max_discount:
+                if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                    discount_amount = basket_line.line_amount * action_amount
+                    basket_line.line_amount = basket_line.line_amount - discount_amount
+                    basket_line.discount_amount = discount_amount
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                    implemented_total_discount = implemented_total_discount + discount_amount
+
+                    if implemented_total_discount > max_discount:
+                        distance = (implemented_total_discount - max_discount)
+                        basket_line.line_amount = basket_line.line_amount + distance
+                        basket_line.discount_amount = basket_line.discount_amount - distance
+                        basket_line.discount_lines[len(basket_line.discount_lines)-1]["discount_amount"] = basket_line.discount_amount
+                        implemented_total_discount = max_discount
+            else:
+                break
 
     def f13(self):
         pass
