@@ -34,7 +34,8 @@ class Finder:
         response: list[Campaign] = []
         for id in id_list:
             campaign_helper: CampaignHelper = CampaignHelper(id, DBObjectRole.REDIS)
-            response.append(campaign_helper.get())
+            if campaign_helper.get() is not None:
+                response.append(campaign_helper.get())
         return response
 
     def discover_campaign_list(self) -> list[str]:
@@ -83,6 +84,7 @@ class Finder:
 
         for campaign_id in response_id_list:
             campaign_helper: CampaignHelper = CampaignHelper(campaign_id, DBObjectRole.REDIS)
-            response.append(campaign_helper.get())
+            if campaign_helper.get() is not None:
+                response.append(campaign_helper.get())
 
         return response

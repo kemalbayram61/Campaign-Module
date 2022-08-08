@@ -21,7 +21,7 @@ class PaymentTypeHelper(DBObject):
 
     def __fetch_on_db(self) ->None:
         db_helper = DBHelper()
-        db_object = db_helper.find_by_id("payment_channel", self.id)
+        db_object = db_helper.find_by_id("payment_type", self.id)
         if db_object is not None:
             self.payment_type = PaymentType(id=db_object[0],
                                             campaign_list=[] if db_object[1] is None else db_object[1].split(','))
@@ -47,7 +47,7 @@ class PaymentTypeHelper(DBObject):
         response: list[PaymentType] = []
         if self.role == DBObjectRole.DATABASE:
             db_helper: DBHelper = DBHelper()
-            db_object_list = db_helper.select_all("payment_channel")
+            db_object_list = db_helper.select_all("payment_type")
             if db_object_list is not None:
                 for db_object in db_object_list:
                     payment_type = PaymentType(id=str(db_object[0]),
