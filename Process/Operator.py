@@ -132,17 +132,20 @@ class Operator:
                     basket_line.line_amount = basket_line.line_amount - tmp_action_amount
                     basket_line.discount_amount = tmp_action_amount
                     basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
+                    basket_line.is_used = True
                     implemented_total_discount = implemented_total_discount + tmp_action_amount
                 else:
                     implemented_total_discount = implemented_total_discount + basket_line.line_amount
                     basket_line.discount_amount = basket_line.line_amount
                     basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
+                    basket_line.is_used = True
                     basket_line.line_amount = 0.0
                 if implemented_total_discount > max_discount:
                     distance = (implemented_total_discount - max_discount)
                     basket_line.line_amount = basket_line.line_amount + distance
                     basket_line.discount_amount = basket_line.discount_amount - distance
                     basket_line.discount_lines[len(basket_line.discount_lines)-1]["discount_amount"] = basket_line.discount_amount
+                    basket_line.is_used = True
                     implemented_total_discount = max_discount
             else:
                 break
@@ -166,9 +169,11 @@ class Operator:
                     basket_line.line_amount = basket_line.line_amount - tmp_action_amount
                     basket_line.discount_amount = tmp_action_amount
                     basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
+                    basket_line.is_used = True
                 else:
                     basket_line.discount_amount = basket_line.line_amount
                     basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
+                    basket_line.is_used = True
                     basket_line.line_amount = 0.0
             else:
                 break
@@ -183,10 +188,12 @@ class Operator:
                 basket_line.line_amount = basket_line.line_amount - discount_amount
                 basket_line.discount_amount = discount_amount
                 basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                basket_line.is_used = True
             else:
                 basket_line.discount_amount = basket_line.line_amount
                 basket_line.line_amount = 0.0
                 basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
+                basket_line.is_used = True
 
     # kampanya ürünlerine ayrı ayrı amount kadar indirim uygula max discountu geçmesin f4()
     def f4(self):
@@ -202,17 +209,20 @@ class Operator:
                         basket_line.line_amount = basket_line.line_amount - tmp_action_amount
                         basket_line.discount_amount = tmp_action_amount
                         basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
+                        basket_line.is_used = True
                         implemented_total_discount = implemented_total_discount + tmp_action_amount
                     else:
                         implemented_total_discount = implemented_total_discount + basket_line.line_amount
                         basket_line.discount_amount = basket_line.line_amount
                         basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
+                        basket_line.is_used = True
                         basket_line.line_amount = 0.0
                     if implemented_total_discount > max_discount:
                         distance = (implemented_total_discount - max_discount)
                         basket_line.line_amount = basket_line.line_amount + distance
                         basket_line.discount_amount = basket_line.discount_amount - distance
                         basket_line.discount_lines[len(basket_line.discount_lines) - 1]["discount_amount"] = basket_line.discount_amount
+                        basket_line.is_used = True
                         implemented_total_discount = max_discount
             else:
                 break
@@ -237,9 +247,11 @@ class Operator:
                         basket_line.line_amount = basket_line.line_amount - tmp_action_amount
                         basket_line.discount_amount = tmp_action_amount
                         basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
+                        basket_line.is_used = True
                     else:
                         basket_line.discount_amount = basket_line.line_amount
                         basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
+                        basket_line.is_used = True
                         basket_line.line_amount = 0.0
             else:
                 break
@@ -255,10 +267,12 @@ class Operator:
                     basket_line.line_amount = basket_line.line_amount - discount_amount
                     basket_line.discount_amount = discount_amount
                     basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                    basket_line.is_used = True
                 else:
                     basket_line.discount_amount = basket_line.line_amount
                     basket_line.line_amount = 0.0
                     basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
+                    basket_line.is_used = True
 
     # her bir üründen action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula max discountu geçmesin f7()
     def f7(self):
@@ -287,6 +301,7 @@ class Operator:
                     implemented_total_discount = max_discount
 
                 basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
+                basket_line.is_used = True
             else:
                 break
 
@@ -301,6 +316,7 @@ class Operator:
                 basket_line.line_amount = basket_line.line_amount - discount_amount
                 basket_line.discount_amount = discount_amount
                 basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                basket_line.is_used = True
                 implemented_total_discount = implemented_total_discount + discount_amount
 
                 if implemented_total_discount > max_discount:
@@ -308,6 +324,7 @@ class Operator:
                     basket_line.line_amount = basket_line.line_amount + distance
                     basket_line.discount_amount = basket_line.discount_amount - distance
                     basket_line.discount_lines[len(basket_line.discount_lines)-1]["discount_amount"] = basket_line.discount_amount
+                    basket_line.is_used = True
                     implemented_total_discount = max_discount
             else:
                 break
@@ -330,6 +347,7 @@ class Operator:
                 basket_line.line_amount = basket_line.line_amount - discount_amount
                 basket_line.discount_amount = discount_amount
                 basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                basket_line.is_used = True
             else:
                 break
 
@@ -341,6 +359,7 @@ class Operator:
             basket_line.line_amount = basket_line.line_amount - discount_amount
             basket_line.discount_amount = discount_amount
             basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+            basket_line.is_used = True
 
     # kampanya ürünlerinden action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula max discountu geçmesin f11()
     def f11(self):
@@ -370,6 +389,7 @@ class Operator:
                         implemented_total_discount = max_discount
 
                     basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
+                    basket_line.is_used = True
             else:
                 break
 
@@ -385,6 +405,7 @@ class Operator:
                     basket_line.line_amount = basket_line.line_amount - discount_amount
                     basket_line.discount_amount = discount_amount
                     basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                    basket_line.is_used = True
                     implemented_total_discount = implemented_total_discount + discount_amount
 
                     if implemented_total_discount > max_discount:
@@ -392,6 +413,7 @@ class Operator:
                         basket_line.line_amount = basket_line.line_amount + distance
                         basket_line.discount_amount = basket_line.discount_amount - distance
                         basket_line.discount_lines[len(basket_line.discount_lines)-1]["discount_amount"] = basket_line.discount_amount
+                        basket_line.is_used = True
                         implemented_total_discount = max_discount
             else:
                 break
@@ -415,6 +437,7 @@ class Operator:
                     basket_line.line_amount = basket_line.line_amount - discount_amount
                     basket_line.discount_amount = discount_amount
                     basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                    basket_line.is_used = True
             else:
                 break
 
@@ -427,6 +450,7 @@ class Operator:
                 basket_line.line_amount = basket_line.line_amount - discount_amount
                 basket_line.discount_amount = discount_amount
                 basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                basket_line.is_used = True
 
     def apply_campaign(self) -> Optional[Basket]:
         current_date: str = Date.get_current_date()
