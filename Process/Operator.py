@@ -418,8 +418,15 @@ class Operator:
             else:
                 break
 
+    # kampanya ayrı ayrı rate kadar indirim uygula f14()
     def f14(self):
-        pass
+        action_amount: float = self.campaign.action_amount
+        for index, basket_line in enumerate(self.basket.basket_lines, start=0):
+            if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                discount_amount = basket_line.line_amount * action_amount
+                basket_line.line_amount = basket_line.line_amount - discount_amount
+                basket_line.discount_amount = discount_amount
+                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
 
     def apply_campaign(self) -> Optional[Basket]:
         current_date: str = Date.get_current_date()
