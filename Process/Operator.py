@@ -78,25 +78,29 @@ class Operator:
     def get_criteria_product_amount(self) -> float:
         amount: float = 0.0
         for basket_line in self.criteria_basket_lines:
-            amount = amount + basket_line.amount
+            if basket_line.is_used is False:
+                amount = amount + basket_line.amount
         return amount
 
     def get_criteria_product_count(self) -> int:
         count: int = 0
         for basket_line in self.criteria_basket_lines:
-            count = count + basket_line.qty
+            if basket_line.is_used is False:
+                count = count + basket_line.qty
         return count
 
     def get_action_product_count(self) -> int:
         count: int = 0
         for basket_line in self.action_basket_lines:
-            count = count + basket_line.qty
+            if basket_line.is_used is False:
+                count = count + basket_line.qty
         return count
 
     def get_basket_product_count(self) -> int:
         count: int = 0
         for basket_line in self.basket.basket_lines:
-            count = count + basket_line.qty
+            if basket_line.is_used is False:
+                count = count + basket_line.qty
         return count
 
     def get_real_max_discount(self) -> float:
@@ -162,7 +166,7 @@ class Operator:
                     implemented_total_qty = implemented_total_qty + basket_line.qty
                     tmp_action_amount = action_amount
                     if implemented_total_qty > action_qty:
-                        tmp_action_amount = tmp_action_amount * (implemented_total_qty - action_qty)
+                        tmp_action_amount = tmp_action_amount * (basket_line.qty - (implemented_total_qty - action_qty))
                         implemented_total_qty = action_qty
                     else:
                         tmp_action_amount = tmp_action_amount * basket_line.qty
