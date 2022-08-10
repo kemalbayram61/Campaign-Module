@@ -86,10 +86,11 @@ class Finder:
                 if criteria_campaign_id not in response:
                     response_id_list.append(criteria_campaign_id)
 
-        all_campaign_list: list[Campaign] = campaign_helper.get_all("-1")
-        for campaign in all_campaign_list:
-            if campaign.all_product_action == AllProductAction.YES and campaign.all_product_criteria == AllProductCriteria.YES and campaign.all_customer == AllCustomer.YES and campaign.all_payment_type == AllPaymentType.YES and campaign.all_payment_channel == AllPaymentChannel.YES and campaign.id not in response:
-                response_id_list.append(campaign.id)
+        if len(criteria_campaign_id_list) != 0:
+            all_campaign_list: list[Campaign] = campaign_helper.get_all("-1")
+            for campaign in all_campaign_list:
+                if campaign.all_product_action == AllProductAction.YES and campaign.all_product_criteria == AllProductCriteria.YES and campaign.all_customer == AllCustomer.YES and campaign.all_payment_type == AllPaymentType.YES and campaign.all_payment_channel == AllPaymentChannel.YES and campaign.id not in response:
+                    response_id_list.append(campaign.id)
 
         response = Finder.get_campaign_list_of_id_list(response_id_list)
 
