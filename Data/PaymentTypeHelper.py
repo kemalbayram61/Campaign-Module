@@ -56,7 +56,7 @@ class PaymentTypeHelper(DBObject):
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()
             payment_type_list_str: str = str(redis_helper.get("payment_type_list"))
-            payment_type_list_str = payment_type_list_str[2:len(payment_type_list_str)-1].replace("\\n","")
+            payment_type_list_str = payment_type_list_str[2:len(payment_type_list_str)-1].replace("\\n","").replace('None', 'null')
             payment_type_dict_list: list[dict] = json.loads(payment_type_list_str)
             for payment_type_dict in payment_type_dict_list:
                 response.append(PaymentType.dict_to_payment_type(payment_type_dict))
