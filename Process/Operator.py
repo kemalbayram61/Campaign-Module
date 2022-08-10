@@ -126,27 +126,28 @@ class Operator:
         max_discount: float = self.get_real_max_discount()
         for basket_line in self.basket.basket_lines:
             if implemented_total_discount < max_discount:
-                tmp_action_amount = action_amount
-                tmp_action_amount = tmp_action_amount * basket_line.qty
-                if basket_line.line_amount > tmp_action_amount:
-                    basket_line.line_amount = basket_line.line_amount - tmp_action_amount
-                    basket_line.discount_amount = tmp_action_amount
-                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
-                    basket_line.is_used = True
-                    implemented_total_discount = implemented_total_discount + tmp_action_amount
-                else:
-                    implemented_total_discount = implemented_total_discount + basket_line.line_amount
-                    basket_line.discount_amount = basket_line.line_amount
-                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
-                    basket_line.is_used = True
-                    basket_line.line_amount = 0.0
-                if implemented_total_discount > max_discount:
-                    distance = (implemented_total_discount - max_discount)
-                    basket_line.line_amount = basket_line.line_amount + distance
-                    basket_line.discount_amount = basket_line.discount_amount - distance
-                    basket_line.discount_lines[len(basket_line.discount_lines)-1]["discount_amount"] = basket_line.discount_amount
-                    basket_line.is_used = True
-                    implemented_total_discount = max_discount
+                if basket_line.is_used is False:
+                    tmp_action_amount = action_amount
+                    tmp_action_amount = tmp_action_amount * basket_line.qty
+                    if basket_line.line_amount > tmp_action_amount:
+                        basket_line.line_amount = basket_line.line_amount - tmp_action_amount
+                        basket_line.discount_amount = tmp_action_amount
+                        basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
+                        basket_line.is_used = True
+                        implemented_total_discount = implemented_total_discount + tmp_action_amount
+                    else:
+                        implemented_total_discount = implemented_total_discount + basket_line.line_amount
+                        basket_line.discount_amount = basket_line.line_amount
+                        basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
+                        basket_line.is_used = True
+                        basket_line.line_amount = 0.0
+                    if implemented_total_discount > max_discount:
+                        distance = (implemented_total_discount - max_discount)
+                        basket_line.line_amount = basket_line.line_amount + distance
+                        basket_line.discount_amount = basket_line.discount_amount - distance
+                        basket_line.discount_lines[len(basket_line.discount_lines)-1]["discount_amount"] = basket_line.discount_amount
+                        basket_line.is_used = True
+                        implemented_total_discount = max_discount
             else:
                 break
 
@@ -157,24 +158,25 @@ class Operator:
         action_qty: int = self.get_real_action_qty()
         for basket_line in self.basket.basket_lines:
             if implemented_total_qty < action_qty:
-                implemented_total_qty = implemented_total_qty + basket_line.qty
-                tmp_action_amount = action_amount
-                if implemented_total_qty > action_qty:
-                    tmp_action_amount = tmp_action_amount * (implemented_total_qty - action_qty)
-                    implemented_total_qty = action_qty
-                else:
-                    tmp_action_amount = tmp_action_amount * basket_line.qty
+                if basket_line.is_used is False:
+                    implemented_total_qty = implemented_total_qty + basket_line.qty
+                    tmp_action_amount = action_amount
+                    if implemented_total_qty > action_qty:
+                        tmp_action_amount = tmp_action_amount * (implemented_total_qty - action_qty)
+                        implemented_total_qty = action_qty
+                    else:
+                        tmp_action_amount = tmp_action_amount * basket_line.qty
 
-                if basket_line.line_amount > tmp_action_amount:
-                    basket_line.line_amount = basket_line.line_amount - tmp_action_amount
-                    basket_line.discount_amount = tmp_action_amount
-                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
-                    basket_line.is_used = True
-                else:
-                    basket_line.discount_amount = basket_line.line_amount
-                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
-                    basket_line.is_used = True
-                    basket_line.line_amount = 0.0
+                    if basket_line.line_amount > tmp_action_amount:
+                        basket_line.line_amount = basket_line.line_amount - tmp_action_amount
+                        basket_line.discount_amount = tmp_action_amount
+                        basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": tmp_action_amount})
+                        basket_line.is_used = True
+                    else:
+                        basket_line.discount_amount = basket_line.line_amount
+                        basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.line_amount})
+                        basket_line.is_used = True
+                        basket_line.line_amount = 0.0
             else:
                 break
 
@@ -183,17 +185,18 @@ class Operator:
         action_amount: float = self.campaign.action_amount
         unit_discount: float = action_amount / self.get_basket_product_count()
         for basket_line in self.basket.basket_lines:
-            discount_amount = unit_discount * basket_line.qty
-            if discount_amount < basket_line.line_amount:
-                basket_line.line_amount = basket_line.line_amount - discount_amount
-                basket_line.discount_amount = discount_amount
-                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
-                basket_line.is_used = True
-            else:
-                basket_line.discount_amount = basket_line.line_amount
-                basket_line.line_amount = 0.0
-                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
-                basket_line.is_used = True
+            if basket_line.is_used is False:
+                discount_amount = unit_discount * basket_line.qty
+                if discount_amount < basket_line.line_amount:
+                    basket_line.line_amount = basket_line.line_amount - discount_amount
+                    basket_line.discount_amount = discount_amount
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                    basket_line.is_used = True
+                else:
+                    basket_line.discount_amount = basket_line.line_amount
+                    basket_line.line_amount = 0.0
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
+                    basket_line.is_used = True
 
     # kampanya ürünlerine ayrı ayrı amount kadar indirim uygula max discountu geçmesin f4()
     def f4(self):
@@ -202,7 +205,7 @@ class Operator:
         max_discount: float = self.get_real_max_discount()
         for index, basket_line in enumerate(self.basket.basket_lines, start=0):
             if implemented_total_discount < max_discount:
-                if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                if self.campaign.id in self.basket.product_list[index].action_campaign_list and basket_line.is_used is False:
                     tmp_action_amount = action_amount
                     tmp_action_amount = tmp_action_amount * basket_line.qty
                     if basket_line.line_amount > tmp_action_amount:
@@ -234,7 +237,7 @@ class Operator:
         action_qty: int = self.get_real_action_qty()
         for index, basket_line in enumerate(self.basket.basket_lines, start=0):
             if implemented_total_qty < action_qty:
-                if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                if self.campaign.id in self.basket.product_list[index].action_campaign_list and basket_line.is_used is False:
                     implemented_total_qty = implemented_total_qty + basket_line.qty
                     tmp_action_amount = action_amount
                     if implemented_total_qty > action_qty:
@@ -261,7 +264,7 @@ class Operator:
         action_amount: float = self.campaign.action_amount
         unit_discount: float = action_amount / self.get_action_product_count()
         for index, basket_line in enumerate(self.basket.basket_lines, start=0):
-            if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+            if self.campaign.id in self.basket.product_list[index].action_campaign_list and basket_line.is_used is False:
                 discount_amount = unit_discount * basket_line.qty
                 if discount_amount < basket_line.line_amount:
                     basket_line.line_amount = basket_line.line_amount - discount_amount
@@ -283,25 +286,26 @@ class Operator:
         action_qty: int = self.get_real_action_qty()
         for basket_line in self.basket.basket_lines:
             if implemented_total_discount < max_discount and implemented_total_qty < action_qty:
-                tmp_action_amount = action_amount
-                implemented_total_qty = implemented_total_qty + basket_line.qty
-                if implemented_total_qty > action_qty:
-                    tmp_action_amount = (basket_line.qty - (implemented_total_qty - action_qty)) * tmp_action_amount / basket_line.qty
-                    implemented_total_qty = action_qty
+                if basket_line.is_used is False:
+                    tmp_action_amount = action_amount
+                    implemented_total_qty = implemented_total_qty + basket_line.qty
+                    if implemented_total_qty > action_qty:
+                        tmp_action_amount = (basket_line.qty - (implemented_total_qty - action_qty)) * tmp_action_amount / basket_line.qty
+                        implemented_total_qty = action_qty
 
-                discount_amount = basket_line.line_amount * tmp_action_amount
-                basket_line.line_amount = basket_line.line_amount - discount_amount
-                basket_line.discount_amount = discount_amount
-                implemented_total_discount = implemented_total_discount + discount_amount
+                    discount_amount = basket_line.line_amount * tmp_action_amount
+                    basket_line.line_amount = basket_line.line_amount - discount_amount
+                    basket_line.discount_amount = discount_amount
+                    implemented_total_discount = implemented_total_discount + discount_amount
 
-                if implemented_total_discount > max_discount:
-                    distance = (implemented_total_discount - max_discount)
-                    basket_line.line_amount = basket_line.line_amount + distance
-                    basket_line.discount_amount = basket_line.discount_amount - distance
-                    implemented_total_discount = max_discount
+                    if implemented_total_discount > max_discount:
+                        distance = (implemented_total_discount - max_discount)
+                        basket_line.line_amount = basket_line.line_amount + distance
+                        basket_line.discount_amount = basket_line.discount_amount - distance
+                        implemented_total_discount = max_discount
 
-                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
-                basket_line.is_used = True
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": basket_line.discount_amount})
+                    basket_line.is_used = True
             else:
                 break
 
@@ -312,20 +316,21 @@ class Operator:
         max_discount: float = self.get_real_max_discount()
         for basket_line in self.basket.basket_lines:
             if implemented_total_discount < max_discount:
-                discount_amount = basket_line.line_amount * action_amount
-                basket_line.line_amount = basket_line.line_amount - discount_amount
-                basket_line.discount_amount = discount_amount
-                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
-                basket_line.is_used = True
-                implemented_total_discount = implemented_total_discount + discount_amount
-
-                if implemented_total_discount > max_discount:
-                    distance = (implemented_total_discount - max_discount)
-                    basket_line.line_amount = basket_line.line_amount + distance
-                    basket_line.discount_amount = basket_line.discount_amount - distance
-                    basket_line.discount_lines[len(basket_line.discount_lines)-1]["discount_amount"] = basket_line.discount_amount
+                if basket_line.is_used is False:
+                    discount_amount = basket_line.line_amount * action_amount
+                    basket_line.line_amount = basket_line.line_amount - discount_amount
+                    basket_line.discount_amount = discount_amount
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
                     basket_line.is_used = True
-                    implemented_total_discount = max_discount
+                    implemented_total_discount = implemented_total_discount + discount_amount
+
+                    if implemented_total_discount > max_discount:
+                        distance = (implemented_total_discount - max_discount)
+                        basket_line.line_amount = basket_line.line_amount + distance
+                        basket_line.discount_amount = basket_line.discount_amount - distance
+                        basket_line.discount_lines[len(basket_line.discount_lines)-1]["discount_amount"] = basket_line.discount_amount
+                        basket_line.is_used = True
+                        implemented_total_discount = max_discount
             else:
                 break
 
@@ -336,18 +341,19 @@ class Operator:
         action_qty: int = self.get_real_action_qty()
         for basket_line in self.basket.basket_lines:
             if implemented_total_qty < action_qty:
-                implemented_total_qty = implemented_total_qty + basket_line.qty
-                tmp_action_amount = action_amount
-                if implemented_total_qty > action_qty:
-                    distance = implemented_total_qty - action_qty
-                    tmp_action_amount = (basket_line.qty - distance) * tmp_action_amount / basket_line.qty
-                    implemented_total_qty = action_qty
+                if basket_line.is_used is False:
+                    implemented_total_qty = implemented_total_qty + basket_line.qty
+                    tmp_action_amount = action_amount
+                    if implemented_total_qty > action_qty:
+                        distance = implemented_total_qty - action_qty
+                        tmp_action_amount = (basket_line.qty - distance) * tmp_action_amount / basket_line.qty
+                        implemented_total_qty = action_qty
 
-                discount_amount = basket_line.line_amount * tmp_action_amount
-                basket_line.line_amount = basket_line.line_amount - discount_amount
-                basket_line.discount_amount = discount_amount
-                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
-                basket_line.is_used = True
+                    discount_amount = basket_line.line_amount * tmp_action_amount
+                    basket_line.line_amount = basket_line.line_amount - discount_amount
+                    basket_line.discount_amount = discount_amount
+                    basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                    basket_line.is_used = True
             else:
                 break
 
@@ -355,11 +361,12 @@ class Operator:
     def f10(self):
         action_amount: float = self.campaign.action_amount
         for basket_line in self.basket.basket_lines:
-            discount_amount = basket_line.line_amount * action_amount
-            basket_line.line_amount = basket_line.line_amount - discount_amount
-            basket_line.discount_amount = discount_amount
-            basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
-            basket_line.is_used = True
+            if basket_line.is_used is False:
+                discount_amount = basket_line.line_amount * action_amount
+                basket_line.line_amount = basket_line.line_amount - discount_amount
+                basket_line.discount_amount = discount_amount
+                basket_line.discount_lines.append({"campaign_id": self.campaign.id, "discount_amount": discount_amount})
+                basket_line.is_used = True
 
     # kampanya ürünlerinden action_qty kadar ürüne ayrı ayrı rate kadar indirim uygula max discountu geçmesin f11()
     def f11(self):
@@ -370,7 +377,7 @@ class Operator:
         action_qty: int = self.get_real_action_qty()
         for index, basket_line in enumerate(self.basket.basket_lines, start=0):
             if implemented_total_discount < max_discount and implemented_total_qty < action_qty:
-                if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                if self.campaign.id in self.basket.product_list[index].action_campaign_list and basket_line.is_used is False:
                     tmp_action_amount = action_amount
                     implemented_total_qty = implemented_total_qty + basket_line.qty
                     if implemented_total_qty > action_qty:
@@ -400,7 +407,7 @@ class Operator:
         max_discount: float = self.get_real_max_discount()
         for index, basket_line in enumerate(self.basket.basket_lines, start=0):
             if implemented_total_discount < max_discount:
-                if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                if self.campaign.id in self.basket.product_list[index].action_campaign_list and basket_line.is_used is False:
                     discount_amount = basket_line.line_amount * action_amount
                     basket_line.line_amount = basket_line.line_amount - discount_amount
                     basket_line.discount_amount = discount_amount
@@ -425,7 +432,7 @@ class Operator:
         action_qty: int = self.get_real_action_qty()
         for index, basket_line in enumerate(self.basket.basket_lines, start=0):
             if implemented_total_qty < action_qty:
-                if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+                if self.campaign.id in self.basket.product_list[index].action_campaign_list and basket_line.is_used is False:
                     implemented_total_qty = implemented_total_qty + basket_line.qty
                     tmp_action_amount = action_amount
                     if implemented_total_qty > action_qty:
@@ -445,7 +452,7 @@ class Operator:
     def f14(self):
         action_amount: float = self.campaign.action_amount
         for index, basket_line in enumerate(self.basket.basket_lines, start=0):
-            if self.campaign.id in self.basket.product_list[index].action_campaign_list:
+            if self.campaign.id in self.basket.product_list[index].action_campaign_list and basket_line.is_used is False:
                 discount_amount = basket_line.line_amount * action_amount
                 basket_line.line_amount = basket_line.line_amount - discount_amount
                 basket_line.discount_amount = discount_amount
