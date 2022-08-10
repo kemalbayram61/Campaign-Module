@@ -49,7 +49,7 @@ class Optimizer:
                 temp_basket = operator.apply_campaign()
 
             executed_stack.append(
-                {"campaign_list": executed_list, "basket_amount": Operator.evaluate_basket_amount(temp_basket), "basket": copy.copy(temp_basket)})
+                {"campaign_list": copy.deepcopy(executed_list), "basket_amount": Operator.evaluate_basket_amount(temp_basket), "basket": copy.copy(temp_basket)})
             applicable_list = Finder.filter_campaign_on_basket(temp_basket)
             applicable_list = self.filter_list(executed_list, applicable_list)
 
