@@ -55,7 +55,7 @@ class PaymentChannelHelper(DBObject):
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()
             payment_channel_list_str: str = str(redis_helper.get("payment_channel_list"))
-            payment_channel_list_str = payment_channel_list_str[2:len(payment_channel_list_str)-1].replace("\\n","")
+            payment_channel_list_str = payment_channel_list_str[2:len(payment_channel_list_str)-1].replace("\\n","").replace('None', 'null')
             payment_channel_dict_list: list[dict] = json.loads(payment_channel_list_str)
             for payment_channel_dict in payment_channel_dict_list:
                 response.append(PaymentChannel.dict_to_payment_channel(payment_channel_dict))

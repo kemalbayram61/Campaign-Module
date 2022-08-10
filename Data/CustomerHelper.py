@@ -55,7 +55,7 @@ class CustomerHelper(DBObject):
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()
             customer_list_str: str = str(redis_helper.get("customer_list"))
-            customer_list_str = customer_list_str[2:len(customer_list_str)-1].replace("\\n","")
+            customer_list_str = customer_list_str[2:len(customer_list_str)-1].replace("\\n","").replace('None', 'null')
             customer_dict_list: list[dict] = json.loads(customer_list_str)
             for customer_dict in customer_dict_list:
                 response.append(Customer.dict_to_customer(customer_dict))

@@ -68,7 +68,7 @@ class ProductHelper(DBObject):
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()
             product_list_str: str = str(redis_helper.get("product_list"))
-            product_list_str = product_list_str[2:len(product_list_str)-1].replace("\\n","")
+            product_list_str = product_list_str[2:len(product_list_str)-1].replace("\\n","").replace('None', 'null')
             product_dict_list: list[dict] = json.loads(product_list_str)
             for product_dict in product_dict_list:
                 response.append(Product.dict_to_product(product_dict))
