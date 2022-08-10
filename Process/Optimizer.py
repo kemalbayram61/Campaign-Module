@@ -2,6 +2,7 @@ from Object.Basket import Basket
 from Object.Campaign import Campaign
 from Process.Operator import Operator
 from Process.Finder import Finder
+import copy
 
 
 class Optimizer:
@@ -41,16 +42,17 @@ class Optimizer:
         #sort all campaigns with different combinations and assign to applicable_list object
         while len(applicable_list) != 0:
             executed_list.append(applicable_list[0])
+            temp_basket = copy.deepcopy(self.basket)
             for campaign in executed_list:
-                operator: Operator = Operator(basket=self.basket,
+                operator: Operator = Operator(basket=temp_basket,
                                               campaign=campaign)
-                self.basket = operator.apply_campaign()
+                temp_basket = operator.apply_campaign()
 
             executed_stack.append(
-                {"campaign_list": executed_list, "basket_amount": Operator.evaluate_basket_amount(self.basket)})
-            applicable_list = Finder.filter_campaign_on_basket(self.basket)
+                {"campaign_list": executed_list, "basket_amount": Operator.evaluate_basket_amount(temp_basket), "basket": copy.copy(temp_basket)})
+            applicable_list = Finder.filter_campaign_on_basket(temp_basket)
             applicable_list = self.filter_list(executed_list, applicable_list)
 
         optimum_campaign = self.get_optimum_campaign(executed_stack)
 
-        return self.basket, optimum_campaign["campaign_list"] if optimum_campaign is not None else []
+        return optimum_campaign["basket"], optimum_campaign["campaign_list"] if optimum_campaign is not None else []
