@@ -245,7 +245,7 @@ class Operator:
                     implemented_total_qty = implemented_total_qty + basket_line.qty
                     tmp_action_amount = action_amount
                     if implemented_total_qty > action_qty:
-                        tmp_action_amount = tmp_action_amount * (implemented_total_qty - action_qty)
+                        tmp_action_amount = tmp_action_amount * (basket_line.qty - (implemented_total_qty - action_qty))
                         implemented_total_qty = action_qty
                     else:
                         tmp_action_amount = tmp_action_amount * basket_line.qty
