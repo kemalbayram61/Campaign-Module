@@ -6,6 +6,7 @@ from Data.PaymentChannelHelper import PaymentChannelHelper
 from Data.CampaignHelper import CampaignHelper
 from Data.DBHelper import DBHelper
 from Data.Config import Config
+from Data.ApplicationCacheHelper import ApplicationCacheHelper
 from Data.RedisHelper import RedisHelper
 from Mock.Product import ProductMock
 from Mock.Customer import CustomerMock
@@ -27,6 +28,7 @@ from Process.Optimizer import Optimizer
 from fastapi import FastAPI
 
 
+ApplicationCacheHelper()
 config = Config()
 db_helper = DBHelper()
 redis_helper = RedisHelper()

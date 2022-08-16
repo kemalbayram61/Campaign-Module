@@ -9,6 +9,7 @@ from Abstract.DBObjectRole import DBObjectRole
 from Object.Campaign import Campaign
 from Data.DBHelper import DBHelper
 from Data.RedisHelper import RedisHelper
+from Data.ApplicationCacheHelper import ApplicationCacheHelper
 import json
 
 
@@ -24,6 +25,8 @@ class CampaignHelper(DBObject):
             self.__fetch_on_db()
         elif role == DBObjectRole.REDIS and id != "-1":
             self.__fetch_on_redis()
+        elif role == DBObjectRole.APPLICATION_CACHE and id != "-1":
+            self.__fetch_on_application_cache()
 
     def __fetch_on_db(self) -> None:
         db_helper: DBHelper = DBHelper()
@@ -48,6 +51,13 @@ class CampaignHelper(DBObject):
                                      all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES)
 
     def __fetch_on_redis(self) -> None:
+        campaign_list: list[Campaign] = self.get_all("-1")
+        for campaign in campaign_list:
+            if campaign.id == self.id:
+                self.campaign = campaign
+                break
+
+    def __fetch_on_application_cache(self) -> None:
         campaign_list: list[Campaign] = self.get_all("-1")
         for campaign in campaign_list:
             if campaign.id == self.id:
@@ -89,6 +99,8 @@ class CampaignHelper(DBObject):
             campaign_dict_list: list[dict] = json.loads(campaign_list_str)
             for campaign_dict in campaign_dict_list:
                 response.append(Campaign.dict_to_campaign(campaign_dict))
+        elif self.role == DBObjectRole.APPLICATION_CACHE:
+            response = ApplicationCacheHelper.get_instance().get_data("campaign_list")
         return response
 
     def load_data(self, org_id: str) -> None:
@@ -97,5 +109,6 @@ class CampaignHelper(DBObject):
         campaign_list: list[Campaign] = self.get_all(org_id)
         campaign_list_str: str = "[" + ",".join(list(map(lambda campaign: str(campaign), campaign_list))) + "]"
         redis_helper.set("campaign_list", campaign_list_str)
+        ApplicationCacheHelper.get_instance().store_data("campaign_list", campaign_list)
 
 

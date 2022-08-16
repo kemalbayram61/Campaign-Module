@@ -3,6 +3,7 @@ from Abstract.DBObjectRole import DBObjectRole
 from Object.PaymentChannel import PaymentChannel
 from Data.DBHelper import DBHelper
 from Data.RedisHelper import RedisHelper
+from Data.ApplicationCacheHelper import ApplicationCacheHelper
 import json
 
 class PaymentChannelHelper(DBObject):
@@ -17,6 +18,8 @@ class PaymentChannelHelper(DBObject):
             self.__fetch_on_db()
         elif role == DBObjectRole.REDIS and id != "-1":
             self.__fetch_on_redis()
+        elif role == DBObjectRole.APPLICATION_CACHE and id != "-1":
+            self.__fetch_on_application_cache()
 
     def __fetch_on_db(self) -> None:
         db_helper: DBHelper = DBHelper()
@@ -32,6 +35,13 @@ class PaymentChannelHelper(DBObject):
                 self.payment_channel = payment_channel
                 break
 
+    def __fetch_on_application_cache(self) -> None:
+        payment_channel_list: list[PaymentChannel] = self.get_all("-1")
+        for payment_channel in payment_channel_list:
+            if payment_channel.id == self.id:
+                self.payment_channel = payment_channel
+                break
+
     def get(self) ->PaymentChannel:
         return self.payment_channel
 
@@ -41,6 +51,7 @@ class PaymentChannelHelper(DBObject):
         payment_channel_list: list[PaymentChannel] = self.get_all(org_id)
         payment_channel_list_str: str = "[" + ",".join(list(map(lambda payment_channel: str(payment_channel), payment_channel_list))) + "]"
         redis_helper.set("payment_channel_list", payment_channel_list_str)
+        ApplicationCacheHelper.get_instance().store_data("payment_channel_list", payment_channel_list)
 
     def get_all(self, org_id: str) -> list[PaymentChannel]:
         response: list[PaymentChannel] = []
@@ -59,4 +70,6 @@ class PaymentChannelHelper(DBObject):
             payment_channel_dict_list: list[dict] = json.loads(payment_channel_list_str)
             for payment_channel_dict in payment_channel_dict_list:
                 response.append(PaymentChannel.dict_to_payment_channel(payment_channel_dict))
+        elif self.role == DBObjectRole.APPLICATION_CACHE:
+            response = ApplicationCacheHelper.get_instance().get_data("payment_channel_list")
         return response
