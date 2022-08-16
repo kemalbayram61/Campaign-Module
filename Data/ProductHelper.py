@@ -37,7 +37,8 @@ class ProductHelper(DBObject):
             self.product = Product(id=str(db_object[0]),
                                    barcode=db_object[1],
                                    criteria_campaign_list=[] if db_object[2] is None else db_object[2].split(','),
-                                   action_campaign_list=[] if db_object[3] is None else db_object[3].split(','))
+                                   action_campaign_list=[] if db_object[3] is None else db_object[3].split(','),
+                                   org_id=str(db_object[4]))
 
     def __fetch_on_redis(self) -> None:
         product_list: list[Product] = self.get_all("-1")
@@ -74,7 +75,8 @@ class ProductHelper(DBObject):
                     product = Product(id=str(db_object[0]),
                                       barcode=db_object[1],
                                       criteria_campaign_list=[] if db_object[2] is None else db_object[2].split(','),
-                                      action_campaign_list=[] if db_object[3] is None else db_object[3].split(','))
+                                      action_campaign_list=[] if db_object[3] is None else db_object[3].split(','),
+                                      org_id=str(db_object[4]))
                     response.append(product)
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()

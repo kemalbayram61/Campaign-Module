@@ -5,39 +5,39 @@ class ProductMock(MockObject):
     def get_mock_sql(self) -> str:
         response = '''
         INSERT INTO public.product
-        ("barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('283746328746432', '1,2', '1');
+        ("barcode", "criteria_campaign_list", "action_campaign_list", "org_id")
+        VALUES('283746328746432', '1,2', '1', '1');
         
         INSERT INTO public.product
-        ("barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('283746328746936', '1,2', '1,2');
+        ("barcode", "criteria_campaign_list", "action_campaign_list", "org_id")
+        VALUES('283746328746936', '1,2', '1,2', '1');
         
         INSERT INTO public.product
-        ("barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('283746328746124', '7,8', '9,12');
+        ("barcode", "criteria_campaign_list", "action_campaign_list", "org_id")
+        VALUES('283746328746124', '7,8', '9,12', '1');
         
         INSERT INTO public.product
-        ("barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('283746328746125', '3,8', NULL);
+        ("barcode", "criteria_campaign_list", "action_campaign_list", "org_id")
+        VALUES('283746328746125', '3,8', NULL, '1');
         
         INSERT INTO public.product
-        ("barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('283746328746126', '3,8', NULL);
+        ("barcode", "criteria_campaign_list", "action_campaign_list", "org_id")
+        VALUES('283746328746126', '3,8', NULL, '1');
         
         INSERT INTO public.product
-        ("barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('283746328746127', '3,8', NULL);
+        ("barcode", "criteria_campaign_list", "action_campaign_list", "org_id")
+        VALUES('283746328746127', '3,8', NULL, '1');
         
         INSERT INTO public.product
-        ("barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('283746328746128', '3,8', NULL);
+        ("barcode", "criteria_campaign_list", "action_campaign_list", "org_id")
+        VALUES('283746328746128', '3,8', NULL, '1');
         
         INSERT INTO public.product
-        ("barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('283746328746129', '3,8', NULL);
+        ("barcode", "criteria_campaign_list", "action_campaign_list", "org_id")
+        VALUES('283746328746129', '3,8', NULL, '1');
         
         INSERT INTO public.product
-        ("barcode", "criteria_campaign_list", "action_campaign_list")
-        VALUES('283746328746130', '3,8', NULL);
+        ("barcode", "criteria_campaign_list", "action_campaign_list", "org_id")
+        VALUES('283746328746130', '3,8', NULL, '1');
         '''
         return response

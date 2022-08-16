@@ -26,7 +26,8 @@ class PaymentChannelHelper(DBObject):
         db_object = db_helper.find_by_id("payment_channel", self.id)
         if db_object is not None:
             self.payment_channel = PaymentChannel(id=db_object[0],
-                                                  campaign_list=[] if db_object[1] is None else db_object[1].split(','))
+                                                  campaign_list=[] if db_object[1] is None else db_object[1].split(','),
+                                                  org_id=str(db_object[2]))
 
     def __fetch_on_redis(self) -> None:
         payment_channel_list: list[PaymentChannel] = self.get_all("-1")
@@ -61,7 +62,8 @@ class PaymentChannelHelper(DBObject):
             if db_object_list is not None:
                 for db_object in db_object_list:
                     payment_channel = PaymentChannel(id=str(db_object[0]),
-                                                     campaign_list=[] if db_object[1] is None else db_object[1].split(','))
+                                                     campaign_list=[] if db_object[1] is None else db_object[1].split(','),
+                                                     org_id=str(db_object[2]))
                     response.append(payment_channel)
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()

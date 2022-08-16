@@ -37,17 +37,17 @@ if config.get_reset_table_on_init():
     db_helper.reset_tables()
     redis_helper.reset()
 
-# add mock
-product_mock = ProductMock()
-db_helper.execute_command(product_mock.get_mock_sql())
-customer_mock = CustomerMock()
-db_helper.execute_command(customer_mock.get_mock_sql())
-payment_channel_mock = PaymentChannelMock()
-db_helper.execute_command(payment_channel_mock.get_mock_sql())
-payment_type_mock = PaymentTypeMock()
-db_helper.execute_command(payment_type_mock.get_mock_sql())
-campaign_mock = CampaignMock()
-db_helper.execute_command(campaign_mock.get_mock_sql())
+    # add mock
+    product_mock = ProductMock()
+    db_helper.execute_command(product_mock.get_mock_sql())
+    customer_mock = CustomerMock()
+    db_helper.execute_command(customer_mock.get_mock_sql())
+    payment_channel_mock = PaymentChannelMock()
+    db_helper.execute_command(payment_channel_mock.get_mock_sql())
+    payment_type_mock = PaymentTypeMock()
+    db_helper.execute_command(payment_type_mock.get_mock_sql())
+    campaign_mock = CampaignMock()
+    db_helper.execute_command(campaign_mock.get_mock_sql())
 
 
 #load data on redis

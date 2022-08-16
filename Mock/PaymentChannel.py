@@ -5,11 +5,11 @@ class PaymentChannelMock(MockObject):
     def get_mock_sql(self) -> str:
         response = '''
         INSERT INTO public.payment_channel
-        ("campaign_list")
-        VALUES('1,2,3,4,5,6,7,8,9');
+        ("campaign_list", "org_id")
+        VALUES('1,2,3,4,5,6,7,8,9', '1');
 
         INSERT INTO public.payment_channel
-        ("campaign_list")
-        VALUES('1,2,3,4,5,6,7,8,9,10,11');
+        ("campaign_list", "org_id")
+        VALUES('1,2,3,4,5,6,7,8,9,10,11', '1');
         '''
         return response

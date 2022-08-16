@@ -48,7 +48,8 @@ class CampaignHelper(DBObject):
                                      all_customer=AllCustomer.NO if db_object[13] == 0 else AllCustomer.YES,
                                      all_payment_type=AllPaymentType.NO if db_object[14] == 0 else AllPaymentType.YES,
                                      all_product_criteria=AllProductCriteria.NO if db_object[15] == 0 else AllProductCriteria.YES,
-                                     all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES)
+                                     all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES,
+                                     org_id=str(db_object[17]))
 
     def __fetch_on_redis(self) -> None:
         campaign_list: list[Campaign] = self.get_all("-1")
@@ -90,7 +91,8 @@ class CampaignHelper(DBObject):
                                         all_customer=AllCustomer.NO if db_object[13] == 0 else AllCustomer.YES,
                                         all_payment_type=AllPaymentType.NO if db_object[14] == 0 else AllPaymentType.YES,
                                         all_product_criteria=AllProductCriteria.NO if db_object[15] == 0 else AllProductCriteria.YES,
-                                        all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES)
+                                        all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES,
+                                        org_id=str(db_object[17]))
                     response.append(campaign)
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()
