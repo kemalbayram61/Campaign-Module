@@ -3,6 +3,7 @@ from Abstract.DBObjectRole import DBObjectRole
 from Object.PaymentType import PaymentType
 from Data.DBHelper import DBHelper
 from Data.RedisHelper import RedisHelper
+from Data.ApplicationCacheHelper import ApplicationCacheHelper
 import json
 
 
@@ -18,6 +19,8 @@ class PaymentTypeHelper(DBObject):
             self.__fetch_on_db()
         elif role == DBObjectRole.REDIS and id != "-1":
             self.__fetch_on_redis()
+        elif role == DBObjectRole.APPLICATION_CACHE and id != "-1":
+            self.__fetch_on_application_cache()
 
     def __fetch_on_db(self) ->None:
         db_helper = DBHelper()
@@ -33,6 +36,13 @@ class PaymentTypeHelper(DBObject):
                 self.payment_type = payment_type
                 break
 
+    def __fetch_on_application_cache(self) -> None:
+        payment_type_list: list[PaymentType] = self.get_all("-1")
+        for payment_type in payment_type_list:
+            if payment_type.id == self.id:
+                self.payment_type = payment_type
+                break
+
     def get(self) ->PaymentType:
         return self.payment_type
 
@@ -42,6 +52,7 @@ class PaymentTypeHelper(DBObject):
         payment_type_list: list[PaymentType] = self.get_all(org_id)
         payment_type_list_str: str = "[" + ",".join(list(map(lambda payment_type: str(payment_type), payment_type_list))) + "]"
         redis_helper.set("payment_type_list", payment_type_list_str)
+        ApplicationCacheHelper.get_instance().store_data("payment_type_list", payment_type_list)
 
     def get_all(self, org_id: str) -> list[PaymentType]:
         response: list[PaymentType] = []
@@ -60,4 +71,6 @@ class PaymentTypeHelper(DBObject):
             payment_type_dict_list: list[dict] = json.loads(payment_type_list_str)
             for payment_type_dict in payment_type_dict_list:
                 response.append(PaymentType.dict_to_payment_type(payment_type_dict))
+        elif self.role == DBObjectRole.APPLICATION_CACHE:
+            response = ApplicationCacheHelper.get_instance().get_data("payment_type_list")
         return response

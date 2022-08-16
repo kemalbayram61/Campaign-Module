@@ -3,6 +3,7 @@ from Abstract.DBObjectRole import DBObjectRole
 from Object.Customer import Customer
 from Data.DBHelper import DBHelper
 from Data.RedisHelper import RedisHelper
+from Data.ApplicationCacheHelper import ApplicationCacheHelper
 import json
 
 class CustomerHelper(DBObject):
@@ -17,6 +18,8 @@ class CustomerHelper(DBObject):
             self.__fetch_on_db()
         elif role == DBObjectRole.REDIS and id != "-1":
             self.__fetch_on_redis()
+        elif role == DBObjectRole.APPLICATION_CACHE and id != "-1":
+            self.__fetch_on_application_cache()
 
     def __fetch_on_db(self) -> None:
         db_helper: DBHelper = DBHelper()
@@ -32,6 +35,13 @@ class CustomerHelper(DBObject):
                 self.customer = customer
                 break
 
+    def __fetch_on_application_cache(self) -> None:
+        customer_list: list[Customer] = self.get_all("-1")
+        for customer in customer_list:
+            if customer.id == self.id:
+                self.customer = customer
+                break
+
     def get(self) -> Customer:
         return self.customer
 
@@ -41,6 +51,7 @@ class CustomerHelper(DBObject):
         customer_list: list[Customer] = self.get_all(org_id)
         customer_list_str: str = "[" + ",".join(list(map(lambda customer: str(customer), customer_list))) + "]"
         redis_helper.set("customer_list", customer_list_str)
+        ApplicationCacheHelper.get_instance().store_data("customer_list", customer_list)
 
     def get_all(self, org_id: str) -> list[Customer]:
         response: list[Customer] = []
@@ -59,4 +70,6 @@ class CustomerHelper(DBObject):
             customer_dict_list: list[dict] = json.loads(customer_list_str)
             for customer_dict in customer_dict_list:
                 response.append(Customer.dict_to_customer(customer_dict))
+        elif self.role == DBObjectRole.APPLICATION_CACHE:
+            response = ApplicationCacheHelper.get_instance().get_data("customer_list")
         return response
