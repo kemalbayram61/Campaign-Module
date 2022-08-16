@@ -45,12 +45,18 @@ class Finder:
             criteria_campaign_id_list: list[str] = []
             action_campaign_id_list: list[str] = []
             response: list[str] = []
+
+            all_campaign_list: list[Campaign] = self.campaign_helper.get_all("-1")
+            for campaign in all_campaign_list:
+                if campaign.all_customer == AllCustomer.YES or campaign.id in self.customer.campaign_list:
+                    criteria_campaign_id_list.append(campaign.id)
+                    action_campaign_id_list.append(campaign.id)
+
             for product in product_list:
                 criteria_campaign_id_list = criteria_campaign_id_list + product.criteria_campaign_list
                 action_campaign_id_list = action_campaign_id_list + product.action_campaign_list
 
             criteria_campaign_list: list[Campaign] = Finder.get_campaign_list_of_id_list(criteria_campaign_id_list)
-            all_campaign_list: list[Campaign] = self.campaign_helper.get_all("-1")
 
             for criteria_campaign in criteria_campaign_list:
                 if criteria_campaign.id in action_campaign_id_list:
@@ -59,10 +65,6 @@ class Finder:
                             if criteria_campaign.all_payment_type == AllPaymentType.YES or criteria_campaign.id in self.payment_type.campaign_list:
                                 if criteria_campaign.id not in response:
                                     response.append(criteria_campaign.id)
-
-            for campaign in all_campaign_list:
-                if campaign.all_product_action == AllProductAction.YES and campaign.all_product_criteria == AllProductCriteria.YES and campaign.all_customer == AllCustomer.YES and campaign.all_payment_type == AllPaymentType.YES and campaign.all_payment_channel == AllPaymentChannel.YES and campaign.id not in response:
-                    response.append(campaign.id)
 
             return response
         return []
