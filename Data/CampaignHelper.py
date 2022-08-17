@@ -17,10 +17,12 @@ class CampaignHelper(DBObject):
     id: str = None
     campaign: Campaign = None
     role: DBObjectRole = None
+    org_id: str = None
 
-    def __init__(self, id: str, role: DBObjectRole):
+    def __init__(self, id: str, role: DBObjectRole, org_id: str):
         self.id = id
         self.role = role
+        self.org_id = org_id
         if role == DBObjectRole.DATABASE and id != "-1":
             self.__fetch_on_db()
         elif role == DBObjectRole.REDIS and id != "-1":
@@ -48,17 +50,18 @@ class CampaignHelper(DBObject):
                                      all_customer=AllCustomer.NO if db_object[13] == 0 else AllCustomer.YES,
                                      all_payment_type=AllPaymentType.NO if db_object[14] == 0 else AllPaymentType.YES,
                                      all_product_criteria=AllProductCriteria.NO if db_object[15] == 0 else AllProductCriteria.YES,
-                                     all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES)
+                                     all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES,
+                                     org_id=str(db_object[17]))
 
     def __fetch_on_redis(self) -> None:
-        campaign_list: list[Campaign] = self.get_all("-1")
+        campaign_list: list[Campaign] = self.get_all(self.org_id)
         for campaign in campaign_list:
             if campaign.id == self.id:
                 self.campaign = campaign
                 break
 
     def __fetch_on_application_cache(self) -> None:
-        campaign_list: list[Campaign] = self.get_all("-1")
+        campaign_list: list[Campaign] = self.get_all(self.org_id)
         for campaign in campaign_list:
             if campaign.id == self.id:
                 self.campaign = campaign
@@ -71,7 +74,7 @@ class CampaignHelper(DBObject):
         response: list[Campaign] = []
         if self.role == DBObjectRole.DATABASE:
             db_helper: DBHelper = DBHelper()
-            db_object_list = db_helper.select_all("campaign")
+            db_object_list = db_helper.select_all("campaign", org_id)
             if db_object_list is not None:
                 for db_object in db_object_list:
                     campaign = Campaign(id=str(db_object[0]),
@@ -90,25 +93,26 @@ class CampaignHelper(DBObject):
                                         all_customer=AllCustomer.NO if db_object[13] == 0 else AllCustomer.YES,
                                         all_payment_type=AllPaymentType.NO if db_object[14] == 0 else AllPaymentType.YES,
                                         all_product_criteria=AllProductCriteria.NO if db_object[15] == 0 else AllProductCriteria.YES,
-                                        all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES)
+                                        all_product_action=AllProductAction.NO if db_object[16] == 0 else AllProductAction.YES,
+                                        org_id=str(db_object[17]))
                     response.append(campaign)
         elif self.role == DBObjectRole.REDIS:
             redis_helper: RedisHelper = RedisHelper()
-            campaign_list_str: str = str(redis_helper.get("campaign_list"))
+            campaign_list_str: str = str(redis_helper.get("campaign_list_" + org_id))
             campaign_list_str = campaign_list_str[2:len(campaign_list_str)-1].replace("\\n","").replace('None', 'null')
             campaign_dict_list: list[dict] = json.loads(campaign_list_str)
             for campaign_dict in campaign_dict_list:
                 response.append(Campaign.dict_to_campaign(campaign_dict))
         elif self.role == DBObjectRole.APPLICATION_CACHE:
-            response = ApplicationCacheHelper.get_instance().get_data("campaign_list")
+            response = ApplicationCacheHelper.get_instance().get_data("campaign_list_" + org_id)
         return response
 
-    def load_data(self, org_id: str) -> None:
+    def load_data(self) -> None:
         self.role = DBObjectRole.DATABASE
         redis_helper: RedisHelper = RedisHelper()
-        campaign_list: list[Campaign] = self.get_all(org_id)
+        campaign_list: list[Campaign] = self.get_all(self.org_id)
         campaign_list_str: str = "[" + ",".join(list(map(lambda campaign: str(campaign), campaign_list))) + "]"
-        redis_helper.set("campaign_list", campaign_list_str)
-        ApplicationCacheHelper.get_instance().store_data("campaign_list", campaign_list)
+        redis_helper.set("campaign_list_" + self.org_id, campaign_list_str)
+        ApplicationCacheHelper.get_instance().store_data("campaign_list_" + self.org_id, campaign_list)
 
 

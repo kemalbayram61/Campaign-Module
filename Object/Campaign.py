@@ -24,6 +24,7 @@ class Campaign:
     start_date: str
     end_date: str
     is_active: bool
+    org_id: str
 
     def __init__(self, id: str = None,
                  all_payment_channel: AllPaymentChannel = None,
@@ -41,7 +42,8 @@ class Campaign:
                  action_qty: int = None,
                  start_date: str = None,
                  end_date: str = None,
-                 is_active: bool = None):
+                 is_active: bool = None,
+                 org_id: str = None):
         self.id = id
         self.all_payment_channel = all_payment_channel
         self.all_customer = all_customer
@@ -59,6 +61,7 @@ class Campaign:
         self.start_date = start_date
         self.end_date = end_date
         self.is_active = is_active
+        self.org_id = org_id
 
     def __str__(self) -> str:
         response: str = '''
@@ -78,7 +81,8 @@ class Campaign:
             "action_qty":{13},
             "start_date":"{14}",
             "end_date":"{15}",
-            "is_active":{16}}}    
+            "is_active":{16},
+            "org_id":"{17}"}}    
         '''.format(self.id,
                    self.all_payment_channel.value,
                    self.all_customer.value,
@@ -95,7 +99,8 @@ class Campaign:
                    self.action_qty,
                    self.start_date,
                    self.end_date,
-                   1 if self.is_active else 0)
+                   1 if self.is_active else 0,
+                   self.org_id)
 
         return response
 
@@ -117,5 +122,6 @@ class Campaign:
                             action_qty=int(dict_data["action_qty"]) if dict_data["action_qty"] != None else None,
                             start_date=str(dict_data["start_date"]),
                             end_date=str(dict_data["end_date"]),
-                            is_active= False if int(dict_data["is_active"]) == 0 else True)
+                            is_active= False if int(dict_data["is_active"]) == 0 else True,
+                            org_id=str(dict_data["org_id"]))
         return response

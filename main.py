@@ -37,30 +37,30 @@ if config.get_reset_table_on_init():
     db_helper.reset_tables()
     redis_helper.reset()
 
-# add mock
-product_mock = ProductMock()
-db_helper.execute_command(product_mock.get_mock_sql())
-customer_mock = CustomerMock()
-db_helper.execute_command(customer_mock.get_mock_sql())
-payment_channel_mock = PaymentChannelMock()
-db_helper.execute_command(payment_channel_mock.get_mock_sql())
-payment_type_mock = PaymentTypeMock()
-db_helper.execute_command(payment_type_mock.get_mock_sql())
-campaign_mock = CampaignMock()
-db_helper.execute_command(campaign_mock.get_mock_sql())
+    # add mock
+    product_mock = ProductMock()
+    db_helper.execute_command(product_mock.get_mock_sql())
+    customer_mock = CustomerMock()
+    db_helper.execute_command(customer_mock.get_mock_sql())
+    payment_channel_mock = PaymentChannelMock()
+    db_helper.execute_command(payment_channel_mock.get_mock_sql())
+    payment_type_mock = PaymentTypeMock()
+    db_helper.execute_command(payment_type_mock.get_mock_sql())
+    campaign_mock = CampaignMock()
+    db_helper.execute_command(campaign_mock.get_mock_sql())
 
 
-#load data on redis
-campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.DATABASE)
-campaign_helper.load_data("-1")
-customer_helper: CustomerHelper = CustomerHelper("-1", DBObjectRole.DATABASE)
-customer_helper.load_data("-1")
-payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper("-1", DBObjectRole.DATABASE)
-payment_channel_helper.load_data("-1")
-payment_type_helper: PaymentTypeHelper = PaymentTypeHelper("-1", DBObjectRole.DATABASE)
-payment_type_helper.load_data("-1")
-product_helper: ProductHelper = ProductHelper(id="-1", role=DBObjectRole.DATABASE)
-product_helper.load_data("-1")
+def load_data(org_id: str):
+    campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.DATABASE, org_id)
+    campaign_helper.load_data()
+    customer_helper: CustomerHelper = CustomerHelper("-1", DBObjectRole.DATABASE, org_id)
+    customer_helper.load_data()
+    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper("-1", DBObjectRole.DATABASE, org_id)
+    payment_channel_helper.load_data()
+    payment_type_helper: PaymentTypeHelper = PaymentTypeHelper("-1", DBObjectRole.DATABASE, org_id)
+    payment_type_helper.load_data()
+    product_helper: ProductHelper = ProductHelper(id="-1", role=DBObjectRole.DATABASE, org_id=org_id)
+    product_helper.load_data()
 
 app = FastAPI()
 
@@ -69,7 +69,7 @@ def get_basked(request: RequestBasket) -> Basket:
     product_list: list[Product] = []
     basket_lines: list[BasketLine] = []
     for request_basket_line in request.basket_lines:
-        product_helper = ProductHelper(barcode=request_basket_line.barcode, role=DBObjectRole.REDIS)
+        product_helper = ProductHelper(barcode=request_basket_line.barcode, role=DBObjectRole.REDIS, org_id=request.org_id)
         product = product_helper.get()
         if product is not None:
             basket_line = BasketLine(barcode=request_basket_line.barcode,
@@ -120,10 +120,11 @@ def get_response_basket(applied_basket: Basket, applied_campaign_list: list[Camp
 
 @app.post("/find_campaign_list")
 def find_campaign_list(request: RequestBasket) -> ResponseBasket:
+    load_data(request.org_id)
     basket: Basket = get_basked(request)
-    customer_helper: CustomerHelper = CustomerHelper(request.customer_id, DBObjectRole.DATABASE)
-    payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(request.payment_type_id, DBObjectRole.REDIS)
-    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(request.payment_channel_id, DBObjectRole.REDIS)
+    customer_helper: CustomerHelper = CustomerHelper(request.customer_id, DBObjectRole.DATABASE, request.org_id)
+    payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(request.payment_type_id, DBObjectRole.REDIS, request.org_id)
+    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(request.payment_channel_id, DBObjectRole.REDIS, request.org_id)
     customer: Customer = customer_helper.get()
     payment_type: PaymentType = payment_type_helper.get()
     payment_channel: PaymentChannel = payment_channel_helper.get()
@@ -134,7 +135,7 @@ def find_campaign_list(request: RequestBasket) -> ResponseBasket:
     campaign_list: list[Campaign] = []
     campaign_id_list: list[str] = finder.discover_campaign_list()
     for campaign_id in campaign_id_list:
-        campaign_helper: CampaignHelper = CampaignHelper(campaign_id, DBObjectRole.REDIS)
+        campaign_helper: CampaignHelper = CampaignHelper(campaign_id, DBObjectRole.REDIS, request.org_id)
         campaign_list.append(campaign_helper.get())
 
     optimizer: Optimizer = Optimizer(basket=basket,

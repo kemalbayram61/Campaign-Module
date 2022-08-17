@@ -23,27 +23,31 @@ class DBHelper:
             id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
             barcode varchar(20) NOT NULL,
             criteria_campaign_list varchar(100),
-            action_campaign_list varchar(100)
+            action_campaign_list varchar(100),
+            org_id varchar(100)
             )
         '''
         customer_sql: str = '''
             create table customer(
             id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
-            campaign_list varchar(100)
+            campaign_list varchar(100),
+            org_id varchar(100)
             )
         '''
 
         payment_channel_sql: str = '''
             create table payment_channel(
             id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
-            campaign_list varchar(100)
+            campaign_list varchar(100),
+            org_id varchar(100)
             )
         '''
 
         payment_type_sql: str = '''
             create table payment_type(
             id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
-            campaign_list varchar(100)
+            campaign_list varchar(100),
+            org_id varchar(100)
             )
         '''
 
@@ -61,11 +65,12 @@ class DBHelper:
             action_qty int,
             max_discount real,
             is_active int,
-            "all_payment_channel" int, 
-            "all_customer" int, 
-            "all_payment_type" int, 
-            "all_product_criteria" int, 
-            "all_product_action" int
+            all_payment_channel int, 
+            all_customer int, 
+            all_payment_type int, 
+            all_product_criteria int, 
+            all_product_action int,
+            org_id varchar(100)
             )
         '''
 
@@ -90,9 +95,12 @@ class DBHelper:
         self.close_connection()
         return result
 
-    def select_all(self, table_name: str):
+    def select_all(self, table_name: str, org_id: str = None):
         self.open_connection()
-        self.cursor.execute("select * from " + table_name)
+        if org_id is None:
+            self.cursor.execute("select * from " + table_name)
+        else:
+            self.cursor.execute("select * from " + table_name + " where org_id='" + org_id + "'")
         result = self.cursor.fetchall()
         self.close_connection()
         return result
@@ -111,9 +119,12 @@ class DBHelper:
         self.close_connection()
         return result
 
-    def find_product_by_barcode(self, barcode: str):
+    def find_product_by_barcode(self, barcode: str, org_id: str = None):
         self.open_connection()
-        self.cursor.execute("select * from product where barcode='"+ barcode + "'")
+        if org_id is None:
+            self.cursor.execute("select * from product where barcode='" + barcode + "'")
+        else:
+            self.cursor.execute("select * from product where barcode='" + barcode + "' and org_id='" + org_id + "'")
         result = self.cursor.fetchone()
         self.close_connection()
         return result
