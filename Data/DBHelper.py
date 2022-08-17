@@ -95,9 +95,12 @@ class DBHelper:
         self.close_connection()
         return result
 
-    def select_all(self, table_name: str):
+    def select_all(self, table_name: str, org_id: str = None):
         self.open_connection()
-        self.cursor.execute("select * from " + table_name)
+        if org_id is None:
+            self.cursor.execute("select * from " + table_name)
+        else:
+            self.cursor.execute("select * from " + table_name + " where org_id='" + org_id + "'")
         result = self.cursor.fetchall()
         self.close_connection()
         return result
@@ -116,9 +119,12 @@ class DBHelper:
         self.close_connection()
         return result
 
-    def find_product_by_barcode(self, barcode: str):
+    def find_product_by_barcode(self, barcode: str, org_id: str = None):
         self.open_connection()
-        self.cursor.execute("select * from product where barcode='"+ barcode + "'")
+        if org_id is None:
+            self.cursor.execute("select * from product where barcode='" + barcode + "'")
+        else:
+            self.cursor.execute("select * from product where barcode='" + barcode + "' and org_id='" + org_id + "'")
         result = self.cursor.fetchone()
         self.close_connection()
         return result
