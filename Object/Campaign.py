@@ -25,6 +25,7 @@ class Campaign:
     end_date: str
     is_active: bool
     org_id: str
+    external_code: str
 
     def __init__(self, id: str = None,
                  all_payment_channel: AllPaymentChannel = None,
@@ -43,7 +44,8 @@ class Campaign:
                  start_date: str = None,
                  end_date: str = None,
                  is_active: bool = None,
-                 org_id: str = None):
+                 org_id: str = None,
+                 external_code: str = None):
         self.id = id
         self.all_payment_channel = all_payment_channel
         self.all_customer = all_customer
@@ -62,6 +64,7 @@ class Campaign:
         self.end_date = end_date
         self.is_active = is_active
         self.org_id = org_id
+        self.external_code = external_code
 
     def __str__(self) -> str:
         response: str = '''
@@ -82,7 +85,8 @@ class Campaign:
             "start_date":"{14}",
             "end_date":"{15}",
             "is_active":{16},
-            "org_id":"{17}"}}    
+            "org_id":"{17}",    
+            "external_code":"{18}"}}    
         '''.format(self.id,
                    self.all_payment_channel.value,
                    self.all_customer.value,
@@ -100,7 +104,8 @@ class Campaign:
                    self.start_date,
                    self.end_date,
                    1 if self.is_active else 0,
-                   self.org_id)
+                   self.org_id,
+                   self.external_code)
 
         return response
 
@@ -123,5 +128,6 @@ class Campaign:
                             start_date=str(dict_data["start_date"]),
                             end_date=str(dict_data["end_date"]),
                             is_active= False if int(dict_data["is_active"]) == 0 else True,
-                            org_id=str(dict_data["org_id"]))
+                            org_id=str(dict_data["org_id"]),
+                            external_code=str(dict_data["external_code"]))
         return response
