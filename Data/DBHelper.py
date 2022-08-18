@@ -123,6 +123,13 @@ class DBHelper:
         self.close_connection()
         return result
 
+    def find_by_external_code(self, table_name: str, external_code: str):
+        self.open_connection()
+        self.cursor.execute("select * from " + table_name + " where external_code='" + external_code + "'")
+        result = self.cursor.fetchone()
+        self.close_connection()
+        return result
+
     def find_product_by_barcode(self, barcode: str, org_id: str = None):
         self.open_connection()
         if org_id is None:
