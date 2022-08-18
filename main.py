@@ -113,7 +113,7 @@ def get_response_basket(applied_basket: Basket, applied_campaign_list: list[Camp
     response.basket_lines = response_basket_lines
     campaign_list: list[str] = []
     for campaign in applied_campaign_list:
-        campaign_list.append(campaign.id)
+        campaign_list.append(campaign.external_code)
     response.campaign_list = campaign_list
     return response
 
