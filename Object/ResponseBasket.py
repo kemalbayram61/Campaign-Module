@@ -3,8 +3,8 @@ from Object.ResponseBasketLine import ResponseBasketLine
 
 class ResponseBasket:
     order_id: str
-    customer_id: str
+    customer_external_code: str
     basket_lines: list[ResponseBasketLine]
-    payment_type_id: str
-    payment_channel_id: str
+    payment_type_external_code: str
+    payment_channel_external_code: str
     campaign_list: list[str]
