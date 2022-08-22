@@ -2,17 +2,20 @@ from Object.Basket import Basket
 from Object.Campaign import Campaign
 from Process.Operator import Operator
 from Process.Finder import Finder
+from threading import Thread
 import copy
 
 
 class Optimizer:
     basket: Basket
     campaign_list: list[Campaign]
+    executed_stack: list[dict]
 
     def __init__(self, basket: Basket = None,
                  campaign_list: list[Campaign] = None):
         self.basket = basket
         self.campaign_list = campaign_list
+        self.executed_stack = []
 
     def is_exist_campaign(self, campaign: Campaign, campaign_list: list[Campaign]) -> bool:
         for cmp in campaign_list:
@@ -34,12 +37,10 @@ class Optimizer:
                 minimum_amount = executed
         return minimum_amount
 
-    def optimize_basket(self) -> (Basket, list[Campaign]):
-        applicable_list: list[Campaign] = self.campaign_list
+    def thread(self, applicable_list: list[Campaign]) -> list[dict]:
+        applicable_list: applicable_list
         executed_list: list[Campaign] = []
-        executed_stack: list[dict] = []
 
-        #sort all campaigns with different combinations and assign to applicable_list object
         while len(applicable_list) != 0:
             executed_list.append(applicable_list[0])
             temp_basket = copy.deepcopy(self.basket)
@@ -48,11 +49,19 @@ class Optimizer:
                                               campaign=campaign)
                 temp_basket = operator.apply_campaign()
 
-            executed_stack.append(
-                {"campaign_list": copy.deepcopy(executed_list), "basket_amount": Operator.evaluate_basket_amount(temp_basket), "basket": copy.copy(temp_basket)})
+            self.executed_stack.append(
+                {"campaign_list": copy.deepcopy(executed_list),
+                 "basket_amount": Operator.evaluate_basket_amount(temp_basket), "basket": copy.copy(temp_basket)})
             applicable_list = Finder.filter_campaign_on_basket(temp_basket, self.campaign_list[0].org_id)
             applicable_list = self.filter_list(executed_list, applicable_list)
 
-        optimum_campaign = self.get_optimum_campaign(executed_stack)
+    def optimize_basket(self) -> (Basket, list[Campaign]):
+        thread_list: list[Thread] = []
+        thread_list.append(Thread(target=self.thread, args=(self.campaign_list,)))
+        for thread in thread_list:
+            thread.start()
+        for thread in thread_list:
+            thread.join()
+        optimum_campaign = self.get_optimum_campaign(self.executed_stack)
 
         return optimum_campaign["basket"], optimum_campaign["campaign_list"] if optimum_campaign is not None else []
