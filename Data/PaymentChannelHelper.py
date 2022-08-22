@@ -8,12 +8,17 @@ import json
 
 class PaymentChannelHelper(DBObject):
     id: str = None
+    external_code: str = None
     org_id: str = None
     payment_channel: PaymentChannel = None
     role: DBObjectRole = None
 
-    def __init__(self, id: str, role: DBObjectRole, org_id: str):
+    def __init__(self, id: str = None,
+                 external_code: str = None,
+                 role: DBObjectRole = None,
+                 org_id: str = None):
         self.id = id
+        self.external_code = external_code
         self.role = role
         self.org_id = org_id
         if role == DBObjectRole.DATABASE and id != "-1":
@@ -25,7 +30,11 @@ class PaymentChannelHelper(DBObject):
 
     def __fetch_on_db(self) -> None:
         db_helper: DBHelper = DBHelper()
-        db_object = db_helper.find_by_id("payment_channel", self.id)
+        db_object = None
+        if self.id is not None:
+            db_object = db_helper.find_by_id("payment_channel", self.id)
+        elif self.external_code is not None:
+            db_object = db_helper.find_by_external_code("payment_channel", self.external_code)
         if db_object is not None:
             self.payment_channel = PaymentChannel(id=db_object[0],
                                                   campaign_list=[] if db_object[1] is None else db_object[1].split(','),
@@ -35,16 +44,26 @@ class PaymentChannelHelper(DBObject):
     def __fetch_on_redis(self) -> None:
         payment_channel_list: list[PaymentChannel] = self.get_all(self.org_id)
         for payment_channel in payment_channel_list:
-            if payment_channel.id == self.id:
-                self.payment_channel = payment_channel
-                break
+            if self.id is not None:
+                if payment_channel.id == self.id:
+                    self.payment_channel = payment_channel
+                    break
+            elif self.external_code is not None:
+                if payment_channel.external_code == self.external_code:
+                    self.payment_channel = payment_channel
+                    break
 
     def __fetch_on_application_cache(self) -> None:
         payment_channel_list: list[PaymentChannel] = self.get_all(self.org_id)
         for payment_channel in payment_channel_list:
-            if payment_channel.id == self.id:
-                self.payment_channel = payment_channel
-                break
+            if self.id is not None:
+                if payment_channel.id == self.id:
+                    self.payment_channel = payment_channel
+                    break
+            elif self.external_code is not None:
+                if payment_channel.external_code == self.external_code:
+                    self.payment_channel = payment_channel
+                    break
 
     def get(self) ->PaymentChannel:
         return self.payment_channel
