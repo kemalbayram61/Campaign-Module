@@ -5,7 +5,6 @@ from Process.Finder import Finder
 from threading import Thread
 import copy
 
-
 class Optimizer:
     basket: Basket
     campaign_list: list[Campaign]
@@ -36,6 +35,12 @@ class Optimizer:
             if minimum_amount is None or minimum_amount["basket_amount"] > executed["basket_amount"]:
                 minimum_amount = executed
         return minimum_amount
+
+    def factorial(self, n: int) -> int:
+        if n == 0 or n == 1:
+            return 1
+        else:
+            return self.factorial(n-1) * n
 
     def thread(self, applicable_list: list[Campaign]) -> list[dict]:
         applicable_list: applicable_list
