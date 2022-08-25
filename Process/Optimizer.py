@@ -72,6 +72,7 @@ class Optimizer:
             applicable_list = self.filter_list(executed_list, applicable_list)
 
     def optimize_basket(self) -> (Basket, list[Campaign]):
+        #TODO sınırlamayı kaldırmayı unutma
         if len(self.campaign_list) > 3:
             self.campaign_list = self.campaign_list[:3]
         campaign_permutation_list: list[list[Campaign]] = self.permutation(copy.deepcopy(self.campaign_list))
