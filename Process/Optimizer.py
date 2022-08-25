@@ -36,11 +36,22 @@ class Optimizer:
                 minimum_amount = executed
         return minimum_amount
 
-    def factorial(self, n: int) -> int:
-        if n == 0 or n == 1:
-            return 1
-        else:
-            return self.factorial(n-1) * n
+    def permutation(self, lst):
+
+        if len(lst) == 0:
+            return []
+
+        if len(lst) == 1:
+            return [lst]
+
+        l = []
+
+        for i in range(len(lst)):
+            m = lst[i]
+            remLst = lst[:i] + lst[i + 1:]
+            for p in self.permutation(remLst):
+                l.append([m] + p)
+        return l
 
     def thread(self, applicable_list: list[Campaign]) -> list[dict]:
         applicable_list: applicable_list
@@ -61,8 +72,13 @@ class Optimizer:
             applicable_list = self.filter_list(executed_list, applicable_list)
 
     def optimize_basket(self) -> (Basket, list[Campaign]):
+        if len(self.campaign_list) > 3:
+            self.campaign_list = self.campaign_list[:3]
+        campaign_permutation_list: list[list[Campaign]] = self.permutation(copy.deepcopy(self.campaign_list))
         thread_list: list[Thread] = []
-        thread_list.append(Thread(target=self.thread, args=(self.campaign_list,)))
+        for permutation in campaign_permutation_list:
+            thread_list.append(Thread(target=self.thread, args=(permutation,)))
+
         for thread in thread_list:
             thread.start()
         for thread in thread_list:
