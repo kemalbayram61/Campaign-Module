@@ -53,7 +53,7 @@ class Optimizer:
                 l.append([m] + p)
         return l
 
-    def thread(self, applicable_list: list[Campaign]) -> list[dict]:
+    def thread(self, applicable_list: list[Campaign]) -> None:
         applicable_list: applicable_list
         executed_list: list[Campaign] = []
 
