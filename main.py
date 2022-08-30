@@ -139,8 +139,6 @@ def find_campaign_list(request: RequestBasket) -> ResponseBasket:
                                      campaign_list=campaign_list)
 
     optimum_result = optimizer.optimize_basket()
-    applied_basket: Basket = optimum_result[0]
-    applied_campaign_list: list[Campaign] = optimum_result[1]
-    response: ResponseBasket = get_response_basket(applied_basket, applied_campaign_list)
+    response: ResponseBasket = get_response_basket(optimum_result[0], optimum_result[1])
 
     return response
