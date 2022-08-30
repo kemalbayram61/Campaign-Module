@@ -39,7 +39,7 @@ class Finder:
                 response.append(campaign_helper.get())
         return response
 
-    def discover_campaign_list(self) -> list[str]:
+    def discover_campaign_list(self) -> list[Campaign]:
         if self.customer is not None and self.basked is not None and self.payment_type is not None and self.payment_channel is not None:
             product_list: list[Product] = self.basked.product_list
             criteria_campaign_id_list: list[str] = []
@@ -66,7 +66,7 @@ class Finder:
                                 if criteria_campaign.id not in response:
                                     response.append(criteria_campaign.id)
 
-            return response
+            return Finder.get_campaign_list_of_id_list(response, self.customer.org_id)
         return []
 
     @staticmethod

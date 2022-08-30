@@ -132,11 +132,8 @@ def find_campaign_list(request: RequestBasket) -> ResponseBasket:
                             basket=basket,
                             payment_type=payment_type,
                             payment_channel=payment_channel)
-    campaign_list: list[Campaign] = []
-    campaign_id_list: list[str] = finder.discover_campaign_list()
-    for campaign_id in campaign_id_list:
-        campaign_helper: CampaignHelper = CampaignHelper(campaign_id, DBObjectRole.REDIS, request.org_id)
-        campaign_list.append(campaign_helper.get())
+
+    campaign_list: list[Campaign] = finder.discover_campaign_list()
 
     optimizer: Optimizer = Optimizer(basket=basket,
                                      campaign_list=campaign_list)
