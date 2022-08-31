@@ -1,5 +1,6 @@
 class Config:
     config_file: dict = None
+
     def __init__(self):
         main_config: dict = self.get_env_data_as_dict("Config/main.env")
         selected_env: str = main_config["SELECTED_ENVIRONMENT"]
@@ -28,7 +29,7 @@ class Config:
 
     def get_reset_table_on_init(self) -> bool:
         case = self.config_file["RESET_TABLES_ON_INIT"]
-        if(case != "1"):
+        if case != "1":
             return False
         return True
 

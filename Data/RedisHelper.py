@@ -1,4 +1,3 @@
-from Abstract.DBObjectRole import DBObjectRole
 from Data.Config import Config
 import redis
 

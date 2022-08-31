@@ -6,6 +6,7 @@ from Data.RedisHelper import RedisHelper
 from Data.ApplicationCacheHelper import ApplicationCacheHelper
 import json
 
+
 class CustomerHelper(DBObject):
     id: str = None
     external_code: str = None
