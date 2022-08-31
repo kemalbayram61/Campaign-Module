@@ -69,7 +69,7 @@ def get_basked(request: RequestBasket) -> Basket:
     product_list: list[Product] = []
     basket_lines: list[BasketLine] = []
     for request_basket_line in request.basket_lines:
-        product_helper = ProductHelper(barcode=request_basket_line.barcode, role=DBObjectRole.REDIS, org_id=request.org_id)
+        product_helper = ProductHelper(barcode=request_basket_line.barcode, role=DBObjectRole.APPLICATION_CACHE, org_id=request.org_id)
         product = product_helper.get()
         if product is not None:
             basket_line = BasketLine(barcode=request_basket_line.barcode,
@@ -123,8 +123,8 @@ def find_campaign_list(request: RequestBasket) -> ResponseBasket:
     load_data(request.org_id)
     basket: Basket = get_basked(request)
     customer_helper: CustomerHelper = CustomerHelper(external_code=request.customer_external_code, role=DBObjectRole.DATABASE, org_id=request.org_id)
-    payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(external_code=request.payment_type_external_code, role=DBObjectRole.REDIS, org_id=request.org_id)
-    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(external_code=request.payment_channel_external_code, role=DBObjectRole.REDIS, org_id=request.org_id)
+    payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(external_code=request.payment_type_external_code, role=DBObjectRole.APPLICATION_CACHE, org_id=request.org_id)
+    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(external_code=request.payment_channel_external_code, role=DBObjectRole.APPLICATION_CACHE, org_id=request.org_id)
     customer: Customer = customer_helper.get()
     payment_type: PaymentType = payment_type_helper.get()
     payment_channel: PaymentChannel = payment_channel_helper.get()

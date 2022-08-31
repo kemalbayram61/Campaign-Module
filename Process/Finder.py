@@ -28,13 +28,13 @@ class Finder:
         self.basked = basket
         self.payment_type = payment_type
         self.payment_channel = payment_channel
-        self.campaign_helper = CampaignHelper("-1", DBObjectRole.REDIS, customer.org_id)
+        self.campaign_helper = CampaignHelper("-1", DBObjectRole.APPLICATION_CACHE, customer.org_id)
 
     @staticmethod
     def get_campaign_list_of_id_list(id_list: list[str], org_id: str) -> list[Campaign]:
         response: list[Campaign] = []
         for id in id_list:
-            campaign_helper: CampaignHelper = CampaignHelper(id, DBObjectRole.REDIS, org_id)
+            campaign_helper: CampaignHelper = CampaignHelper(id, DBObjectRole.APPLICATION_CACHE, org_id)
             if campaign_helper.get() is not None:
                 response.append(campaign_helper.get())
         return response
@@ -76,7 +76,7 @@ class Finder:
         action_campaign_id_list: list[str] = []
         response_id_list: list[str] = []
         response: list[Campaign] = []
-        campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.REDIS, org_id)
+        campaign_helper: CampaignHelper = CampaignHelper("-1", DBObjectRole.APPLICATION_CACHE, org_id)
 
         for index, product in enumerate(product_list, start=0):
             if basket.basket_lines[index].is_used is False:
