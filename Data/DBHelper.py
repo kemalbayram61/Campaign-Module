@@ -147,7 +147,8 @@ class DBHelper:
         self.connection = psycopg2.connect( database=self.config.get_db_name(),
                                             user=self.config.get_db_user(),
                                             host=self.config.get_db_host(),
-                                            port=self.config.get_db_port())
+                                            port=self.config.get_db_port(),
+                                            password=self.config.get_db_password())
         self.cursor = self.connection.cursor()
         self.cursor.execute("select version()")
         data = self.cursor.fetchone()
