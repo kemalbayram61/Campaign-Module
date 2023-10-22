@@ -26,7 +26,7 @@ from Object.BasketLine import BasketLine
 from Process.Finder import Finder
 from Process.Optimizer import Optimizer
 from fastapi import FastAPI
-
+import uvicorn
 
 ApplicationCacheHelper()
 config = Config()
@@ -55,12 +55,14 @@ def load_data(org_id: str):
     campaign_helper.load_data()
     customer_helper: CustomerHelper = CustomerHelper(id="-1", role=DBObjectRole.DATABASE, org_id=org_id)
     customer_helper.load_data()
-    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(id="-1", role=DBObjectRole.DATABASE, org_id=org_id)
+    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(id="-1", role=DBObjectRole.DATABASE,
+                                                                        org_id=org_id)
     payment_channel_helper.load_data()
     payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(id="-1", role=DBObjectRole.DATABASE, org_id=org_id)
     payment_type_helper.load_data()
     product_helper: ProductHelper = ProductHelper(id="-1", role=DBObjectRole.DATABASE, org_id=org_id)
     product_helper.load_data()
+
 
 app = FastAPI()
 
@@ -69,7 +71,8 @@ def get_basked(request: RequestBasket) -> Basket:
     product_list: list[Product] = []
     basket_lines: list[BasketLine] = []
     for request_basket_line in request.basket_lines:
-        product_helper = ProductHelper(barcode=request_basket_line.barcode, role=DBObjectRole.APPLICATION_CACHE, org_id=request.org_id)
+        product_helper = ProductHelper(barcode=request_basket_line.barcode, role=DBObjectRole.APPLICATION_CACHE,
+                                       org_id=request.org_id)
         product = product_helper.get()
         if product is not None:
             basket_line = BasketLine(barcode=request_basket_line.barcode,
@@ -122,9 +125,13 @@ def get_response_basket(applied_basket: Basket, applied_campaign_list: list[Camp
 def find_campaign_list(request: RequestBasket) -> ResponseBasket:
     load_data(request.org_id)
     basket: Basket = get_basked(request)
-    customer_helper: CustomerHelper = CustomerHelper(external_code=request.customer_external_code, role=DBObjectRole.DATABASE, org_id=request.org_id)
-    payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(external_code=request.payment_type_external_code, role=DBObjectRole.APPLICATION_CACHE, org_id=request.org_id)
-    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(external_code=request.payment_channel_external_code, role=DBObjectRole.APPLICATION_CACHE, org_id=request.org_id)
+    customer_helper: CustomerHelper = CustomerHelper(external_code=request.customer_external_code,
+                                                     role=DBObjectRole.DATABASE, org_id=request.org_id)
+    payment_type_helper: PaymentTypeHelper = PaymentTypeHelper(external_code=request.payment_type_external_code,
+                                                               role=DBObjectRole.APPLICATION_CACHE,
+                                                               org_id=request.org_id)
+    payment_channel_helper: PaymentChannelHelper = PaymentChannelHelper(
+        external_code=request.payment_channel_external_code, role=DBObjectRole.APPLICATION_CACHE, org_id=request.org_id)
     customer: Customer = customer_helper.get()
     payment_type: PaymentType = payment_type_helper.get()
     payment_channel: PaymentChannel = payment_channel_helper.get()
@@ -142,3 +149,7 @@ def find_campaign_list(request: RequestBasket) -> ResponseBasket:
     response: ResponseBasket = get_response_basket(optimum_result[0], optimum_result[1])
 
     return response
+
+
+if __name__ == '__main__':
+    uvicorn.run(app, port=8080, host='127.0.0.1')
