@@ -1,7 +1,8 @@
 from Object.ResponseBasketLine import ResponseBasketLine
+from pydantic import BaseModel
 
 
-class ResponseBasket:
+class ResponseBasket(BaseModel):
     order_id: str
     customer_external_code: str
     basket_lines: list[ResponseBasketLine]
