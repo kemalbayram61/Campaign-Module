@@ -2,7 +2,7 @@ from Object.ResponseBasketLine import ResponseBasketLine
 from pydantic import BaseModel
 
 
-class ResponseBasket(BaseModel):
+class ResponseBasket:
     order_id: str
     customer_external_code: str
     basket_lines: list[ResponseBasketLine]

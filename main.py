@@ -25,7 +25,7 @@ from Object.ResponseBasketLine import ResponseBasketLine
 from Object.BasketLine import BasketLine
 from Process.Finder import Finder
 from Process.Optimizer import Optimizer
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 import uvicorn
 
 ApplicationCacheHelper()
@@ -122,7 +122,7 @@ def get_response_basket(applied_basket: Basket, applied_campaign_list: list[Camp
 
 
 @app.post("/find_campaign_list")
-def find_campaign_list(request: RequestBasket) -> ResponseBasket:
+def find_campaign_list(request: RequestBasket) -> Response:
     load_data(request.org_id)
     basket: Basket = get_basked(request)
     customer_helper: CustomerHelper = CustomerHelper(external_code=request.customer_external_code,

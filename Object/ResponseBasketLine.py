@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class ResponseBasketLine(BaseModel):
+class ResponseBasketLine:
     qty: int
     barcode: str
     amount: float
